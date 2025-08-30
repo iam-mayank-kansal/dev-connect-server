@@ -12,7 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/iam-mayank-kansal/dev-connect-server.git"
   },
-  "keywords": ["social media for developer"],
+  "keywords": [
+    "social media for developer"
+  ],
   "author": "Mayank Kansal",
   "license": "ISC",
   "type": "commonjs",
@@ -27,6 +29,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
+    "mongoose-sequence": "^6.0.1",
     "nodemon": "^3.1.10",
     "winston": "^3.17.0"
   },

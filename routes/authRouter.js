@@ -1,8 +1,14 @@
 const express = require("express");
-const userRouter = express.Router();
+const authRouter = express.Router();
 
-userRouter.get("/signup", signUpValidation, signUp);
-userRouter.get("/login", loginValidation, login);
-userRouter.get("/forget-password", forgetPasswordValidation, forgetPassword);
+//auth imports
+const signUpValidation = require("../validators/auth/signUpValidator");
+const signUp = require("../controllers/auth/signUp");
+const loginValidation = require("../validators/auth/loginValidator");
+const login = require("../controllers/auth/login");
 
-module.exports = userRouter;
+//auth routes
+authRouter.post("/signup", signUpValidation, signUp);
+authRouter.post("/login", loginValidation, login);
+
+module.exports = authRouter;

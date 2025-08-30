@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const logger = require("./helper/logger");
 const connectToDB = require("./config/database");
 const cookieParser = require("cookie-parser");
+const authRouter = require("../dev-connect-server/routes/authRouter");
+const userRouter = require("../dev-connect-server/routes/userRouter");
 const app = express();
 
 // some middleware for data transfers
@@ -17,6 +19,7 @@ dotenv.config();
 connectToDB()
   .then(() => {
     app.listen(process.env.PORT, () => {
+      console.log("server started");
       logger.log({
         level: "info",
         message: `Server Running Fine at PORT : ${process.env.PORT}`,
@@ -31,7 +34,9 @@ connectToDB()
     });
   });
 
-// routes
-app.use("/user", userRouter);
-app.use("/auth", authRouter);
-app.use("/user", userRouter);
+//routes
+
+//auth routes
+app.use("/devConnect/auth", authRouter);
+//user routes
+app.use("/devConnect/user", userRouter);
