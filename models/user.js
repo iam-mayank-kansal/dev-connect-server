@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
     designation: {
       type: String,
     },
+    profilePic: {
+      data: Buffer,
+      contentType: String,
+    },
   },
   { timestamps: true }
 );
