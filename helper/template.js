@@ -52,10 +52,21 @@ async function loginUserTemplate(checkUser) {
   return template;
 }
 
+async function updateUserTemplate(name, updatedUser) {
+  const template = {
+    responseCode: "201",
+    status: "success",
+    message: `${name} user updated in successfully`,
+    data: updatedUser,
+  };
+  return template;
+}
+
 module.exports = {
   failureTemplate,
   registerUserTemplate,
   delteUserTemplate,
   resetUserPasswordTemplate,
   loginUserTemplate,
+  updateUserTemplate,
 };
