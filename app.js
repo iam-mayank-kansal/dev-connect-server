@@ -3,8 +3,8 @@ const dotenv = require("dotenv");
 const logger = require("./helper/logger");
 const connectToDB = require("./config/database");
 const cookieParser = require("cookie-parser");
-const authRouter = require("../dev-connect-server/routes/authRouter");
-const userRouter = require("../dev-connect-server/routes/userRouter");
+const authRouter = require("./routes/authRouter");
+const userRouter = require("./routes/userRouter");
 const app = express();
 
 // some middleware for data transfers
