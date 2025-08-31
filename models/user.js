@@ -4,10 +4,6 @@ const AutoIncrementFactory = require("mongoose-sequence");
 //creating user schema
 const userSchema = new mongoose.Schema(
   {
-    userid: {
-      type: Number,
-      unique: true,
-    },
     email: {
       type: String,
       required: true,
@@ -23,32 +19,24 @@ const userSchema = new mongoose.Schema(
     },
     age: {
       type: Number,
-      default: null,
     },
     mobile: {
       type: Number,
-      required: true,
     },
     bio: {
       type: String,
-      default: "",
+      default: "Hello i am a devconnect user",
     },
     dob: {
       type: String,
-      default: "",
     },
     designation: {
       type: String,
-      default: "",
     },
   },
   { timestamps: true }
 );
 
-const AutoIncrement = AutoIncrementFactory(mongoose);
-
-// Attach the plugin — "userId" will increment automatically
-userSchema.plugin(AutoIncrement, { inc_field: "userid" });
 
 //creating user model
 const userModel = mongoose.model("user", userSchema);

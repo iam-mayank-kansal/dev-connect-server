@@ -22,49 +22,6 @@ async function registerUserTemplate(name, email, password, mobile) {
   return template;
 }
 
-async function listUserTemplate(userList) {
-  const template = {
-    responseCode: "201",
-    status: "success",
-    message: "users listed successfully",
-    data: userList,
-  };
-  return template;
-}
-
-async function createTaskTemplate() {
-  const template = {
-    responseCode: "201",
-    status: "success",
-    message: "task created successfully",
-  };
-  return template;
-}
-
-async function listTaskTemplate(taskList) {
-  const template = {
-    responseCode: "201",
-    status: "success",
-    message: "Tasks listed successfully",
-    data: taskList,
-  };
-  return template;
-}
-
-async function assignTaskTemplate(title, assigned_to, assigned_by) {
-  const template = {
-    responseCode: "201",
-    status: "success",
-    message: "Tasks assigned successfully",
-    data: {
-      title: title,
-      assigned_to: assigned_to,
-      assigned_by: assigned_by,
-    },
-  };
-  return template;
-}
-
 //USERS MODULE -->
 async function delteUserTemplate(name) {
   const template = {
@@ -85,12 +42,11 @@ async function resetUserPasswordTemplate(name) {
 }
 
 //LOGIN
-
 async function loginUserTemplate(checkUser) {
   const template = {
     responseCode: "201",
     status: "success",
-    message: `${checkUser.name} user logged in  successfully`,
+    message: `${checkUser.name} user logged in successfully`,
     data: checkUser,
   };
   return template;
@@ -99,10 +55,6 @@ async function loginUserTemplate(checkUser) {
 module.exports = {
   failureTemplate,
   registerUserTemplate,
-  listUserTemplate,
-  createTaskTemplate,
-  listTaskTemplate,
-  assignTaskTemplate,
   delteUserTemplate,
   resetUserPasswordTemplate,
   loginUserTemplate,

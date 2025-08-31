@@ -11,9 +11,9 @@ const resetPasswordValidation = require("../validators/user/resetPasswordValidat
 const resetPassword = require("../controllers/user/resetPassword");
 
 //user routes
-userRouter.post("/delete", authRoute, delteValidation, deleteUser);
-userRouter.post(
-  "/resetPassword",
+userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
+userRouter.patch(
+  "/reset-password",
   authRoute,
   resetPasswordValidation,
   resetPassword

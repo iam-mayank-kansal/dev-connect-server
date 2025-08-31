@@ -8,7 +8,7 @@ const loginValidation = require("../validators/auth/loginValidator");
 const login = require("../controllers/auth/login");
 
 //auth routes
-authRouter.post("/signup", signUpValidation, signUp);
+authRouter.post("/sign-up", signUpValidation, signUp);
 authRouter.post("/login", loginValidation, login);
 
 module.exports = authRouter;

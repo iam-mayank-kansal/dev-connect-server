@@ -37,6 +37,6 @@ connectToDB()
 //routes
 
 //auth routes
-app.use("/devConnect/auth", authRouter);
+app.use("/devconnect/auth", authRouter);
 //user routes
-app.use("/devConnect/user", userRouter);
+app.use("/devconnect/user", userRouter);

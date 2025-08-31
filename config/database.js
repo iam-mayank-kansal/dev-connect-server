@@ -14,6 +14,7 @@ async function connectToDB() {
       message: `DB Connection Failed`,
       error: error,
     });
+    throw new Error(error);
   }
 }
 

@@ -26,26 +26,6 @@ async function loginValidation(req, res, next) {
       .json(await failureTemplate(400, "Enter Valid Email"));
   }
 
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-  if (!passwordRegex.test(password)) {
-    logger.log({
-      level: "info",
-      message: await failureTemplate(
-        400,
-        "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)."
-      ),
-    });
-    return res
-      .status(400)
-      .json(
-        await failureTemplate(
-          400,
-          "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)."
-        )
-      );
-  }
-
   const findUser = await userModel.findOne({ email: email });
 
   if (findUser == null) {
@@ -68,10 +48,9 @@ async function loginValidation(req, res, next) {
   }
 
   const storeHash = findUser.password;
-  // console.log(storeHash)
 
   const checkUser = await encPassword("compare", password, storeHash);
-  // console.log(checkUser);
+
 
   if (checkUser == false) {
     logger.log({
@@ -81,6 +60,12 @@ async function loginValidation(req, res, next) {
 
     return res.status(400).json(await failureTemplate(400, "Invalid password"));
   }
+
+  req.user = {
+    _id: findUser._id,
+    name: findUser.name,
+    email: findUser.email
+  };
 
   next();
 }

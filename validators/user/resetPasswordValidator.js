@@ -5,7 +5,11 @@ const jwt = require("jsonwebtoken");
 const encPassword = require("../../helper/encPassword");
 
 async function resetPasswordValidation(req, res, next) {
+
+  const user = req.user;
+
   const { oldpassword, newpassword } = req.body;
+
   if ((!oldpassword, !newpassword)) {
     logger.log({
       level: "info",
@@ -53,12 +57,7 @@ async function resetPasswordValidation(req, res, next) {
       );
   }
 
-  //extracting user based on mongo --> documnet id
-  const userCookie = await req.cookies.devConnect;
-  const decodeValue = jwt.verify(userCookie, process.env.SECRETKEY);
-  const userId = decodeValue.payload;
-
-  const findUser = await userModel.findById(userId);
+  const findUser = await userModel.findById(user._id);
 
   const storeHash = findUser.password;
 

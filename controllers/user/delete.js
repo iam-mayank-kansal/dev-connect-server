@@ -4,21 +4,17 @@ const logger = require("../../helper/logger");
 const cookie = require("cookie-parser");
 
 async function deleteUser(req, res) {
-  let { email, password } = req.body;
-  email = email.trim();
+  const user = req.user;
+  let { password } = req.body;
   password = password.trim();
 
-  const findUser = await userModel.findOneAndDelete({ email: email });
-
-  if (findUser != null) {
-    logger.log({
-      level: "info",
-      message: await delteUserTemplate(findUser.name),
-    });
-
-    res.clearCookie("devConnect");
-    res.status(201).json(await delteUserTemplate(findUser.name));
-  }
+  const findUser = await userModel.findByIdAndDelete(user._id);
+  logger.log({
+    level: "info",
+    message: await delteUserTemplate(findUser.name),
+  });
+  res.clearCookie("devconnect-auth-token");
+  res.status(201).json(await delteUserTemplate(findUser.name));
 }
 
 module.exports = deleteUser;

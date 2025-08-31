@@ -5,21 +5,18 @@ const encPassword = require("../../helper/encPassword");
 const jwt = require("jsonwebtoken");
 
 async function resetPassword(req, res) {
+  const user = req.user;
   const { newpassword } = req.body;
-  //extracting user based on mongo --> documnet id
-  const userCookie = await req.cookies.devConnect;
-  const decodeValue = jwt.verify(userCookie, process.env.SECRETKEY);
-
-  const userId = decodeValue.payload;
 
   const resetUserPassword = await userModel.findOneAndUpdate(
-    { _id: userId },
+    { _id: user._id },
     { password: await encPassword("genrate", newpassword) }
   );
   logger.log({
     level: "info",
     message: await resetUserPasswordTemplate(resetUserPassword.name),
   });
+  res.clearCookie("devconnect-auth-token");
   res.status(201).json(await resetUserPasswordTemplate(resetUserPassword.name));
 }
 

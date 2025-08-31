@@ -3,8 +3,8 @@ const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
 
 async function signUpValidation(req, res, next) {
-  const { name, email, password, mobile } = req.body;
-  if ((!name, !email, !password, !mobile)) {
+  const { name, email, password } = req.body;
+  if ((!name, !email, !password)) {
     logger.log({
       level: "info",
       message: await failureTemplate(400, "invalid request body"),
@@ -45,31 +45,12 @@ async function signUpValidation(req, res, next) {
       );
   }
 
-  if (name.length < 3) {
+  if (name.length < 3 || name.length > 20) {
     logger.log({
       level: "info",
       message: await failureTemplate(400, "Enter Valid Name"),
     });
     return res.status(400).json(await failureTemplate(400, "Enter Valid Name"));
-  }
-
-  const mobileRegex = /^[6-9]\d{9}$/;
-  if (!mobileRegex.test(mobile)) {
-    logger.log({
-      level: "info",
-      message: await failureTemplate(
-        400,
-        "Mobile number must be 10 digits long, start with 6, 7, 8, or 9, and can optionally include the country code +91."
-      ),
-    });
-    return res
-      .status(400)
-      .json(
-        await failureTemplate(
-          400,
-          "Mobile number must be 10 digits long, start with 6, 7, 8, or 9, and can optionally include the country code +91."
-        )
-      );
   }
 
   const existingUser = await userModel.findOne({ email: email });
