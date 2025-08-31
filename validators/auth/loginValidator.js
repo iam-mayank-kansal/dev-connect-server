@@ -51,7 +51,6 @@ async function loginValidation(req, res, next) {
 
   const checkUser = await encPassword("compare", password, storeHash);
 
-
   if (checkUser == false) {
     logger.log({
       level: "info",
@@ -64,7 +63,7 @@ async function loginValidation(req, res, next) {
   req.user = {
     _id: findUser._id,
     name: findUser.name,
-    email: findUser.email
+    email: findUser.email,
   };
 
   next();

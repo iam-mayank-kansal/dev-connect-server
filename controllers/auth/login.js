@@ -5,7 +5,6 @@ const { loginUserTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 
 async function login(req, res) {
-
   const user = req.user;
 
   //creating jwt token on successful login

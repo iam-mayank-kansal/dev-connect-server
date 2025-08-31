@@ -4,10 +4,9 @@ const userModel = require("../../models/user");
 const encPassword = require("../../helper/encPassword");
 
 async function deleteValidation(req, res, next) {
-
   const user = req.user;
   const { password } = req.body;
-  if ((!password)) {
+  if (!password) {
     logger.log({
       level: "info",
       message: await failureTemplate(400, "invalid request body"),

@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const encPassword = require("../../helper/encPassword");
 
 async function resetPasswordValidation(req, res, next) {
-
   const user = req.user;
 
   const { oldpassword, newpassword } = req.body;
