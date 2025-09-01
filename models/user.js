@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const AutoIncrementFactory = require("mongoose-sequence");
 
 //creating user schema
 const userSchema = new mongoose.Schema(

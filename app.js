@@ -1,21 +1,24 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const chalk = require("chalk");
+const cors=require('cors');
+
+// imports 
 const logger = require("./helper/logger");
 const connectToDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
-const chalk = require("chalk");
-const cors=require('cors');
+const otpRouter = require("./routes/otpRouter");
 
 const app = express();
 
 // Allow all origins (dev mode)
 app.use(cors());
 // some middleware for data transfers
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 // configuring dotenv in main file to use it across all over the project
 dotenv.config();
@@ -52,3 +55,5 @@ connectToDB()
 app.use("/devconnect/auth", authRouter);
 //user routes
 app.use("/devconnect/user", userRouter);
+// otp routes 
+app.use("/devconnect/otp", otpRouter);
