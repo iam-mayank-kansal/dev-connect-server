@@ -7,8 +7,16 @@ const calculateAge = require("../../helper/calculateAge");
 
 async function updateUser(req, res) {
   const user = req.user;
+  
   const { password, name, mobile, bio, dob, designation } = req.body;
-  const userProfilePic = req.file ? `${user.email}.${req.file.filename}` : null;
+    
+  //for photo refernece
+  const userProfilePicRefrence = req.file ? `${user.email}/${req.file.originalname}` : null;
+  
+  //for photo buffer
+  const userPhotoBase64= req.file ? req.file.buffer.toString('base64'):null;
+ 
+ 
   await userModel.findByIdAndUpdate(user._id, {
     password: await encPassword("genrate", password),
     name: name.trim(),
@@ -17,7 +25,8 @@ async function updateUser(req, res) {
     dob: dob.trim(),
     designation: designation.trim(),
     age: calculateAge(dob.trim()),
-    profilePic: userProfilePic,
+    profilePic:userPhotoBase64,
+    profilePicRefrence: userProfilePicRefrence,
   });
 
   const updatedUser = await userModel.findById(user._id);

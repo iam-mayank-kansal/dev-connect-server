@@ -6,8 +6,12 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const chalk = require("chalk");
+const cors=require('cors');
+
 const app = express();
 
+// Allow all origins (dev mode)
+app.use(cors());
 // some middleware for data transfers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -13,14 +13,21 @@ const resetPasswordValidation = require("../validators/user/resetPasswordValidat
 const resetPassword = require("../controllers/user/resetPassword");
 const updateUserValidation = require("../validators/user/updateUserValidator");
 const updateUser = require("../controllers/user/updateUser");
+const displayUserProfile=require("../controllers/user/displayUserProfile")
 
 //middleware for file uploading
 const upload=uploadedImageStore()
+
 
 //user routes
 userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
 userRouter.patch("/reset-password",authRoute,resetPasswordValidation,resetPassword);
 userRouter.patch("/update-user",authRoute,upload.single("profilePic"),updateUserValidation,updateUser);
+userRouter.get("/display-user",authRoute,displayUserProfile);
+
+
+//  --> use while testing for get profile in browser
+// userRouter.get("/display-user",displayUserProfile);
 
 
 

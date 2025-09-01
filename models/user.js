@@ -33,7 +33,10 @@ const userSchema = new mongoose.Schema(
     designation: {
       type: String,
     },
-    profilePic: {
+    profilePic:{
+      type:String,
+    },
+    profilePicRefrence: {
       type:String //storing base64 encoded data
     },
   },
