@@ -5,6 +5,7 @@ const connectToDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
+const chalk = require("chalk");
 const app = express();
 
 // some middleware for data transfers
@@ -19,7 +20,14 @@ dotenv.config();
 connectToDB()
   .then(() => {
     app.listen(process.env.PORT, () => {
-      console.log("server started");
+      
+      console.log(chalk.cyan.bold("===================================="));
+      console.log(chalk.yellow.bold("🚀  DEV CONNECT SERVER STARTED  🚀"));
+      console.log(chalk.green.bold("Project: Dev Connect"));
+      console.log(chalk.magenta.bold("Contributors: Mayank Kansal & Kartik Bhatt"));
+      console.log(chalk.blue("Server running at: http://localhost:3000"));
+      console.log(chalk.cyan.bold("===================================="));
+      
       logger.log({
         level: "info",
         message: `Server Running Fine at PORT : ${process.env.PORT}`,

@@ -150,6 +150,38 @@ async function updateUserValidation(req, res, next) {
         )
       );
   }
+  if (req.file) {
+    // Validate file type
+    if (!req.file.mimetype.startsWith("image/")) {
+      logger.log({
+        level: "info",
+        message: await failureTemplate(400, "Only image files are allowed"),
+      });
+      return res
+        .status(400)
+        .json(await failureTemplate(400, "Only image files are allowed"));
+    }
+
+    // Validate file size (max 2MB)
+    const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+    if (req.file.size > MAX_SIZE) {
+      logger.log({
+        level: "info",
+        message: await failureTemplate(
+          400,
+          `Profile picture cannot exceed ${MAX_SIZE / 1024 / 1024} MB`
+        ),
+      });
+      return res
+        .status(400)
+        .json(
+          await failureTemplate(
+            400,
+            `Profile picture cannot exceed ${MAX_SIZE / 1024 / 1024} MB`
+          )
+        );
+    }
+  }
   next();
 }
 

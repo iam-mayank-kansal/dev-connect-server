@@ -34,8 +34,7 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     profilePic: {
-      data: Buffer,
-      contentType: String,
+      type:String //storing base64 encoded data
     },
   },
   { timestamps: true }

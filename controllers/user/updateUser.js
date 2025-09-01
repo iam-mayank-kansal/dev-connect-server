@@ -3,9 +3,12 @@ const encPassword = require("../../helper/encPassword");
 const { updateUserTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const calculateAge = require("../../helper/calculateAge");
+
+
 async function updateUser(req, res) {
   const user = req.user;
   const { password, name, mobile, bio, dob, designation } = req.body;
+  const userProfilePic = req.file ? `${user.email}.${req.file.filename}` : null;
   await userModel.findByIdAndUpdate(user._id, {
     password: await encPassword("genrate", password),
     name: name.trim(),
@@ -14,6 +17,7 @@ async function updateUser(req, res) {
     dob: dob.trim(),
     designation: designation.trim(),
     age: calculateAge(dob.trim()),
+    profilePic: userProfilePic,
   });
 
   const updatedUser = await userModel.findById(user._id);
