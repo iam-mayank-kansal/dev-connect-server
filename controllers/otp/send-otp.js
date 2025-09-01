@@ -1,34 +1,58 @@
-const { level } = require("winston");
-const generateOTP = require("../../helper/generateOtp");
+const genrateOtp = require("../../helper/genrateOtp");
 const logger = require("../../helper/logger");
-const sendOtp = require("../../helper/sendMail");
+const shipOTP = require("../../helper/sendMail");
+const { otpSentTemplate, failureTemplate } = require("../../helper/template");
+const OTPModel = require("../../models/otp");
+const OTP_LENGTH = process.env.OTP_LENGTH || 6;
 
 async function sendOTP(req, res, next) {
     const user = req.user;
+    const otp = genrateOtp(OTP_LENGTH);
 
-    const otp = await generateOTP();
-    if (user.type == 'email') {
-        await sendOtp(otp, user.email, user.type);
-        logger({
+    try {
+        const newOtp = new OTPModel({
+            email: user?.email,
+            mobile: user?.mobile,
+            otp: otp,
+            type: user?.email ? 'email' : 'mobile',
+            expiringTime: new Date(Date.now() + 5 * 60000),
+            status: "pending"
+        });
+
+        const mongooseResponse = await newOtp.save();
+        logger.log({
             level: "info",
-            message: `OTP Sent Successfully to ${user.name} on email : ${user.email}`
+            message: mongooseResponse.message
         })
-    }
-    else if (user.type == 'mobile') {
-        await sendOtp(otp, user.mobile, user.type);
-        logger({
-            level: "info",
-            message: `OTP Sent Successfully to ${user.name} on mobile : ${user.mobile}`
-        })
-    }
-    else{
-         logger({
+
+        if (user.otpType == 'email') {
+            await shipOTP(otp, user.email, user.otpType);
+            logger.log({
+                level: "info",
+                message: `OTP Sent Successfully to ${user.name} on email : ${user.email}`
+            });
+            return res.status(200).json(await otpSentTemplate(user.email));
+        } else if (user.otpType == 'mobile') {
+            await shipOTP(otp, user.mobile, user.otpType);
+            logger.log({
+                level: "info",
+                message: `OTP Sent Successfully to ${user.name} on mobile : ${user.mobile}`
+            });
+            return res.status(200).json(await otpSentTemplate(user.mobile));
+        } else {
+            logger.log({
+                level: "error",
+                message: `Unspecified OTP type it could only be email or mobile`
+            });
+            return res.status(400).json(await failureTemplate(400, "No valid contact info for user"));
+        }
+    } catch (error) {
+        logger.log({
             level: "error",
-            message: `Unspecified OTP type it could only be email or mobile`
-        })
+            message: `Failed to send OTP: ${error.message}`
+        });
+        return res.status(500).json(await failureTemplate(500, "Failed to send OTP"));
     }
-
-    next();
 }
 
-module.exports = sendOTP
+module.exports = sendOTP;

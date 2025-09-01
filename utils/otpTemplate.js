@@ -77,7 +77,7 @@ function otpTemplate({ otp, title = "OTP Verification", message = "Use the OTP b
             <div class="otp-box">
               <span class="otp">${otp}</span>
             </div>
-            <p>This OTP is valid for the next <b>10 minutes</b>. Do not share it with anyone.</p>
+            <p>This OTP is valid for the next <b>5 minutes</b>. Do not share it with anyone.</p>
             <p>If you didn’t request this, please ignore this email.</p>
             <br/>
             <p style="color:#555555;">Regards,<br/>The DevConnect Team</p>

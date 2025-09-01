@@ -1,16 +1,17 @@
 const crypto = require("crypto");
 
-function genrateOtp(length = 6) {
-  //genrate random bytes
-  const buffer = crypto.randomBytes(length);
-  // console.log('bufffer>>',buffer);
+function generateOtp(length = 6) {
+  if (length <= 0) {
+    throw new Error("OTP length must be a positive integer.");
+  }
 
-  //convert to numeric otp
-  const otp = parseInt(buffer.toString("hex"), 16).toString().slice(0, length);
-  return otp;
+  const min = Math.pow(10, length - 1);
+  const max = Math.pow(10, length) - 1;
+
+  const otp = crypto.randomInt(min, max + 1);
+
+  // Return the OTP as a string.
+  return otp.toString();
 }
 
-//to check this genrate otp fn
-// console.log("Generated OTP >>>", genrateOtp(6));
-
-module.exports = genrateOtp;
+module.exports = generateOtp;

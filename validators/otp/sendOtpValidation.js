@@ -1,7 +1,9 @@
-const sendOtp = require("../../helper/sendMail");
+const logger = require("../../helper/logger");
+const { failureTemplate } = require("../../helper/template");
+const userModel = require("../../models/user");
 
-async function forgetPasswordValidation(req, res, next) {
-     const { email, mobile } = req.body;
+async function sendOtpValidation(req, res, next) {
+    const { email, mobile } = req.body;
 
     const query = {};
     if (email) query.email = email;
@@ -53,7 +55,6 @@ async function forgetPasswordValidation(req, res, next) {
     }
 
     req.user = {
-        _id: findUser._id,
         name: findUser.name,
         email: query.email ? query.email : null,
         mobile: query.mobile ? query.mobile : null,
@@ -63,4 +64,4 @@ async function forgetPasswordValidation(req, res, next) {
     next();
 }
 
-module.exports = forgetPasswordValidation;
+module.exports = sendOtpValidation;

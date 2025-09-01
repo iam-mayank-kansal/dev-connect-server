@@ -32,11 +32,17 @@ const userSchema = new mongoose.Schema(
     designation: {
       type: String,
     },
-    profilePic:{
-      type:String,
+    profilePic: {
+      type: String,
     },
     profilePicRefrence: {
-      type:String //storing base64 encoded data
+      type: String,
+    },
+    resetToken: {
+      type: String,
+    },
+    resetTokenExpiry: {
+      type: Date,
     },
   },
   { timestamps: true }

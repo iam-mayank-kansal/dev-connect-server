@@ -1,6 +1,8 @@
 const nodemailer = require("nodemailer");
 const otpTemplate = require("../utils/otpTemplate");
 const logger = require("./logger");
+const dotenv= require("dotenv");
+dotenv.config();  
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -10,7 +12,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function sendOtp(otp, receiver, type) {
+async function shipOTP(otp, receiver, type) {
   if (type == 'email') 
     {
     const info = await transporter.sendMail({
@@ -39,4 +41,4 @@ async function sendOtp(otp, receiver, type) {
   }
 }
 
-module.exports = sendOtp;
+module.exports = shipOTP;

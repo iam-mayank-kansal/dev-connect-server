@@ -12,12 +12,8 @@ const resetPasswordValidation = require("../validators/user/resetPasswordValidat
 const resetPassword = require("../controllers/user/resetPassword");
 const updateUserValidation = require("../validators/user/updateUserValidator");
 const updateUser = require("../controllers/user/updateUser");
-const forgetPasswordValidation = require("../validators/user/forgetPasswordValidation");
-
-//OTP imports
-const sendOTP = require("../controllers/otp/send-otp");
-const otpRouter = require("./otpRouter");
-const forgetPassword = require("../controllers/user/forgetPassword");
+const setNewPasswordValidation = require("../validators/user/setNewPasswordValidation");
+const setNewPassword = require("../controllers/user/setNewPassword");
 
 //middleware for file uploading
 const upload = uploadedImageStore()
@@ -27,6 +23,6 @@ userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
 userRouter.patch("/reset-password", authRoute, resetPasswordValidation, resetPassword);
 userRouter.patch("/update-user", authRoute, upload.single("profilePic"), updateUserValidation, updateUser);
 userRouter.patch("/reset-password", authRoute, resetPasswordValidation, resetPassword);
-userRouter.post("/forget-password", forgetPasswordValidation, forgetPassword );
+userRouter.patch("/set-new-password", setNewPasswordValidation, setNewPassword);
 
 module.exports = userRouter;
