@@ -24,7 +24,6 @@ userRouter.get("/profile", authRoute, displayUser);
 userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
 userRouter.patch("/reset-password", authRoute, resetPasswordValidation, resetPassword);
 userRouter.patch("/update-user", authRoute, upload.single("profilePic"), updateUserValidation, updateUser);
-userRouter.patch("/reset-password", authRoute, resetPasswordValidation, resetPassword);
 userRouter.patch("/set-new-password", setNewPasswordValidation, setNewPassword);
 
 module.exports = userRouter;
