@@ -1,6 +1,4 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("../../models/user");
-const encPassword = require("../../helper/encPassword");
 const { loginUserTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 

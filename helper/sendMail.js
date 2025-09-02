@@ -1,8 +1,8 @@
 const nodemailer = require("nodemailer");
 const otpTemplate = require("../utils/otpTemplate");
 const logger = require("./logger");
-const dotenv= require("dotenv");
-dotenv.config();  
+const dotenv = require("dotenv");
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -13,8 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function shipOTP(otp, receiver, type) {
-  if (type == 'email') 
-    {
+  if (type == "email") {
     const info = await transporter.sendMail({
       from: `"Devconnect" <${process.env.GMAIL_USER}>`,
       to: receiver,
@@ -22,22 +21,21 @@ async function shipOTP(otp, receiver, type) {
       html: otpTemplate({
         otp,
         title: "OTP Verification for Password Reset",
-        message: "We received a request to reset your password. Use the OTP below to proceed:",
+        message:
+          "We received a request to reset your password. Use the OTP below to proceed:",
       }),
     });
 
     logger.log({
-      level : "info",
-      message : "OTP on mail sent Successfully",
-      messageId : info.messageId
-    })
-  }
-  else if(type == 'mobile')
-  {
-     logger.log({
-      level : "info",
-      message : "OTP on mobile service under construction"
-    })
+      level: "info",
+      message: "OTP on mail sent Successfully",
+      messageId: info.messageId,
+    });
+  } else if (type == "mobile") {
+    logger.log({
+      level: "info",
+      message: "OTP on mobile service under construction",
+    });
   }
 }
 

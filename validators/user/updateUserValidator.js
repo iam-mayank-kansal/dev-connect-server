@@ -4,7 +4,6 @@ const userModel = require("../../models/user");
 
 async function updateUserValidation(req, res, next) {
   const user = req.user;
-  const { password, name, mobile, bio, dob, designation } = req.body;
   if (!req.body) {
     logger.log({
       level: "info",
@@ -14,6 +13,18 @@ async function updateUserValidation(req, res, next) {
       .status(400)
       .json(await failureTemplate(400, "invalid request body"));
   }
+
+  //fields array
+  const allowedFields = ["name", "mobile", "bio", "dob", "designation"];
+  const payload = {};
+
+  //only run that code block which matches with the allowFields array
+  for (const key of allowedFields) {
+    if (req.body[key] !== undefined) {
+      payload[key] = req.body[key];
+    }
+  }
+
   const findUser = await userModel.findById(user._id);
 
   if (findUser == null) {
@@ -35,54 +46,42 @@ async function updateUserValidation(req, res, next) {
       );
   }
 
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-  if (!passwordRegex.test(password)) {
-    logger.log({
-      level: "info",
-      message: await failureTemplate(
-        400,
-        "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)."
-      ),
-    });
-    return res
-      .status(400)
-      .json(
-        await failureTemplate(
-          400,
-          "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)."
-        )
-      );
-  }
-
-  if (name.length < 3 || name.length > 20) {
+  if (payload.name?.length < 3 || payload.name?.length > 20) {
     logger.log({
       level: "info",
       message: await failureTemplate(400, "Enter Valid Name"),
     });
     return res.status(400).json(await failureTemplate(400, "Enter Valid Name"));
   }
+
   const mobileRegex = /^[6-9]\d{9}$/;
-  if (!mobileRegex.test(mobile)) {
-    logger.log({
-      level: "info",
-      message: await failureTemplate(
-        400,
-        "Mobile number must be 10 digits long, start with 6, 7, 8, or 9, and can optionally include the country code +91."
-      ),
-    });
-    return res
-      .status(400)
-      .json(
-        await failureTemplate(
+  if (payload.mobile) {
+    if (!mobileRegex.test(payload.mobile)) {
+      logger.log({
+        level: "info",
+        message: await failureTemplate(
           400,
           "Mobile number must be 10 digits long, start with 6, 7, 8, or 9, and can optionally include the country code +91."
-        )
-      );
+        ),
+      });
+      return res
+        .status(400)
+        .json(
+          await failureTemplate(
+            400,
+            "Mobile number must be 10 digits long, start with 6, 7, 8, or 9, and can optionally include the country code +91."
+          )
+        );
+    }
   }
+
   // Name Validation
   const nameRegex = /^[a-zA-Z\s]+$/;
-  if (!name || name.length < 3 || name.length > 50 || !nameRegex.test(name)) {
+  if (
+    payload.name?.length < 3 ||
+    payload.name?.length > 50 ||
+    !nameRegex.test(payload.name)
+  ) {
     logger.log({
       level: "info",
       message: await failureTemplate(
@@ -103,7 +102,7 @@ async function updateUserValidation(req, res, next) {
   // DOB Validation
   // Expecting YYYY-MM-DD format
   const dobRegex = /^\d{4}-\d{2}-\d{2}$/;
-  if (!dob || !dobRegex.test(dob)) {
+  if (payload.dob && !dobRegex.test(payload.dob)) {
     logger.log({
       level: "info",
       message: await failureTemplate(
@@ -122,7 +121,7 @@ async function updateUserValidation(req, res, next) {
   }
 
   // Bio Validation
-  if (bio && bio.length > 200) {
+  if (payload.bio?.length > 200) {
     logger.log({
       level: "info",
       message: await failureTemplate(400, "Bio cannot exceed 200 characters."),
@@ -133,7 +132,7 @@ async function updateUserValidation(req, res, next) {
   }
 
   // Designation Validation
-  if (!designation || designation.length < 2 || designation.length > 100) {
+  if (payload.designation?.length < 2 || payload.designation?.length > 100) {
     logger.log({
       level: "info",
       message: await failureTemplate(
@@ -150,6 +149,7 @@ async function updateUserValidation(req, res, next) {
         )
       );
   }
+
   if (req.file) {
     // Validate file type
     if (!req.file.mimetype.startsWith("image/")) {

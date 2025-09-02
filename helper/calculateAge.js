@@ -16,7 +16,4 @@ function calculateAge(dob) {
   return age;
 }
 
-// Example
-//   console.log(calculateAge("1999-08-31")); // 👉 26 (as of 2025)
-
 module.exports = calculateAge;

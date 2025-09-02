@@ -6,8 +6,9 @@ const cookie = require("cookie-parser");
 async function displayUser(req, res) {
   const user = req.user;
 
-  const findUser = await userModel.findById(user._id)
-    .select('-password -updatedAt -resetToken -resetTokenExpiry -__v');
+  const findUser = await userModel
+    .findById(user._id)
+    .select("-password -updatedAt -resetToken -resetTokenExpiry -__v");
   logger.log({
     level: "info",
     action: "user displayed successfully",
@@ -17,5 +18,3 @@ async function displayUser(req, res) {
 }
 
 module.exports = displayUser;
-
-

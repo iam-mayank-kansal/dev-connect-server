@@ -5,36 +5,32 @@ const { v4: uuid } = require("uuid");
 
 //helper function to suport image/file uploads
 function uploadedImageStore() {
-
   //disk storage
 
-  // const storeImage = multer.diskStorage({
-  //   destination: function (req, file, cb) {
-  //     const uploadPath = path.join(__dirname, "..", "uploads");
-  //     console.log(uploadPath);
-  //     // ensure folder exists
-  //     if (!fs.existsSync(uploadPath)) {
-  //       fs.mkdirSync(uploadPath, { recursive: true });
-  //     }
+  const storeImage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      const uploadPath = path.join(__dirname, "..", "uploads/profilePic");
 
-  //     cb(null, uploadPath);
-  //   },
+      // ensure folder exists
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
 
-  //   filename: function (req, file, cb) {
-  //     //image store format
-  //     const imageStringFormat = `DevConnect-profilePic.${new Date().toISOString().replace(/:/g, "-").split(".")[0]}.${uuid()}`;
+      cb(null, uploadPath);
+    },
 
-  //     cb(null, `${imageStringFormat}.${file.originalname}`);
-  //   },
-  // });
+    filename: function (req, file, cb) {
+      //image store format
+      const imageStringFormat = `DevConnect-userprofilePic.${new Date().toISOString().replace(/:/g, "-").split(".")[0]}.${uuid()}`;
 
-  // return multer({ storage: storeImage });
+      cb(null, `${imageStringFormat}.${file.originalname}`);
+    },
+  });
 
+  return multer({ storage: storeImage });
 
   // // memory storage for processing in memory
-  return multer({ storage: multer.memoryStorage() });
-
+  // return multer({ storage: multer.memoryStorage() });
 }
-
 
 module.exports = uploadedImageStore;

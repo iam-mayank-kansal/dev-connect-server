@@ -1,5 +1,9 @@
 // utils/otpTemplate.js
-function otpTemplate({ otp, title = "OTP Verification", message = "Use the OTP below to Reset Password." }) {
+function otpTemplate({
+  otp,
+  title = "OTP Verification",
+  message = "Use the OTP below to Reset Password.",
+}) {
   return `
   <!DOCTYPE html>
   <html>

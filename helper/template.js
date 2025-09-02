@@ -71,7 +71,7 @@ async function displayUserTemplate(findUser) {
   return template;
 }
 
-// OTP MODULE 
+// OTP MODULE
 async function otpSentTemplate(destination) {
   return {
     responseCode: "200",
@@ -79,7 +79,6 @@ async function otpSentTemplate(destination) {
     message: `OTP sent successfully to ${destination}`,
   };
 }
-
 
 module.exports = {
   failureTemplate,
@@ -89,5 +88,5 @@ module.exports = {
   loginUserTemplate,
   updateUserTemplate,
   displayUserTemplate,
-  otpSentTemplate
+  otpSentTemplate,
 };

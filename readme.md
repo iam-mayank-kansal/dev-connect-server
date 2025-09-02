@@ -11,7 +11,6 @@
 -> /update -- completed
 -> /delete -- completed
 -> /resetpassword -- completed
--> /display-user -- completed 
+-> /display-user -- completed
 
-
-NOTE -> profile.html is made just to test diplay user in broswer 
+NOTE -> profile.html is made just to test diplay user in broswer

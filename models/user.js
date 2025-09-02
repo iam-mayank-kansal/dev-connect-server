@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
     },
     password: {
       type: String,
@@ -20,7 +21,12 @@ const userSchema = new mongoose.Schema(
       type: Number,
     },
     mobile: {
-      type: Number,
+      countryCode: {
+        type: String,
+      },
+      number: {
+        type: String,
+      },
     },
     bio: {
       type: String,
@@ -43,6 +49,55 @@ const userSchema = new mongoose.Schema(
     },
     resetTokenExpiry: {
       type: Date,
+    },
+    location: {
+      country: String,
+      state: String,
+      pincode: String,
+      address: String,
+    },
+    socialLinks: [
+      {
+        title: String,
+        link: String,
+      },
+    ],
+    skills: {
+      type: [String],
+      default: [],
+    },
+    education: {
+      type: [
+        {
+          degree: String,
+          institution: String,
+          period: String,
+        },
+      ],
+      default: [],
+    },
+    experience: {
+      type: [
+        {
+          position: String,
+          company: String,
+          period: String,
+          description: String,
+          image: String,
+        },
+      ],
+      default: [],
+    },
+    cvLink: String,
+    certification: {
+      type: [
+        {
+          certificate: String,
+          time: String,
+          image: String,
+        },
+      ],
+      default: [],
     },
   },
   { timestamps: true }

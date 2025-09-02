@@ -5,7 +5,7 @@ const logger = require("../helper/logger");
 async function authRoute(req, res, next) {
   try {
     const userCookie = await req.cookies["devconnect-auth-token"];
-    
+
     logger.log({
       level: "info",
       message: "user cookie auth route.",
@@ -31,7 +31,7 @@ async function authRoute(req, res, next) {
 
     // attaching user to req
     req.user = decoded?.payload;
-    
+
     next();
   } catch (error) {
     logger.log({
