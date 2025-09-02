@@ -14,7 +14,10 @@ const otpRouter = require("./routes/otpRouter");
 const app = express();
 
 // Allow all origins (dev mode)
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',   
+  credentials: true                  
+}));
 // some middleware for data transfers
 app.use(cookieParser());
 app.use(express.json());
@@ -32,7 +35,7 @@ connectToDB()
       console.log(chalk.yellow.bold("🚀  DEV CONNECT SERVER STARTED  🚀"));
       console.log(chalk.green.bold("Project: Dev Connect"));
       console.log(chalk.magenta.bold("Contributors: Mayank Kansal & Kartik Bhatt"));
-      console.log(chalk.blue("Server running at: http://localhost:3000"));
+      console.log(chalk.blue("Server running at: http://localhost:8080"));
       console.log(chalk.cyan.bold("===================================="));
       
       logger.log({

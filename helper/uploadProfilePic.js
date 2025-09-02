@@ -5,9 +5,9 @@ const { v4: uuid } = require("uuid");
 
 //helper function to suport image/file uploads
 function uploadedImageStore() {
-  
+
   //disk storage
-  
+
   // const storeImage = multer.diskStorage({
   //   destination: function (req, file, cb) {
   //     const uploadPath = path.join(__dirname, "..", "uploads");
@@ -29,8 +29,8 @@ function uploadedImageStore() {
   // });
 
   // return multer({ storage: storeImage });
-  
-  
+
+
   // // memory storage for processing in memory
   return multer({ storage: multer.memoryStorage() });
 

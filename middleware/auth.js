@@ -31,6 +31,7 @@ async function authRoute(req, res, next) {
 
     // attaching user to req
     req.user = decoded?.payload;
+    
     next();
   } catch (error) {
     logger.log({
