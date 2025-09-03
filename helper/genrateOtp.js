@@ -11,3 +11,5 @@ function generateOtp(length = 6) {
 }
 
 module.exports = generateOtp;
+
+

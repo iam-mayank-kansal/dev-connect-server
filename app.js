@@ -42,7 +42,7 @@ connectToDB()
       console.log(
         chalk.magenta.bold("Contributors: Mayank Kansal & Kartik Bhatt")
       );
-      console.log(chalk.blue("Server running at: http://localhost:8080"));
+      console.log(chalk.blue(`Server running at: http://localhost:${process.env.PORT}`));
       console.log(chalk.cyan.bold("===================================="));
 
       logger.log({

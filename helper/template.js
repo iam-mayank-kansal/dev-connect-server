@@ -51,6 +51,15 @@ async function loginUserTemplate(checkUser) {
   };
   return template;
 }
+//LOGOUT
+async function logoutUserTemplate() {
+  const template = {
+    responseCode: "201",
+    status: "success",
+    message: `user logged out successfully`,
+  };
+  return template;
+}
 
 async function updateUserTemplate(name, updatedUser) {
   const template = {
@@ -86,6 +95,7 @@ module.exports = {
   delteUserTemplate,
   resetUserPasswordTemplate,
   loginUserTemplate,
+  logoutUserTemplate,
   updateUserTemplate,
   displayUserTemplate,
   otpSentTemplate,
