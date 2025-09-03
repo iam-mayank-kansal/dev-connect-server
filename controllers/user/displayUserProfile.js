@@ -1,7 +1,6 @@
 const userModel = require("../../models/user");
 const { displayUserTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
-const cookie = require("cookie-parser");
 
 async function displayUser(req, res) {
   const user = req.user;

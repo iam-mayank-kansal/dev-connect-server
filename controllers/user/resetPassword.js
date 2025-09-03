@@ -2,7 +2,6 @@ const userModel = require("../../models/user");
 const { resetUserPasswordTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const encPassword = require("../../helper/encPassword");
-const jwt = require("jsonwebtoken");
 
 async function resetPassword(req, res) {
   const user = req.user;
