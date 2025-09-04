@@ -69,7 +69,7 @@ async function updateUser(req, res) {
       const profilePictureFileName = updateData?.file?.profilePicture?.[0]
         ? `${user.email}.${req.files.profilePicture[0].filename}`
         : null;
-      updateData.profilePicture = `${user.email}.${profilePictureFileName}`;
+      updateData.profilePicture = profilePictureFileName;
     }
 
     /**
@@ -79,7 +79,7 @@ async function updateUser(req, res) {
       const resumeFileName = updateData?.file?.resume?.[0]
         ? `${user.email}.${req.files.resume[0].filename}`
         : null;
-      updateData.resume = `${user.email}.${resumeFileName}`;
+      updateData.resume = resumeFileName;
     }
 
     /**
