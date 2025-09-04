@@ -5,7 +5,7 @@ const encPassword = require("../../helper/encPassword");
 
 async function loginValidation(req, res, next) {
   const { email, password } = req.body;
-  if ((!email, !password)) {
+  if (!email || !password) {
     logger.log({
       level: "info",
       message: await failureTemplate(400, "invalid request body"),
