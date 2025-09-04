@@ -25,7 +25,7 @@ userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
 userRouter.patch(
   "/update-user",
   authRoute,
-  upload.single("profilePic"),
+  upload.single("profilePicture"),
   updateUserValidation,
   updateUser
 );
