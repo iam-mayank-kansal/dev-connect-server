@@ -59,7 +59,7 @@ connectToDB()
     });
   });
 
-//routes
+//routes ------------------------->
 
 //auth routes
 app.use("/devconnect/auth", authRouter);
