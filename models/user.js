@@ -77,6 +77,7 @@ const userSchema = new mongoose.Schema(
 
     certification: [
       {
+        company: String,
         certificate: String,
         issuedBy: String,
         issueDate: Date,

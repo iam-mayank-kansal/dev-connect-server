@@ -72,10 +72,10 @@ async function signUpValidation(req, res, next) {
       );
   }
 
-    logger.log({
-        level: "info",
-        message: "User signup Validation Success",
-      });
+  logger.log({
+    level: "info",
+    message: "User signup Validation Success",
+  });
 
   next();
 }

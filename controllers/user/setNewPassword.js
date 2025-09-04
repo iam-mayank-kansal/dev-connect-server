@@ -24,7 +24,7 @@ async function setNewPassword(req, res) {
         level: "info",
         message: "User Password Updated Successfully",
       });
-   
+
       return res.status(200).json({
         status: 200,
         message: "User Password Updated successfully",

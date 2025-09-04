@@ -1,5 +1,8 @@
 const userModel = require("../../models/user");
-const { updateUserTemplate, failureTemplate } = require("../../helper/template");
+const {
+  updateUserTemplate,
+  failureTemplate,
+} = require("../../helper/template");
 const logger = require("../../helper/logger");
 const calculateAge = require("../../helper/calculateAge");
 const { v4: uuid } = require("uuid");
@@ -8,7 +11,7 @@ async function updateUser(req, res) {
   try {
     const user = req.user;
     const findUser = await userModel.findById(user._id);
-    const updateData = { ...req.updatedBody };
+    const updateData = await { ...req.updatedBody };
 
     if (updateData.name) {
       updateData.name = updateData.name.trim();
@@ -62,21 +65,34 @@ async function updateUser(req, res) {
     /**
      * 🔹 Profile Picture
      */
-    if (req.file) {
-      const imageStringFormat = `DevConnect-userprofilePic.${new Date()
-        .toISOString()
-        .replace(/:/g, "-")
-        .split(".")[0]}.${uuid()}`;
-      updateData.profilePicture = `${user.email}.${imageStringFormat}`;
+    if (updateData.file) {
+      const profilePictureFileName = updateData?.file?.profilePicture?.[0]
+        ? `${user.email}.${req.files.profilePicture[0].filename}`
+        : null;
+      updateData.profilePicture = `${user.email}.${profilePictureFileName}`;
+    }
+
+    /**
+     * 🔹 Resume
+     */
+    if (updateData.file) {
+      const resumeFileName = updateData?.file?.resume?.[0]
+        ? `${user.email}.${req.files.resume[0].filename}`
+        : null;
+      updateData.resume = `${user.email}.${resumeFileName}`;
     }
 
     /**
      * 🔹 Update user
      */
-    const updatedUser = await userModel.findByIdAndUpdate(user._id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedUser = await userModel.findByIdAndUpdate(
+      user._id,
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     logger.log({
       level: "info",
@@ -84,7 +100,9 @@ async function updateUser(req, res) {
       userAction: "user updated successfully",
     });
 
-    return res.status(200).json(await updateUserTemplate(findUser.name, updatedUser));
+    return res
+      .status(200)
+      .json(await updateUserTemplate(findUser.name, updatedUser));
   } catch (error) {
     logger.log({
       level: "error",

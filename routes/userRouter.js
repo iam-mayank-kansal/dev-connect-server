@@ -1,7 +1,6 @@
 const express = require("express");
 const userRouter = express.Router();
-const uploadedImageStore = require("../helper/uploadProfilePic");
-
+const uploadStore = require("../helper/upload");
 //auth middleware
 const authRoute = require("../middleware/auth");
 
@@ -16,8 +15,8 @@ const setNewPasswordValidation = require("../validators/user/setNewPasswordValid
 const setNewPassword = require("../controllers/user/setNewPassword");
 const displayUser = require("../controllers/user/displayUserProfile");
 
-//middleware for file uploading
-const upload = uploadedImageStore();
+//middleware for image uploading
+const upload = uploadStore();
 
 //user routes
 userRouter.get("/profile", authRoute, displayUser);
@@ -25,7 +24,10 @@ userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
 userRouter.patch(
   "/update-user",
   authRoute,
-  upload.single("profilePicture"),
+  upload.fields([
+    { name: "profilePicture", maxCount: 1 },
+    { name: "resume", maxCount: 1 },
+  ]),
   updateUserValidation,
   updateUser
 );

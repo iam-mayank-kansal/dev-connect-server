@@ -60,10 +60,10 @@ async function loginValidation(req, res, next) {
     return res.status(400).json(await failureTemplate(400, "Invalid password"));
   }
 
-   logger.log({
-      level: "info",
-      message: "User Login Validation Success",
-    });
+  logger.log({
+    level: "info",
+    message: "User Login Validation Success",
+  });
 
   req.user = {
     _id: findUser._id,
