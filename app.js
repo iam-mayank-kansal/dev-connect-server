@@ -44,10 +44,8 @@ logger.log({
   timestamp: new Date().toISOString(),
 });
 
-
 // statically hosting uploads folder
 app.use("/uploads", express.static("uploads"));
-
 
 // listening to server if it's DB connection Successful
 connectToDB()

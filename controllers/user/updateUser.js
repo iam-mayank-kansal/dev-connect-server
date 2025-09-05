@@ -31,7 +31,7 @@ async function updateUser(req, res) {
       }
     }
 
-    // Skills array 
+    // Skills array
     if (updateData.skills && Array.isArray(reqBodyData.skills)) {
       updateData.skills = updateData?.skills?.map((skill) => skill.trim());
     }
@@ -44,7 +44,6 @@ async function updateUser(req, res) {
         endDate: edu.endDate ? new Date(edu.endDate) : null,
       }));
     }
-
 
     // Experience dates
     if (Array.isArray(updateData.experience)) {
@@ -82,7 +81,6 @@ async function updateUser(req, res) {
       updateData.socialLinks = filteredLinks;
     }
 
-
     // Profile Picture
     if (updateData.file) {
       const profilePictureFileName = updateData?.file?.profilePicture?.[0]
@@ -118,8 +116,7 @@ async function updateUser(req, res) {
     return res
       .status(200)
       .json(await updateUserTemplate(findUser.name, updatedUser));
-  } 
-  catch (error) {
+  } catch (error) {
     logger.log({
       level: "error",
       message: `Error in updateUser controller: ${error.message}`,
