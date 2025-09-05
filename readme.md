@@ -1,371 +1,296 @@
-## API DOCUMENTATION
+# DevConnect API
+
+A comprehensive REST API for developer networking and profile management, built with Node.js and Express.js.
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+  - [Authentication](#authentication)
+  - [User Management](#user-management)
+  - [Utility Services](#utility-services)
+- [Request/Response Examples](#requestresponse-examples)
+- [Error Handling](#error-handling)
+- [Contributing](#contributing)
+
+## 🚀 Overview
+
+DevConnect API provides a robust backend solution for developer networking platforms. It offers secure authentication, comprehensive user profile management, and utility services like OTP verification for password recovery.
+
+## ✨ Features
+
+- **Secure Authentication**: JWT-based login/logout system
+- **Comprehensive User Profiles**: Support for skills, education, experience, certifications
+- **File Upload Support**: Profile pictures and resume uploads
+- **Password Management**: Reset and recovery functionality with OTP verification
+- **Social Integration**: LinkedIn and GitHub profile linking
+- **RESTful Architecture**: Clean, predictable API design
+
+## 🛠 Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- MongoDB
+- npm or yarn
+
+### Base URL
+
+```
+http://localhost:3000/devconnect
+```
+
+## 📡 API Endpoints
+
+### Authentication
+
+#### Sign Up
+Create a new user account.
+
+```http
+POST /auth/sign-up
+```
+
+**Required Fields:** `email`, `name`, `password`, `mobile`
+
+#### Login
+Authenticate an existing user.
+
+```http
+POST /auth/login
+```
+
+**Required Fields:** `email`, `password`
+
+#### Logout
+Terminate the current user session.
+
+```http
+POST /auth/logout
+```
+
+**Authentication:** Required
 
 ---
 
-## AUTH API
+### User Management
 
-## SIGNUP
+#### Delete User Account
+Permanently delete a user account.
 
---> METHOD : POST
---> URL: http://localhost:3000/devconnect/auth/sign-up
+```http
+DELETE /user/delete
+```
 
---> Required Fields = [email,name,password,mobile]
+**Required Fields:** `email`, `password`
 
---> REQUEST BODY :
+#### Reset Password
+Change password for authenticated users.
 
-{
-"email":"kartikwork@gmail.com",
-"name":"Kartik Bhatt",
-"password":"Kartik@12345",
-"mobile":"9310204975"
-}
+```http
+PATCH /user/reset-password
+```
 
---> RESPONSE BODY :
+**Required Fields:** `oldpassword`, `newpassword`
+**Authentication:** Required
 
-{
-"responseCode": 201,
-"status": "success",
-"message": "Kartik Bhatt User created Successfully",
-"data": {
-"email": "kartikwork@gmail.com",
-"password": "$2b$10$p/1iXs7UZk5NAQHwsw/Ev.WU8wGfMieOU7QcqVIvjB65Vf6pc7Y4i",
-"name": "Kartik Bhatt"
-}
-}
+#### Set New Password (Forgot Password)
+Set a new password using reset token from OTP verification.
 
----
+```http
+PATCH /user/set-new-password
+```
 
-## LOGIN
+**Required Fields:** `resetToken`, `newPassword`
 
---> METHOD : POST
---> URL: http://localhost:3000/devconnect/auth/login
+#### Update User Profile
+Update user profile information and upload files.
 
---> Required Fields = [email,password]
+```http
+PATCH /user/update-user
+```
 
---> REQUEST BODY :
+**Authentication:** Required
+**Content-Type:** `multipart/form-data` (for file uploads) or `application/json`
 
-{
-"email":"kartikwork@gmail.com",
-"password":"Kartik@12345"
-}
-
---> RESPONSE BODY :
-
-{
-"responseCode": 201,
-"status": "success",
-"message": "Kartik Bhatt user logged in successfully",
-"data": {
-"\_id": "68ba9038aeeb2a6467e6be76",
-"name": "Kartik Bhatt",
-"email": "kartikwork@gmail.com"
-}
-}
+**Optional Fields:**
+- `name` - Full name
+- `mobile` - Phone number with country code
+- `bio` - Professional bio
+- `dob` - Date of birth
+- `designation` - Job title
+- `profilePicture` - Profile image file
+- `location` - Address information
+- `socialLinks` - GitHub, LinkedIn profiles
+- `skills` - Technical skills array
+- `education` - Educational background
+- `experience` - Work experience
+- `resume` - Resume file upload
+- `certification` - Professional certifications
 
 ---
 
-## LOGOUT
+### Utility Services
 
---> METHOD : POST
---> URL: http://localhost:3000/devconnect/auth/logout
+#### Send OTP
+Send verification code to user's email for password recovery.
 
---> REQUEST BODY : NOT REQUIRED
+```http
+POST /otp/send-otp
+```
 
---> RESPONSE BODY :
+**Required Fields:** `email`
 
+#### Verify OTP
+Verify the OTP and receive reset token.
+
+```http
+POST /otp/verify-otp
+```
+
+**Required Fields:** `email`, `otp`
+
+## 📝 Request/Response Examples
+
+### User Registration
+
+**Request:**
+```json
 {
-"responseCode": 201,
-"status": "success",
-"message": "user logged out successfully"
+  "email": "john.doe@example.com",
+  "name": "John Doe",
+  "password": "SecurePass123!",
+  "mobile": "9876543210"
 }
+```
+
+**Response:**
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "John Doe User created Successfully",
+  "data": {
+    "email": "john.doe@example.com",
+    "name": "John Doe"
+  }
+}
+```
+
+### Profile Update
+
+**Request:**
+```json
+{
+  "name": "John Doe",
+  "bio": "Full-stack developer passionate about building scalable applications",
+  "designation": "Senior Software Engineer",
+  "skills": ["JavaScript", "React", "Node.js", "MongoDB"],
+  "location": {
+    "country": "India",
+    "state": "Karnataka",
+    "city": "Bangalore"
+  },
+  "socialLinks": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/johndoe"
+    },
+    {
+      "platform": "LinkedIn", 
+      "url": "https://linkedin.com/in/johndoe"
+    }
+  ],
+  "experience": [
+    {
+      "position": "Senior Software Engineer",
+      "company": "Tech Solutions Inc",
+      "startDate": "2022-01-01T00:00:00.000Z",
+      "endDate": "2024-12-31T00:00:00.000Z",
+      "description": "Led development of microservices architecture and mentored junior developers."
+    }
+  ]
+}
+```
+
+### OTP Verification
+
+**Request:**
+```json
+{
+  "email": "john.doe@example.com",
+  "otp": "123456"
+}
+```
+
+**Response:**
+```json
+{
+  "status": 200,
+  "message": "OTP verified successfully. Use the provided token to set a new password.",
+  "data": {
+    "token": "4a62cfb1dcce6447c75fd810d6314b4ec620d392cc3353f21263479a347bd2d8",
+    "contact": "john.doe@example.com"
+  }
+}
+```
+
+## ⚠️ Error Handling
+
+The API returns consistent error responses with appropriate HTTP status codes:
+
+```json
+{
+  "responseCode": 400,
+  "status": "error",
+  "message": "Validation error: Email is required"
+}
+```
+
+Common status codes:
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request
+- `401` - Unauthorized
+- `404` - Not Found
+- `500` - Internal Server Error
+
+## 🔐 Authentication
+
+Most endpoints require authentication. Include the JWT token in your requests:
+
+```http
+Authorization: Bearer <your-jwt-token>
+```
+
+## 📁 File Uploads
+
+For profile pictures and resume uploads, use `multipart/form-data`:
+
+```javascript
+const formData = new FormData();
+formData.append('profilePicture', file);
+formData.append('name', 'John Doe');
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Commit your changes: `git commit -m 'Add new feature'`
+4. Push to the branch: `git push origin feature/new-feature`
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support and questions, please open an issue in the GitHub repository or contact the development team.
 
 ---
 
-## USER API
-
-## DELETE USER
-
---> METHOD : DELETE
---> URL: http://localhost:3000/devconnect/user/delete
-
---> Required Fields = [email,password]
-
---> REQUEST BODY :
-
-{
-"email":"kartikwork@gmail.com",
-"password":"Kartik@12345"
-}
-
---> RESPONSE BODY :
-
-{
-"responseCode": 201,
-"status": "success",
-"message": "Kartik Bhatt user deleted successfully"
-}
-
----
-
-## RESET USER PASSWORD
-
---> METHOD : PATCH
---> URL: http://localhost:3000/devconnect/user/reset-password
-
---> Required Fields = [oldpassword,newpassword]
-
---> REQUEST BODY :
-
-{
-"oldpassword":"Kartik@12345",
-"newpassword":"Raj@1234567new"
-}
-
---> RESPONSE BODY :
-
-{
-"responseCode": 201,
-"status": "success",
-"message": "Kartik Bhatt user password updated successfully"
-}
-
----
-
-## FORGET USER PASSWORD
-
---> METHOD : PATCH
---> URL: http://localhost:3000/devconnect/user/set-new-password
-
---> Required Fields = [ resetToken,newPassword]
-
---> REQUEST BODY :
-
-request : {
-"resetToken":"852074e5c5e70bc364cf2e3ae244ce0e88da4133de1afffd10430f66151d7c6d",
-"newPassword":"Mayank@123"
-}
-
---> RESPONSE BODY :
-
-{
-"responseCode": 201,
-"status": "success",
-"message": "Kartik Bhatt user password reseted successfully"
-}
-
----
-
-## UPDATE USER
-
---> METHOD : PATCH
---> URL: http://localhost:3000/devconnect/user/update-user
-
---> Required Fields = 'no required fields'
-
---> Allowed Fields = ["name","mobile","bio","dob","designation","profilePicture","location","socialLinks","skills","education","experience","resume","certification",]
-
---> REQUEST BODY :
-
-:: NOTE : To upload profile pic and resume -- send body as form-data for these fields
-
-![Screenshot](assets/form-data.png)
-
-{
-"name": "Kartikey Bhatt",
-"mobile": {
-"countryCode": "+91",
-"number": "9123456789"
-},
-"bio": "Backend developer passionate about building scalable APIs ⚡",
-"dob": "2003-05-06T00:00:00.000Z",
-"designation": "Backend Engineer",
-"location": {
-"country": "India",
-"state": "Uttarakhand",
-"city": "Dehradun",
-"address": "45 IT Park Road"
-},
-"socialLinks": [
-{
-"platform": "GitHub",
-"url": "https://github.com/kartikeybhatt"
-},
-{
-"platform": "LinkedIn",
-"url": "https://linkedin.com/in/kartikeybhatt"
-}
-],
-"skills": [
-"Node.js",
-"Express.js",
-"MongoDB",
-"Docker",
-"Kubernetes"
-],
-"education": [
-{
-"degree": "B.Sc Computer Science",
-"institution": "Delhi University",
-"startDate": "2020-08-01T00:00:00.000Z",
-"endDate": "2023-05-01T00:00:00.000Z"
-}
-],
-    "experience": [
-        {
-            "position": "Backend Developer Intern",
-            "company": "TechNova Solutions",
-            "startDate": "2023-06-01T00:00:00.000Z",
-            "endDate": "2024-03-01T00:00:00.000Z",
-            "description": "Worked on REST APIs, authentication, and containerized services using Docker."
-        }
-    ],
-    "certification": [
-        {
-            "company": "Google",
-            "certificate": "Google Cloud Associate Engineer",
-            "issuedBy": "Google",
-            "issueDate": "2022-07-15T00:00:00.000Z"
-        },
-        {
-            "company": "Linux Foundation",
-            "certificate": "Certified Kubernetes Administrator (CKA)",
-            "issuedBy": "CNCF",
-            "issueDate": "2024-02-20T00:00:00.000Z"
-        }
-    ]
-
-}
-
---> RESPONSE BODY :
-
-{
-"responseCode": 201,
-"status": "success",
-"message": "Kartikey Bhatt user updated successfully",
-"data": {
-"mobile": {
-"countryCode": "+91",
-"number": "9123456789"
-},
-"location": {
-"country": "India",
-"state": "Uttarakhand",
-"city": "Dehradun",
-"address": "45 IT Park Road"
-},
-"_id": "68bb294a15f5f4ef346dce71",
-"email": "kartikwork@gmail.com",
-"password": "$2b$10$1XaoEp/AUVc3VznriDTB..JaTsKhk8hryCuAJUtRTeYP/T64KPgCm",
-"name": "Kartikey Bhatt",
-"bio": "Backend developer passionate about building scalable APIs ⚡",
-"skills": [
-"Node.js",
-"Express.js",
-"MongoDB",
-"Docker",
-"Kubernetes"
-],
-"role": "user",
-"education": [
-{
-"degree": "B.Sc Computer Science",
-"institution": "Delhi University",
-"startDate": "2020-08-01T00:00:00.000Z",
-"endDate": "2023-05-01T00:00:00.000Z"
-}
-],
-"experience": [
-{
-"position": "Backend Developer Intern",
-"company": "TechNova Solutions",
-"startDate": "2023-06-01T00:00:00.000Z",
-"endDate": "2024-03-01T00:00:00.000Z",
-"description": "Worked on REST APIs, authentication, and containerized services using Docker."
-}
-],
-"certification": [
-{
-"company": "Google",
-"certificate": "Google Cloud Associate Engineer",
-"issuedBy": "Google",
-"issueDate": "2022-07-15T00:00:00.000Z"
-},
-{
-"company": "Linux Foundation",
-"certificate": "Certified Kubernetes Administrator (CKA)",
-"issuedBy": "CNCF",
-"issueDate": "2024-02-20T00:00:00.000Z"
-}
-],
-"socialLinks": [
-{
-"platform": "GitHub",
-"url": "https://github.com/kartikeybhatt"
-},
-{
-"platform": "LinkedIn",
-"url": "https://linkedin.com/in/kartikeybhatt"
-}
-],
-"createdAt": "2025-09-05T18:17:46.017Z",
-"updatedAt": "2025-09-05T18:19:10.630Z",
-"\_\_v": 0,
-"age": 22,
-"designation": "Backend Engineer",
-"dob": "2003-05-06T00:00:00.000Z",
-"profilePicture": "DevConnect-user-profilePicture.68bb294a15f5f4ef346dce71.jpg",
-"resume": "DevConnect-user-resume.68bb294a15f5f4ef346dce71.pdf"
-}
-}
-
----
-
-## Genric API
-
-## SEND OTP
-
---> METHOD : POST
-
---> URL: http://localhost:3000/devconnect/otp/send-otp
-
---> Required Fields = [email]
-
---> REQUEST BODY :
-
-{
-"email":"kartikwork@gmail.com"
-}
-
---> RESPONSE BODY :
-
-{
-"responseCode": "200",
-"status": "success",
-"message": "OTP sent successfully to kartikwork@gmail.com"
-}
-
-## VERIFY OTP
-
---> METHOD : POST
-
---> URL: http://localhost:3000/devconnect/otp/send-otp
-
---> Required Fields = [email,otp]
-
---> REQUEST BODY :
-
-{
-"email":"kartikwork@gmail.com",
-"otp":"919246"
-}
-
---> RESPONSE BODY :
-
-{
-"status": 200,
-"message": "OTP verified successfully. Use the provided token to set a new password.",
-"data": {
-"token": "4a62cfb1dcce6447c75fd810d6314b4ec620d392cc3353f21263479a347bd2d8",
-"contact": "kartikwork@gmail.com"
-}
-}
+**Built with ❤️ for the developer community**
