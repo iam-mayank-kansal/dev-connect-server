@@ -14,10 +14,10 @@
 --> REQUEST BODY :
 
 {
-"email":"kartikworksss@gmail.com",
+"email":"kartikwork@gmail.com",
 "name":"Kartik Bhatt",
 "password":"Kartik@12345",
-"mobile":"9310605985"
+"mobile":"9310204975"
 }
 
 --> RESPONSE BODY :
@@ -27,7 +27,7 @@
 "status": "success",
 "message": "Kartik Bhatt User created Successfully",
 "data": {
-"email": "kartikworksss@gmail.com",
+"email": "kartikwork@gmail.com",
 "password": "$2b$10$p/1iXs7UZk5NAQHwsw/Ev.WU8wGfMieOU7QcqVIvjB65Vf6pc7Y4i",
 "name": "Kartik Bhatt"
 }
@@ -45,7 +45,7 @@
 --> REQUEST BODY :
 
 {
-"email":"kartikworksss@gmail.com",
+"email":"kartikwork@gmail.com",
 "password":"Kartik@12345"
 }
 
@@ -58,7 +58,7 @@
 "data": {
 "\_id": "68ba9038aeeb2a6467e6be76",
 "name": "Kartik Bhatt",
-"email": "kartikworksss@gmail.com"
+"email": "kartikwork@gmail.com"
 }
 }
 
@@ -93,7 +93,7 @@
 --> REQUEST BODY :
 
 {
-"email":"kartikworksss@gmail.com",
+"email":"kartikwork@gmail.com",
 "password":"Kartik@12345"
 }
 
@@ -150,7 +150,7 @@ request : {
 {
 "responseCode": 201,
 "status": "success",
-"message": "Mayank Kansal user password reseted successfully"
+"message": "Kartik Bhatt user password reseted successfully"
 }
 
 ---
@@ -208,9 +208,8 @@ request : {
 "institution": "Delhi University",
 "startDate": "2020-08-01T00:00:00.000Z",
 "endDate": "2023-05-01T00:00:00.000Z"
-
-        }
-    ],
+}
+],
     "experience": [
         {
             "position": "Backend Developer Intern",
@@ -254,8 +253,8 @@ request : {
 "city": "Dehradun",
 "address": "45 IT Park Road"
 },
-"\_id": "68bb294a15f5f4ef346dce71",
-"email": "kartikworksss@gmail.com",
+"_id": "68bb294a15f5f4ef346dce71",
+"email": "kartikwork@gmail.com",
 "password": "$2b$10$1XaoEp/AUVc3VznriDTB..JaTsKhk8hryCuAJUtRTeYP/T64KPgCm",
 "name": "Kartikey Bhatt",
 "bio": "Backend developer passionate about building scalable APIs ⚡",
@@ -334,7 +333,7 @@ request : {
 --> REQUEST BODY :
 
 {
-"email":"iam.mayank.kansal.01@gmail.com"
+"email":"kartikwork@gmail.com"
 }
 
 --> RESPONSE BODY :
@@ -342,7 +341,7 @@ request : {
 {
 "responseCode": "200",
 "status": "success",
-"message": "OTP sent successfully to kartikworksss@gmail.com"
+"message": "OTP sent successfully to kartikwork@gmail.com"
 }
 
 ## VERIFY OTP
@@ -356,7 +355,7 @@ request : {
 --> REQUEST BODY :
 
 {
-"email":"kartikworksss@gmail.com",
+"email":"kartikwork@gmail.com",
 "otp":"919246"
 }
 
@@ -367,6 +366,7 @@ request : {
 "message": "OTP verified successfully. Use the provided token to set a new password.",
 "data": {
 "token": "4a62cfb1dcce6447c75fd810d6314b4ec620d392cc3353f21263479a347bd2d8",
-"contact": "kartikworksss@gmail.com"
+"contact": "kartikwork@gmail.com"
+}
 }
 }
