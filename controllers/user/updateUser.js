@@ -28,7 +28,7 @@ async function updateUser(req, res) {
     }
 
     // Skills array
-    if (updateData.skills && Array.isArray(reqBodyData.skills)) {
+    if (updateData.skills && Array.isArray(updateData.skills)) {
       updateData.skills = updateData?.skills?.map((skill) => skill.trim());
     }
 
