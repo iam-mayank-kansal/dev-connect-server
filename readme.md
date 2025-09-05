@@ -168,7 +168,7 @@ request : {
 
 :: NOTE : To upload profile pic and resume -- send body as form-data for these fields
 
-![Screenshot](../dev-connect-server/assets/form-data.png)
+![Screenshot](assets/form-data.png)
 
 {
 "name": "Kartikey Bhatt",
@@ -367,6 +367,5 @@ request : {
 "data": {
 "token": "4a62cfb1dcce6447c75fd810d6314b4ec620d392cc3353f21263479a347bd2d8",
 "contact": "kartikwork@gmail.com"
-}
 }
 }
