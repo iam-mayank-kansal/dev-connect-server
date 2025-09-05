@@ -1,11 +1,7 @@
 const userModel = require("../../models/user");
-const {
-  updateUserTemplate,
-  failureTemplate,
-} = require("../../helper/template");
+const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const calculateAge = require("../../helper/calculateAge");
-const { v4: uuid } = require("uuid");
 const { allowedSocialLinks } = require("../../utils/enum");
 
 async function updateUser(req, res) {
@@ -109,13 +105,23 @@ async function updateUser(req, res) {
 
     logger.log({
       level: "info",
-      message: await updateUserTemplate(findUser.name, updatedUser),
+      message: await successTemplate(
+        201,
+        `${findUser.name} user updated successfully`,
+        updatedUser
+      ),
       userAction: "user updated successfully",
     });
 
     return res
       .status(200)
-      .json(await updateUserTemplate(findUser.name, updatedUser));
+      .json(
+        await successTemplate(
+          201,
+          `${findUser.name} user updated successfully`,
+          updatedUser
+        )
+      );
   } catch (error) {
     logger.log({
       level: "error",

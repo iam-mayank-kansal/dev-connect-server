@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { loginUserTemplate } = require("../../helper/template");
+const { successTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 
 async function login(req, res) {
@@ -13,10 +13,22 @@ async function login(req, res) {
   res.cookie("devconnect-auth-token", token, { httpOnly: true, secure: false });
   logger.log({
     level: "info",
-    message: await loginUserTemplate(user),
+    message: await successTemplate(
+      201,
+      `${user.name} user logged in successfully`,
+      user
+    ),
     jwtToken: token,
   });
-  res.status(201).json(await loginUserTemplate(user));
+  res
+    .status(201)
+    .json(
+      await successTemplate(
+        201,
+        `${user.name} user logged in successfully`,
+        user
+      )
+    );
 }
 
 module.exports = login;

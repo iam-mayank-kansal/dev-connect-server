@@ -1,5 +1,5 @@
 const userModel = require("../../models/user");
-const { resetUserPasswordTemplate } = require("../../helper/template");
+const { successTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const encPassword = require("../../helper/encPassword");
 
@@ -13,10 +13,20 @@ async function resetPassword(req, res) {
   );
   logger.log({
     level: "info",
-    message: await resetUserPasswordTemplate(resetUserPassword.name),
+    message: await successTemplate(
+      201,
+      `${resetUserPassword.name} user password updated successfully`
+    ),
   });
   res.clearCookie("devconnect-auth-token");
-  res.status(201).json(await resetUserPasswordTemplate(resetUserPassword.name));
+  res
+    .status(201)
+    .json(
+      await successTemplate(
+        201,
+        `${resetUserPassword.name} user password updated successfully`
+      )
+    );
 }
 
 module.exports = resetPassword;

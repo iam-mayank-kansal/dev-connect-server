@@ -1,5 +1,5 @@
 const userModel = require("../../models/user");
-const { displayUserTemplate } = require("../../helper/template");
+const { successTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 
 async function displayUser(req, res) {
@@ -11,9 +11,15 @@ async function displayUser(req, res) {
   logger.log({
     level: "info",
     action: "user displayed successfully",
-    message: await displayUserTemplate(findUser),
+    message: await successTemplate(
+      201,
+      "user displayed successfully",
+      findUser
+    ),
   });
-  res.status(201).json(await displayUserTemplate(findUser));
+  res
+    .status(201)
+    .json(await successTemplate(201, "user displayed successfully", findUser));
 }
 
 module.exports = displayUser;

@@ -1,13 +1,15 @@
 const logger = require("../../helper/logger");
-const { logoutUserTemplate } = require("../../helper/template");
+const { successTemplate } = require("../../helper/template");
 
 async function logout(req, res) {
   res.clearCookie("devconnect-auth-token");
   logger.log({
     level: "info",
-    message: await logoutUserTemplate(),
+    message: await successTemplate(201, "user logged out successfully"),
   });
-  res.status(200).json(await logoutUserTemplate());
+  res
+    .status(200)
+    .json(await successTemplate(201, "user logged out successfully"));
 }
 
 module.exports = logout;
