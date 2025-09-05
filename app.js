@@ -24,13 +24,13 @@ logger.log({
 // Allow all origins (dev mode)
 app.use(
   cors({
-    origin: process.env.ORIGIN_URL,
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
 logger.log({
   level: "info",
-  message: `CORS configured to allow requests from ${process.env.ORIGIN_URL}`,
+  message: `CORS configured to allow requests from ${process.env.CLIENT_URL}`,
   timestamp: new Date().toISOString(),
 });
 
@@ -66,8 +66,8 @@ connectToDB()
     });
   });
 
+  
 //routes ------------------------->
-
 //auth routes
 app.use("/devconnect/auth", authRouter);
 //user routes
