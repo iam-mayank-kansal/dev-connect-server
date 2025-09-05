@@ -6,6 +6,7 @@ const {
 const logger = require("../../helper/logger");
 const calculateAge = require("../../helper/calculateAge");
 const { v4: uuid } = require("uuid");
+const { allowedSocialLinks } = require("../../utils/enum");
 
 async function updateUser(req, res) {
   try {
@@ -30,9 +31,12 @@ async function updateUser(req, res) {
       }
     }
 
-    /**
-     * 🔹 Education dates
-     */
+    // Skills array 
+    if (updateData.skills && Array.isArray(reqBodyData.skills)) {
+      updateData.skills = updateData?.skills?.map((skill) => skill.trim());
+    }
+
+    // Education dates
     if (Array.isArray(updateData.education)) {
       updateData.education = updateData.education.map((edu) => ({
         ...edu,
@@ -41,9 +45,8 @@ async function updateUser(req, res) {
       }));
     }
 
-    /**
-     * 🔹 Experience dates
-     */
+
+    // Experience dates
     if (Array.isArray(updateData.experience)) {
       updateData.experience = updateData.experience.map((exp) => ({
         ...exp,
@@ -52,9 +55,7 @@ async function updateUser(req, res) {
       }));
     }
 
-    /**
-     * 🔹 Certification dates
-     */
+    // Certification dates
     if (Array.isArray(updateData.certification)) {
       updateData.certification = updateData.certification.map((cert) => ({
         ...cert,
@@ -62,29 +63,43 @@ async function updateUser(req, res) {
       }));
     }
 
-    /**
-     * 🔹 Profile Picture
-     */
+    // Social Links
+    if (updateData.socialLinks && Array.isArray(updateData.socialLinks)) {
+      const filteredLinks = [];
+
+      for (const link of updateData.socialLinks) {
+        if (
+          link.platform &&
+          allowedSocialLinks.includes(link.platform.toLowerCase()) &&
+          link.url
+        ) {
+          filteredLinks.push({
+            platform: link.platform.trim(),
+            url: link.url.trim(),
+          });
+        }
+      }
+      updateData.socialLinks = filteredLinks;
+    }
+
+
+    // Profile Picture
     if (updateData.file) {
       const profilePictureFileName = updateData?.file?.profilePicture?.[0]
-        ? `${user.email}.${req.files.profilePicture[0].filename}`
+        ? `${req.files.profilePicture[0].filename}`
         : null;
       updateData.profilePicture = profilePictureFileName;
     }
 
-    /**
-     * 🔹 Resume
-     */
+    // Resume
     if (updateData.file) {
       const resumeFileName = updateData?.file?.resume?.[0]
-        ? `${user.email}.${req.files.resume[0].filename}`
+        ? `${req.files.resume[0].filename}`
         : null;
       updateData.resume = resumeFileName;
     }
 
-    /**
-     * 🔹 Update user
-     */
+    // Update User Document
     const updatedUser = await userModel.findByIdAndUpdate(
       user._id,
       updateData,
@@ -103,7 +118,8 @@ async function updateUser(req, res) {
     return res
       .status(200)
       .json(await updateUserTemplate(findUser.name, updatedUser));
-  } catch (error) {
+  } 
+  catch (error) {
     logger.log({
       level: "error",
       message: `Error in updateUser controller: ${error.message}`,

@@ -92,8 +92,8 @@ const userSchema = new mongoose.Schema(
     // social links
     socialLinks: [
       {
-        title: String,
-        link: String,
+        platform: String,
+        url: String,
         _id: false,
       },
     ],
@@ -107,12 +107,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["user", "admin"],
       default: "user",
-    },
-
-    accountStatus: {
-      type: String,
-      enum: ["active", "suspended", "pending"],
-      default: "active",
     },
   },
   { timestamps: true }

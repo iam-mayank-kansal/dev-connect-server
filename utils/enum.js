@@ -16,8 +16,12 @@ const allowedFields = [
   "certification",
 ];
 
+const allowedSocialLinks = ["github", "linkedin", "twitter", "facebook", "instagram"];
+
+
 module.exports = {
   OTP_TYPES,
   OTP_STATUS,
   allowedFields,
+  allowedSocialLinks
 };

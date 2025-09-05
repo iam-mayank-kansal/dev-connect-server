@@ -339,15 +339,15 @@ async function updateUserValidation(req, res, next) {
     // mapping through each social link to validate
     for (const link of reqBodyData.socialLinks) {
       if (
-        typeof link.title !== "string" ||
-        typeof link.link !== "string" ||
-        !urlRegex.test(link.link)
+        typeof link.platform !== "string" ||
+        typeof link.url !== "string" ||
+        !urlRegex.test(link.url)
       ) {
         logger.log({
           level: "error",
           message: await failureTemplate(
             400,
-            "Each social link must have a valid 'title' and 'link' (a URL)."
+            "Each social link must have a valid 'platform' and 'url'."
           ),
         });
         return res
@@ -355,7 +355,7 @@ async function updateUserValidation(req, res, next) {
           .json(
             await failureTemplate(
               400,
-              "Each social link must have a valid 'title' and 'link' (a URL)."
+              "Each social link must have a valid 'platform' and 'url'."
             )
           );
       }

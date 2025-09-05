@@ -14,6 +14,7 @@ const updateUser = require("../controllers/user/updateUser");
 const setNewPasswordValidation = require("../validators/user/setNewPasswordValidation");
 const setNewPassword = require("../controllers/user/setNewPassword");
 const displayUser = require("../controllers/user/displayUserProfile");
+const handleMulter = require("../helper/uploadErrorHandler");
 
 //middleware for image uploading
 const upload = uploadStore();
@@ -24,10 +25,12 @@ userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
 userRouter.patch(
   "/update-user",
   authRoute,
-  upload.fields([
-    { name: "profilePicture", maxCount: 1 },
-    { name: "resume", maxCount: 1 },
-  ]),
+  handleMulter(
+    upload.fields([
+      { name: "profilePicture", maxCount: 1 },
+      { name: "resume", maxCount: 1 },
+    ])
+  ),
   updateUserValidation,
   updateUser
 );

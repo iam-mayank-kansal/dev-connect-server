@@ -1,6 +1,5 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const chalk = require("chalk");
 const cors = require("cors");
 
 // imports
@@ -10,46 +9,54 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const otpRouter = require("./routes/otpRouter");
+const serverListenMessage = require("./helper/serverListenMessage");
 
 const app = express();
+
+// configuring dotenv in main file to use it across all over the project
+dotenv.config();
+logger.log({
+  level: "info",
+  message: `Environment variables loaded from .env file`,
+  timestamp: new Date().toISOString(),
+});
 
 // Allow all origins (dev mode)
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.ORIGIN_URL,
     credentials: true,
   })
 );
+logger.log({
+  level: "info",
+  message: `CORS configured to allow requests from ${process.env.ORIGIN_URL}`,
+  timestamp: new Date().toISOString(),
+});
 
 // some middleware for data transfers
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+logger.log({
+  level: "info",
+  message: `Middleware for JSON and URL-encoded data configured`,
+  timestamp: new Date().toISOString(),
+});
 
-// configuring dotenv in main file to use it across all over the project
-dotenv.config();
 
 // statically hosting uploads folder
-app.use("/devconnect/uploads", express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
+
 
 // listening to server if it's DB connection Successful
 connectToDB()
   .then(() => {
     app.listen(process.env.PORT, () => {
-      console.log(chalk.cyan.bold("===================================="));
-      console.log(chalk.yellow.bold("🚀  DEV CONNECT SERVER STARTED  🚀"));
-      console.log(chalk.green.bold("Project: Dev Connect"));
-      console.log(
-        chalk.magenta.bold("Contributors: Mayank Kansal & Kartik Bhatt")
-      );
-      console.log(
-        chalk.blue(`Server running at: http://localhost:${process.env.PORT}`)
-      );
-      console.log(chalk.cyan.bold("===================================="));
-
+      serverListenMessage();
       logger.log({
         level: "info",
-        message: `Server Running Fine at PORT : ${process.env.PORT}`,
+        message: `Server Running Fine at ${process.env.ORIGIN_URL}`,
       });
     });
   })

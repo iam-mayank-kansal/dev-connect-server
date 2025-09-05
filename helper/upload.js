@@ -1,16 +1,16 @@
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
-const { v4: uuid } = require("uuid");
+const logger = require("./logger");
 
 function uploadStore() {
   const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function (_, file, cb) {
       let uploadPath;
 
       // choose folder based on fieldname
       if (file.fieldname === "profilePicture") {
-        uploadPath = path.join(__dirname, "..", "uploads", "profilePic");
+        uploadPath = path.join(__dirname, "..", "uploads", "profilePicture");
       } else if (file.fieldname === "resume") {
         uploadPath = path.join(__dirname, "..", "uploads", "resume");
       } else {
@@ -22,31 +22,48 @@ function uploadStore() {
         fs.mkdirSync(uploadPath, { recursive: true });
       }
 
+      logger.log({
+        level: "info",
+        message: `Uploading file to ${uploadPath}`,
+        timestamp: new Date().toISOString(),
+      });
       cb(null, uploadPath);
     },
 
     filename: function (req, file, cb) {
+      const user = req.user;
       const ext = path.extname(file.originalname).toLowerCase();
 
       if (file.fieldname === "resume") {
         if (ext !== ".pdf") {
           return cb(new Error("Only PDF files are allowed"), false);
         }
-        const resumeFileName = `DevConnect-user-resume.${
-          new Date().toISOString().replace(/:/g, "-").split(".")[0]
-        }.${uuid()}.pdf`;
+        const resumeFileName = `DevConnect-user-resume.${user?._id}.pdf`;
+        logger.log({
+          level: "info",
+          message: `Resume upload initiated for user ID: ${user?._id}`,
+          timestamp: new Date().toISOString(),
+        });
         return cb(null, resumeFileName);
       }
 
       if (file.fieldname === "profilePicture") {
-        const imageFileName = `DevConnect-user-profilePic.${
-          new Date().toISOString().replace(/:/g, "-").split(".")[0]
-        }.${uuid()}${ext}`;
+        const imageFileName = `DevConnect-user-profilePicture.${user?._id}${ext}`;
+        logger.log({
+          level: "info",
+          message: `Profile picture upload initiated for user ID: ${user?._id}`,
+          timestamp: new Date().toISOString(),
+        });
         return cb(null, imageFileName);
       }
 
       // fallback for other files
-      const genericFileName = `${file.fieldname}.${Date.now()}.${uuid()}${ext}`;
+      const genericFileName = `${file.fieldname}.${Date.now()}.${user?._id()}${ext}`;
+      logger.log({
+        level: "info",
+        message: `File upload initiated for user ID: ${user?._id}, field: ${file.fieldname}`,
+        timestamp: new Date().toISOString(),
+      });
       cb(null, genericFileName);
     },
   });

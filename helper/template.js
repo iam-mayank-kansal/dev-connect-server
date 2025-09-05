@@ -6,6 +6,14 @@ async function failureTemplate(scode, message) {
   };
   return template;
 }
+async function successTemplate(scode, message) {
+  const template = {
+    responseCode: scode,
+    status: "success",
+    message: message,
+  };
+  return template;
+}
 
 async function registerUserTemplate(name, email, password, mobile) {
   const template = {
@@ -91,6 +99,7 @@ async function otpSentTemplate(destination) {
 
 module.exports = {
   failureTemplate,
+  successTemplate,
   registerUserTemplate,
   delteUserTemplate,
   resetUserPasswordTemplate,
