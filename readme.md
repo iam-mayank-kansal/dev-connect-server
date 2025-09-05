@@ -115,6 +115,8 @@ PATCH /user/update-user
 **Authentication:** Required
 **Content-Type:** `multipart/form-data` (for file uploads) or `application/json`
 
+![Screenshot](assets/form-data.png)
+
 **Optional Fields:**
 - `name` - Full name
 - `mobile` - Phone number with country code
