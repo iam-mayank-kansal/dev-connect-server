@@ -6,6 +6,14 @@ async function failureTemplate(scode, message) {
   };
   return template;
 }
+async function successTemplate(scode, message) {
+  const template = {
+    responseCode: scode,
+    status: "success",
+    message: message,
+  };
+  return template;
+}
 
 async function registerUserTemplate(name, email, password, mobile) {
   const template = {
@@ -51,6 +59,15 @@ async function loginUserTemplate(checkUser) {
   };
   return template;
 }
+//LOGOUT
+async function logoutUserTemplate() {
+  const template = {
+    responseCode: "201",
+    status: "success",
+    message: `user logged out successfully`,
+  };
+  return template;
+}
 
 async function updateUserTemplate(name, updatedUser) {
   const template = {
@@ -82,10 +99,12 @@ async function otpSentTemplate(destination) {
 
 module.exports = {
   failureTemplate,
+  successTemplate,
   registerUserTemplate,
   delteUserTemplate,
   resetUserPasswordTemplate,
   loginUserTemplate,
+  logoutUserTemplate,
   updateUserTemplate,
   displayUserTemplate,
   otpSentTemplate,

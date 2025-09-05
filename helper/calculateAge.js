@@ -1,3 +1,5 @@
+const logger = require("./logger");
+
 function calculateAge(dob) {
   // dob should be in "YYYY-MM-DD" format
   const birthDate = new Date(dob);
@@ -12,6 +14,12 @@ function calculateAge(dob) {
   if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
     age--;
   }
+
+  logger.log({
+    level: "info",
+    message: `Calculated age for DOB ${dob}: ${age}`,
+    timestamp: new Date().toISOString(),
+  });
 
   return age;
 }

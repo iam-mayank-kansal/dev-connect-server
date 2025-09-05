@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-//creating user schema
+// creating user schema
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -16,95 +17,102 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      trim: true,
+    },
+    dob: {
+      type: Date,
     },
     age: {
       type: Number,
+      min: 0,
     },
-    mobile: {
-      countryCode: {
-        type: String,
-      },
-      number: {
-        type: String,
-      },
+    profilePicture: {
+      type: String,
     },
     bio: {
       type: String,
-      default: "Hello i am a devconnect user",
-    },
-    dob: {
-      type: String,
+      default: "Hey, i am using DevConnect!",
     },
     designation: {
       type: String,
     },
-    profilePic: {
-      type: String,
+
+    mobile: {
+      countryCode: { type: String },
+      number: { type: String },
     },
-    profilePicRefrence: {
-      type: String,
-    },
-    resetToken: {
-      type: String,
-    },
-    resetTokenExpiry: {
-      type: Date,
-    },
+
     location: {
       country: String,
       state: String,
-      pincode: String,
+      city: String,
       address: String,
     },
-    socialLinks: [
-      {
-        title: String,
-        link: String,
-      },
-    ],
+
     skills: {
       type: [String],
       default: [],
     },
-    education: {
-      type: [
-        {
-          degree: String,
-          institution: String,
-          period: String,
-        },
-      ],
-      default: [],
+
+    education: [
+      {
+        degree: String,
+        institution: String,
+        startDate: Date,
+        endDate: Date,
+        _id: false,
+      },
+    ],
+
+    experience: [
+      {
+        position: String,
+        company: String,
+        startDate: Date,
+        endDate: Date, // null if currently working
+        description: String,
+        _id: false,
+      },
+    ],
+
+    certification: [
+      {
+        company: String,
+        certificate: String,
+        issuedBy: String,
+        issueDate: Date,
+        _id: false,
+      },
+    ],
+
+    resume: {
+      type: String,
     },
-    experience: {
-      type: [
-        {
-          position: String,
-          company: String,
-          period: String,
-          description: String,
-          image: String,
-        },
-      ],
-      default: [],
-    },
-    cvLink: String,
-    certification: {
-      type: [
-        {
-          certificate: String,
-          time: String,
-          image: String,
-        },
-      ],
-      default: [],
+
+    // social links
+    socialLinks: [
+      {
+        platform: String,
+        url: String,
+        _id: false,
+      },
+    ],
+
+    // security
+    resetToken: String,
+    resetTokenExpiry: Date,
+
+    // platform control
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
     },
   },
   { timestamps: true }
 );
 
-//creating user model
+// creating user model
 const userModel = mongoose.model("user", userSchema);
 
-//exporting user model
 module.exports = userModel;
