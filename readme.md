@@ -152,17 +152,18 @@ POST /otp/verify-otp
 
 **Required Fields:** `email`, `otp`
 
-## 📝 Request/Response Examples
+## 📝 Complete API Request/Response Examples
 
-### User Registration
+### Authentication Endpoints
 
+#### Sign Up
 **Request:**
 ```json
 {
-  "email": "john.doe@example.com",
-  "name": "John Doe",
-  "password": "SecurePass123!",
-  "mobile": "9876543210"
+  "email": "kartikwork@gmail.com",
+  "name": "Kartik Bhatt",
+  "password": "Kartik@12345",
+  "mobile": "9310204975"
 }
 ```
 
@@ -171,57 +172,283 @@ POST /otp/verify-otp
 {
   "responseCode": 201,
   "status": "success",
-  "message": "John Doe User created Successfully",
+  "message": "Kartik Bhatt User created Successfully",
   "data": {
-    "email": "john.doe@example.com",
-    "name": "John Doe"
+    "email": "kartikwork@gmail.com",
+    "password": "$2b$10$p/1iXs7UZk5NAQHwsw/Ev.WU8wGfMieOU7QcqVIvjB65Vf6pc7Y4i",
+    "name": "Kartik Bhatt"
   }
 }
 ```
 
-### Profile Update
-
+#### Login
 **Request:**
 ```json
 {
-  "name": "John Doe",
-  "bio": "Full-stack developer passionate about building scalable applications",
-  "designation": "Senior Software Engineer",
-  "skills": ["JavaScript", "React", "Node.js", "MongoDB"],
+  "email": "kartikwork@gmail.com",
+  "password": "Kartik@12345"
+}
+```
+
+**Response:**
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "Kartik Bhatt user logged in successfully",
+  "data": {
+    "_id": "68ba9038aeeb2a6467e6be76",
+    "name": "Kartik Bhatt",
+    "email": "kartikwork@gmail.com"
+  }
+}
+```
+
+#### Logout
+**Request:** No request body required
+
+**Response:**
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "user logged out successfully"
+}
+```
+
+### User Management Endpoints
+
+#### Delete User
+**Request:**
+```json
+{
+  "email": "kartikwork@gmail.com",
+  "password": "Kartik@12345"
+}
+```
+
+**Response:**
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "Kartik Bhatt user deleted successfully"
+}
+```
+
+#### Reset Password
+**Request:**
+```json
+{
+  "oldpassword": "Kartik@12345",
+  "newpassword": "Raj@1234567new"
+}
+```
+
+**Response:**
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "Kartik Bhatt user password updated successfully"
+}
+```
+
+#### Set New Password (Forgot Password)
+**Request:**
+```json
+{
+  "resetToken": "852074e5c5e70bc364cf2e3ae244ce0e88da4133de1afffd10430f66151d7c6d",
+  "newPassword": "Mayank@123"
+}
+```
+
+**Response:**
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "Kartik Bhatt user password reseted successfully"
+}
+```
+
+#### Update User Profile
+**Request:**
+```json
+{
+  "name": "Kartikey Bhatt",
+  "mobile": {
+    "countryCode": "+91",
+    "number": "9123456789"
+  },
+  "bio": "Backend developer passionate about building scalable APIs ⚡",
+  "dob": "2003-05-06T00:00:00.000Z",
+  "designation": "Backend Engineer",
   "location": {
     "country": "India",
-    "state": "Karnataka",
-    "city": "Bangalore"
+    "state": "Uttarakhand",
+    "city": "Dehradun",
+    "address": "45 IT Park Road"
   },
   "socialLinks": [
     {
       "platform": "GitHub",
-      "url": "https://github.com/johndoe"
+      "url": "https://github.com/kartikeybhatt"
     },
     {
-      "platform": "LinkedIn", 
-      "url": "https://linkedin.com/in/johndoe"
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/kartikeybhatt"
+    }
+  ],
+  "skills": [
+    "Node.js",
+    "Express.js",
+    "MongoDB",
+    "Docker",
+    "Kubernetes"
+  ],
+  "education": [
+    {
+      "degree": "B.Sc Computer Science",
+      "institution": "Delhi University",
+      "startDate": "2020-08-01T00:00:00.000Z",
+      "endDate": "2023-05-01T00:00:00.000Z"
     }
   ],
   "experience": [
     {
-      "position": "Senior Software Engineer",
-      "company": "Tech Solutions Inc",
-      "startDate": "2022-01-01T00:00:00.000Z",
-      "endDate": "2024-12-31T00:00:00.000Z",
-      "description": "Led development of microservices architecture and mentored junior developers."
+      "position": "Backend Developer Intern",
+      "company": "TechNova Solutions",
+      "startDate": "2023-06-01T00:00:00.000Z",
+      "endDate": "2024-03-01T00:00:00.000Z",
+      "description": "Worked on REST APIs, authentication, and containerized services using Docker."
+    }
+  ],
+  "certification": [
+    {
+      "company": "Google",
+      "certificate": "Google Cloud Associate Engineer",
+      "issuedBy": "Google",
+      "issueDate": "2022-07-15T00:00:00.000Z"
+    },
+    {
+      "company": "Linux Foundation",
+      "certificate": "Certified Kubernetes Administrator (CKA)",
+      "issuedBy": "CNCF",
+      "issueDate": "2024-02-20T00:00:00.000Z"
     }
   ]
 }
 ```
 
-### OTP Verification
+**Response:**
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "Kartikey Bhatt user updated successfully",
+  "data": {
+    "mobile": {
+      "countryCode": "+91",
+      "number": "9123456789"
+    },
+    "location": {
+      "country": "India",
+      "state": "Uttarakhand",
+      "city": "Dehradun",
+      "address": "45 IT Park Road"
+    },
+    "_id": "68bb294a15f5f4ef346dce71",
+    "email": "kartikwork@gmail.com",
+    "password": "$2b$10$1XaoEp/AUVc3VznriDTB..JaTsKhk8hryCuAJUtRTeYP/T64KPgCm",
+    "name": "Kartikey Bhatt",
+    "bio": "Backend developer passionate about building scalable APIs ⚡",
+    "skills": [
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Docker",
+      "Kubernetes"
+    ],
+    "role": "user",
+    "education": [
+      {
+        "degree": "B.Sc Computer Science",
+        "institution": "Delhi University",
+        "startDate": "2020-08-01T00:00:00.000Z",
+        "endDate": "2023-05-01T00:00:00.000Z"
+      }
+    ],
+    "experience": [
+      {
+        "position": "Backend Developer Intern",
+        "company": "TechNova Solutions",
+        "startDate": "2023-06-01T00:00:00.000Z",
+        "endDate": "2024-03-01T00:00:00.000Z",
+        "description": "Worked on REST APIs, authentication, and containerized services using Docker."
+      }
+    ],
+    "certification": [
+      {
+        "company": "Google",
+        "certificate": "Google Cloud Associate Engineer",
+        "issuedBy": "Google",
+        "issueDate": "2022-07-15T00:00:00.000Z"
+      },
+      {
+        "company": "Linux Foundation",
+        "certificate": "Certified Kubernetes Administrator (CKA)",
+        "issuedBy": "CNCF",
+        "issueDate": "2024-02-20T00:00:00.000Z"
+      }
+    ],
+    "socialLinks": [
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/kartikeybhatt"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/in/kartikeybhatt"
+      }
+    ],
+    "createdAt": "2025-09-05T18:17:46.017Z",
+    "updatedAt": "2025-09-05T18:19:10.630Z",
+    "__v": 0,
+    "age": 22,
+    "designation": "Backend Engineer",
+    "dob": "2003-05-06T00:00:00.000Z",
+    "profilePicture": "DevConnect-user-profilePicture.68bb294a15f5f4ef346dce71.jpg",
+    "resume": "DevConnect-user-resume.68bb294a15f5f4ef346dce71.pdf"
+  }
+}
+```
 
+### Utility Service Endpoints
+
+#### Send OTP
 **Request:**
 ```json
 {
-  "email": "john.doe@example.com",
-  "otp": "123456"
+  "email": "kartikwork@gmail.com"
+}
+```
+
+**Response:**
+```json
+{
+  "responseCode": "200",
+  "status": "success",
+  "message": "OTP sent successfully to kartikwork@gmail.com"
+}
+```
+
+#### Verify OTP
+**Request:**
+```json
+{
+  "email": "kartikwork@gmail.com",
+  "otp": "919246"
 }
 ```
 
@@ -232,7 +459,7 @@ POST /otp/verify-otp
   "message": "OTP verified successfully. Use the provided token to set a new password.",
   "data": {
     "token": "4a62cfb1dcce6447c75fd810d6314b4ec620d392cc3353f21263479a347bd2d8",
-    "contact": "john.doe@example.com"
+    "contact": "kartikwork@gmail.com"
   }
 }
 ```
