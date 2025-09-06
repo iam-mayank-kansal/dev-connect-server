@@ -22,7 +22,7 @@ async function shipOTP(otp, receiver, type) {
         otp,
         title: "OTP Verification for Password Reset",
         message:
-          "We received a request to reset your password. Use the OTP below to proceed:",
+          "We've received a request to reset your password. Use the OTP below to proceed:",
       }),
     });
 
