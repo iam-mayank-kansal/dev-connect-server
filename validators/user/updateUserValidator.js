@@ -6,8 +6,10 @@ const { allowedFields } = require("../../utils/enum");
 async function updateUserValidation(req, res, next) {
   const user = req.user;
   const reqBodyData = req.body;
+  console.log("REQ BODY : ",reqBodyData);
   // const reqFileData = req.body;
   const reqFileData = req.files;
+  console.log("REQ FILE : ",reqFileData);
 
   // checking if the request body or files are empty
   if (

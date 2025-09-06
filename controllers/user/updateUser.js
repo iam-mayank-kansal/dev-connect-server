@@ -80,7 +80,7 @@ async function updateUser(req, res) {
     // Profile Picture
     if (updateData.file) {
       const profilePictureFileName = updateData?.file?.profilePicture?.[0]
-        ? `${req.files.profilePicture[0].filename}`
+        ? req.files.profilePicture[0].filename
         : null;
       updateData.profilePicture = profilePictureFileName;
     }
