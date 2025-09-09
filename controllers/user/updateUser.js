@@ -77,20 +77,14 @@ async function updateUser(req, res) {
       updateData.socialLinks = filteredLinks;
     }
 
-    // Profile Picture
-    if (updateData.file) {
-      const profilePictureFileName = updateData?.file?.profilePicture?.[0]
-        ? req.files.profilePicture[0].filename
-        : null;
-      updateData.profilePicture = profilePictureFileName;
+    // Profile Picture - Only update if a file was actually uploaded
+    if (req.files?.profilePicture?.[0]) {
+      updateData.profilePicture = req.files.profilePicture[0].filename;
     }
 
-    // Resume
-    if (updateData.file) {
-      const resumeFileName = updateData?.file?.resume?.[0]
-        ? `${req.files.resume[0].filename}`
-        : null;
-      updateData.resume = resumeFileName;
+    // Resume - Only update if a file was actually uploaded
+    if (req.files?.resume?.[0]) {
+      updateData.resume = req.files.resume[0].filename;
     }
 
     // Update User Document

@@ -1,8 +1,11 @@
 const OTP_TYPES = ["mobile", "email"];
 const OTP_STATUS = ["pending", "verified"];
 const allowedFields = [
+  "_id",
   "name",
+  "email",
   "mobile",
+  "age",
   "bio",
   "dob",
   "designation",

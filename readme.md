@@ -47,6 +47,7 @@ http://localhost:3000/devconnect
 ### Authentication
 
 #### Sign Up
+
 Create a new user account.
 
 ```http
@@ -56,6 +57,7 @@ POST /auth/sign-up
 **Required Fields:** `email`, `name`, `password`, `mobile`
 
 #### Login
+
 Authenticate an existing user.
 
 ```http
@@ -65,6 +67,7 @@ POST /auth/login
 **Required Fields:** `email`, `password`
 
 #### Logout
+
 Terminate the current user session.
 
 ```http
@@ -78,6 +81,7 @@ POST /auth/logout
 ### User Management
 
 #### Delete User Account
+
 Permanently delete a user account.
 
 ```http
@@ -87,6 +91,7 @@ DELETE /user/delete
 **Required Fields:** `email`, `password`
 
 #### Reset Password
+
 Change password for authenticated users.
 
 ```http
@@ -97,6 +102,7 @@ PATCH /user/reset-password
 **Authentication:** Required
 
 #### Set New Password (Forgot Password)
+
 Set a new password using reset token from OTP verification.
 
 ```http
@@ -106,6 +112,7 @@ PATCH /user/set-new-password
 **Required Fields:** `resetToken`, `newPassword`
 
 #### Update User Profile
+
 Update user profile information and upload files.
 
 ```http
@@ -118,6 +125,7 @@ PATCH /user/update-user
 ![Screenshot](assets/form-data.png)
 
 **Optional Fields:**
+
 - `name` - Full name
 - `mobile` - Phone number with country code
 - `bio` - Professional bio
@@ -137,6 +145,7 @@ PATCH /user/update-user
 ### Utility Services
 
 #### Send OTP
+
 Send verification code to user's email for password recovery.
 
 ```http
@@ -146,6 +155,7 @@ POST /otp/send-otp
 **Required Fields:** `email`
 
 #### Verify OTP
+
 Verify the OTP and receive reset token.
 
 ```http
@@ -159,7 +169,9 @@ POST /otp/verify-otp
 ### Authentication Endpoints
 
 #### Sign Up
+
 **Request:**
+
 ```json
 {
   "email": "kartikwork@gmail.com",
@@ -170,6 +182,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "responseCode": 201,
@@ -184,7 +197,9 @@ POST /otp/verify-otp
 ```
 
 #### Login
+
 **Request:**
+
 ```json
 {
   "email": "kartikwork@gmail.com",
@@ -193,6 +208,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "responseCode": 201,
@@ -207,9 +223,11 @@ POST /otp/verify-otp
 ```
 
 #### Logout
+
 **Request:** No request body required
 
 **Response:**
+
 ```json
 {
   "responseCode": 201,
@@ -221,7 +239,9 @@ POST /otp/verify-otp
 ### User Management Endpoints
 
 #### Delete User
+
 **Request:**
+
 ```json
 {
   "email": "kartikwork@gmail.com",
@@ -230,6 +250,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "responseCode": 201,
@@ -239,7 +260,9 @@ POST /otp/verify-otp
 ```
 
 #### Reset Password
+
 **Request:**
+
 ```json
 {
   "oldpassword": "Kartik@12345",
@@ -248,6 +271,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "responseCode": 201,
@@ -257,7 +281,9 @@ POST /otp/verify-otp
 ```
 
 #### Set New Password (Forgot Password)
+
 **Request:**
+
 ```json
 {
   "resetToken": "852074e5c5e70bc364cf2e3ae244ce0e88da4133de1afffd10430f66151d7c6d",
@@ -266,6 +292,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "responseCode": 201,
@@ -275,7 +302,9 @@ POST /otp/verify-otp
 ```
 
 #### Update User Profile
+
 **Request:**
+
 ```json
 {
   "name": "Kartikey Bhatt",
@@ -302,13 +331,7 @@ POST /otp/verify-otp
       "url": "https://linkedin.com/in/kartikeybhatt"
     }
   ],
-  "skills": [
-    "Node.js",
-    "Express.js",
-    "MongoDB",
-    "Docker",
-    "Kubernetes"
-  ],
+  "skills": ["Node.js", "Express.js", "MongoDB", "Docker", "Kubernetes"],
   "education": [
     {
       "degree": "B.Sc Computer Science",
@@ -344,6 +367,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "responseCode": 201,
@@ -365,13 +389,7 @@ POST /otp/verify-otp
     "password": "$2b$10$1XaoEp/AUVc3VznriDTB..JaTsKhk8hryCuAJUtRTeYP/T64KPgCm",
     "name": "Kartikey Bhatt",
     "bio": "Backend developer passionate about building scalable APIs ⚡",
-    "skills": [
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "Docker",
-      "Kubernetes"
-    ],
+    "skills": ["Node.js", "Express.js", "MongoDB", "Docker", "Kubernetes"],
     "role": "user",
     "education": [
       {
@@ -429,7 +447,9 @@ POST /otp/verify-otp
 ### Utility Service Endpoints
 
 #### Send OTP
+
 **Request:**
+
 ```json
 {
   "email": "kartikwork@gmail.com"
@@ -437,6 +457,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "responseCode": "200",
@@ -446,7 +467,9 @@ POST /otp/verify-otp
 ```
 
 #### Verify OTP
+
 **Request:**
+
 ```json
 {
   "email": "kartikwork@gmail.com",
@@ -455,6 +478,7 @@ POST /otp/verify-otp
 ```
 
 **Response:**
+
 ```json
 {
   "status": 200,
@@ -479,6 +503,7 @@ The API returns consistent error responses with appropriate HTTP status codes:
 ```
 
 Common status codes:
+
 - `200` - Success
 - `201` - Created
 - `400` - Bad Request
@@ -500,8 +525,8 @@ For profile pictures and resume uploads, use `multipart/form-data`:
 
 ```javascript
 const formData = new FormData();
-formData.append('profilePicture', file);
-formData.append('name', 'John Doe');
+formData.append("profilePicture", file);
+formData.append("name", "John Doe");
 ```
 
 ## 🤝 Contributing

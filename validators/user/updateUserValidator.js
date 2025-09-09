@@ -6,10 +6,61 @@ const { allowedFields } = require("../../utils/enum");
 async function updateUserValidation(req, res, next) {
   const user = req.user;
   const reqBodyData = req.body;
-  console.log("REQ BODY : ",reqBodyData);
-  // const reqFileData = req.body;
   const reqFileData = req.files;
-  console.log("REQ FILE : ",reqFileData);
+
+  // --- Start of the corrected data parsing code ---
+
+  // Iterate through the body keys and attempt to parse any stringified JSON
+  for (const key of Object.keys(reqBodyData)) {
+    try {
+      // Check if the string starts with '{' or '[' to hint at JSON
+      if (
+        typeof reqBodyData[key] === "string" &&
+        (reqBodyData[key].startsWith("{") || reqBodyData[key].startsWith("["))
+      ) {
+        reqBodyData[key] = JSON.parse(reqBodyData[key]);
+      }
+    } catch (e) {
+      // If parsing fails, it's not a valid JSON string, so we keep the original value.
+    }
+  }
+
+  // A separate step to handle nested stringified objects within arrays,
+  // which can happen with `multipart/form-data`.
+  const fieldsToParse = [
+    "socialLinks",
+    "experience",
+    "education",
+    "certification",
+  ];
+
+  for (const field of fieldsToParse) {
+    if (reqBodyData[field] !== undefined) {
+      // If the field is an array, iterate and parse its string elements
+      if (Array.isArray(reqBodyData[field])) {
+        reqBodyData[field] = reqBodyData[field].map((item) => {
+          try {
+            return typeof item === "string" ? JSON.parse(item) : item;
+          } catch (e) {
+            return item;
+          }
+        });
+      }
+      // If it's a single object (e.g., certification), and the validation expects an array,
+      // wrap the object in an array to match the validation.
+      else if (
+        typeof reqBodyData[field] === "object" &&
+        !Array.isArray(reqBodyData[field])
+      ) {
+        reqBodyData[field] = [reqBodyData[field]];
+      }
+    }
+  }
+
+  // --- End of the corrected data parsing code ---
+
+  console.log("Request Body Data:", reqBodyData);
+  console.log("Request File Data:", reqFileData);
 
   // checking if the request body or files are empty
   if (
@@ -152,7 +203,7 @@ async function updateUserValidation(req, res, next) {
 
   // Bio
   if (reqBodyData.bio !== undefined) {
-    if (typeof reqBodyData.bio !== "string" || reqBodyData.bio.length > 200) {
+    if (typeof reqBodyData.bio !== "string" || reqBodyData.bio.length > 500) {
       logger.log({
         level: "error",
         message: await failureTemplate(

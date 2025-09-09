@@ -23,7 +23,7 @@ function otpTemplate({
   supportEmail = "support@devconnect.com",
   expiryMinutes = 5,
   primaryColor = "#2563eb",
-  userName = null
+  userName = null,
 }) {
   // Validate required parameters
   if (!otp) {
@@ -32,10 +32,10 @@ function otpTemplate({
 
   // Generate current year for footer
   const currentYear = new Date().getFullYear();
-  
+
   // Personal greeting
   const greeting = userName ? `Hello ${userName},` : "Hello,";
-  
+
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -299,11 +299,15 @@ function otpTemplate({
       <!-- Header -->
       <tr>
         <td class="header">
-          ${companyLogo ? `
+          ${
+            companyLogo
+              ? `
           <div class="logo">
             <img src="${companyLogo}" alt="${companyName} Logo" />
           </div>
-          ` : ''}
+          `
+              : ""
+          }
           <h1 class="company-name">${companyName}</h1>
         </td>
       </tr>
@@ -317,7 +321,7 @@ function otpTemplate({
           
           <div class="otp-container">
             <p class="otp-label">Your Verification Code</p>
-            <div class="otp-code" role="img" aria-label="OTP Code: ${otp.split('').join(' ')}">${otp}</div>
+            <div class="otp-code" role="img" aria-label="OTP Code: ${otp.split("").join(" ")}">${otp}</div>
           </div>
           
           <div class="security-notice">
