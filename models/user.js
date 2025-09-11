@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "https://i.ibb.co/6P01K0c/default-profile.png", // Added a default URL
+      default: "default-profile.png", 
     },
     bio: {
       type: String,
@@ -36,19 +36,19 @@ const userSchema = new mongoose.Schema(
     },
     designation: {
       type: String,
-      default: "User", // Added a default designation
+      default: "User",
     },
 
     mobile: {
-      countryCode: { type: String, default: "+91" }, // Corrected structure and added default
-      number: { type: String, default: "" }, // Added default value},
+      countryCode: { type: String, default: "+91" }, 
+      number: { type: String, default: "" }, 
     },
 
     location: {
-      country: { type: String, default: "" }, // Corrected structure for default
-      state: { type: String, default: "" }, // Added default
-      city: { type: String, default: "" }, // Added default
-      address: { type: String, default: "" }, // Added default
+      country: { type: String, default: "" }, 
+      state: { type: String, default: "" },
+      city: { type: String, default: "" }, 
+      address: { type: String, default: "" }, 
     },
 
     skills: {
@@ -89,7 +89,7 @@ const userSchema = new mongoose.Schema(
 
     resume: {
       type: String,
-      default: "", // Added a default empty string
+      default: "",
     },
 
     // social links
@@ -104,11 +104,9 @@ const userSchema = new mongoose.Schema(
     // security
     resetToken: {
       type: String,
-      default: null, // Added default
     },
     resetTokenExpiry: {
       type: Date,
-      default: null, // Added default
     },
 
     // platform control
