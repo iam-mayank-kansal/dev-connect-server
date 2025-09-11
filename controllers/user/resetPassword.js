@@ -5,11 +5,11 @@ const encPassword = require("../../helper/encPassword");
 
 async function resetPassword(req, res) {
   const user = req.user;
-  const { newpassword } = req.body;
+  const { newPassword } = req.body;
 
   const resetUserPassword = await userModel.findOneAndUpdate(
     { _id: user._id },
-    { password: await encPassword("genrate", newpassword) }
+    { password: await encPassword("genrate", newPassword) }
   );
   logger.log({
     level: "info",

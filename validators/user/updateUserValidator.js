@@ -59,9 +59,6 @@ async function updateUserValidation(req, res, next) {
 
   // --- End of the corrected data parsing code ---
 
-  console.log("Request Body Data:", reqBodyData);
-  console.log("Request File Data:", reqFileData);
-
   // checking if the request body or files are empty
   if (
     (!reqBodyData || Object.keys(reqBodyData).length === 0) &&
@@ -159,7 +156,7 @@ async function updateUserValidation(req, res, next) {
   }
 
   // Mobile Number
-  if (reqBodyData.mobile?.number !== undefined) {
+  if (reqBodyData.mobile?.number !== undefined && reqBodyData.mobile?.number != "") {
     const mobileRegex = /^\d{10}$/;
     if (!mobileRegex.test(reqBodyData.mobile.number)) {
       logger.log({
@@ -178,7 +175,7 @@ async function updateUserValidation(req, res, next) {
   }
 
   // Mobile Country Code
-  if (reqBodyData.mobile?.countryCode !== undefined) {
+  if (reqBodyData.mobile?.countryCode !== undefined && reqBodyData.mobile?.countryCode !== "") {
     if (
       typeof reqBodyData.mobile.countryCode !== "string" ||
       reqBodyData.mobile.countryCode.length > 5
@@ -286,7 +283,7 @@ async function updateUserValidation(req, res, next) {
       country !== undefined &&
       (typeof country !== "string" ||
         country.trim().length < 2 ||
-        country.trim().length > 20)
+        country.trim().length > 20) && country != ""
     ) {
       logger.log({
         level: "error",
@@ -310,6 +307,7 @@ async function updateUserValidation(req, res, next) {
       (typeof state !== "string" ||
         state.trim().length < 2 ||
         state.trim().length > 20)
+        && state != ""
     ) {
       logger.log({
         level: "error",
@@ -333,6 +331,7 @@ async function updateUserValidation(req, res, next) {
       (typeof city !== "string" ||
         city.trim().length < 2 ||
         city.trim().length > 20)
+        && city != ""
     ) {
       logger.log({
         level: "error",
@@ -356,6 +355,7 @@ async function updateUserValidation(req, res, next) {
       (typeof address !== "string" ||
         address.trim().length < 5 ||
         address.trim().length > 80)
+        && address != ""
     ) {
       logger.log({
         level: "error",

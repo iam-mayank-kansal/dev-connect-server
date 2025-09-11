@@ -7,9 +7,9 @@ const encPassword = require("../../helper/encPassword");
 async function resetPasswordValidation(req, res, next) {
   const user = req.user;
 
-  const { oldpassword, newpassword } = req.body;
+  const { oldPassword, newPassword } = req.body;
 
-  if ((!oldpassword, !newpassword)) {
+  if ((!oldPassword, !newPassword)) {
     logger.log({
       level: "info",
       message: await failureTemplate(400, "invalid request body"),
@@ -21,7 +21,7 @@ async function resetPasswordValidation(req, res, next) {
 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-  if (!passwordRegex.test(oldpassword) || !passwordRegex.test(newpassword)) {
+  if (!passwordRegex.test(oldPassword) || !passwordRegex.test(newPassword)) {
     logger.log({
       level: "info",
       message: await failureTemplate(
@@ -38,7 +38,7 @@ async function resetPasswordValidation(req, res, next) {
         )
       );
   }
-  if (newpassword === oldpassword) {
+  if (newPassword === oldPassword) {
     logger.log({
       level: "info",
       message: await failureTemplate(
@@ -60,7 +60,7 @@ async function resetPasswordValidation(req, res, next) {
 
   const storeHash = findUser.password;
 
-  const checkUser = await encPassword("compare", oldpassword, storeHash);
+  const checkUser = await encPassword("compare", oldPassword, storeHash);
 
   if (checkUser == false) {
     logger.log({

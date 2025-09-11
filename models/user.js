@@ -28,25 +28,27 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
+      default: "https://i.ibb.co/6P01K0c/default-profile.png", // Added a default URL
     },
     bio: {
       type: String,
-      default: "Hey, i am using DevConnect!",
+      default: "Hey, I am using DevConnect!",
     },
     designation: {
       type: String,
+      default: "User", // Added a default designation
     },
 
     mobile: {
-      countryCode: { type: String },
-      number: { type: String },
+      countryCode: { type: String, default: "+91" }, // Corrected structure and added default
+      number: { type: String, default: "" }, // Added default value},
     },
 
     location: {
-      country: String,
-      state: String,
-      city: String,
-      address: String,
+      country: { type: String, default: "" }, // Corrected structure for default
+      state: { type: String, default: "" }, // Added default
+      city: { type: String, default: "" }, // Added default
+      address: { type: String, default: "" }, // Added default
     },
 
     skills: {
@@ -59,7 +61,7 @@ const userSchema = new mongoose.Schema(
         degree: String,
         institution: String,
         startDate: Date,
-        endDate: Date,
+        endDate: Date, // null if currently working
         _id: false,
       },
     ],
@@ -87,6 +89,7 @@ const userSchema = new mongoose.Schema(
 
     resume: {
       type: String,
+      default: "", // Added a default empty string
     },
 
     // social links
@@ -99,8 +102,14 @@ const userSchema = new mongoose.Schema(
     ],
 
     // security
-    resetToken: String,
-    resetTokenExpiry: Date,
+    resetToken: {
+      type: String,
+      default: null, // Added default
+    },
+    resetTokenExpiry: {
+      type: Date,
+      default: null, // Added default
+    },
 
     // platform control
     role: {
