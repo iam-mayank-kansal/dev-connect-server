@@ -27,9 +27,19 @@ const allowedSocialLinks = [
   "instagram",
 ];
 
+
+
+const COLLECTION_STATUS=[
+  "interested",
+  "rejected",
+  "accepted",
+  "blocked"
+]
+
 module.exports = {
   OTP_TYPES,
   OTP_STATUS,
   allowedFields,
   allowedSocialLinks,
+  COLLECTION_STATUS,
 };

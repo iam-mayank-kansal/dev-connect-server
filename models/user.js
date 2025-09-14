@@ -115,6 +115,9 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    connections:{
+      default:[]
+  }
   },
   { timestamps: true }
 );
