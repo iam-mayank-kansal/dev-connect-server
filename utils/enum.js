@@ -31,9 +31,10 @@ const allowedSocialLinks = [
 
 const COLLECTION_STATUS=[
   "interested",
-  "rejected",
   "accepted",
-  "blocked"
+  "rejected",
+  "blocked",
+  "unblocked"
 ]
 
 module.exports = {

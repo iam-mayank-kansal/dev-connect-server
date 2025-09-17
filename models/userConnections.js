@@ -6,11 +6,11 @@ const {COLLECTION_STATUS}=require("../utils/enum")
 const userConnectionSchema = new mongoose.Schema(
   {
     fromUserId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
         required:true
     },
     toUserId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
         required:true
     },
     status:{
