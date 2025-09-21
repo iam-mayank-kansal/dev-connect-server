@@ -48,20 +48,22 @@ async function createConnectionValidation(req, res, next) {
     }
 
     // 6. Prevent duplicate "interested"
-      if (status === "interested") {
-        const existing = await userConnectionModel.findOne({
-          $or: [
-            { fromUserId: userId, toUserId, status: "interested" },
-            { fromUserId: toUserId, toUserId: userId, status: "interested" },
-            { fromUserId: userId, toUserId, status: "accepted" },
-            { fromUserId: toUserId, toUserId: userId, status: "accepted" }
-          ]
-        });
+    if (status === "interested") {
+      const existing = await userConnectionModel.findOne({
+        $or: [
+          { fromUserId: userId, toUserId, status: "interested" },
+          { fromUserId: toUserId, toUserId: userId, status: "interested" },
+          { fromUserId: userId, toUserId, status: "accepted" },
+          { fromUserId: toUserId, toUserId: userId, status: "accepted" },
+        ],
+      });
 
-        if (existing) {
-          return sendError("You already have a pending or accepted connection with this user.");
-        }
+      if (existing) {
+        return sendError(
+          "You already have a pending or accepted connection with this user."
+        );
       }
+    }
     // 7. Prevent duplicate "blocked"
     if (status === "blocked") {
       const existing = await userConnectionModel.findOne({
@@ -98,7 +100,10 @@ async function createConnectionValidation(req, res, next) {
     }
 
     // Success
-    logger.log({ level: "info", message: "CreateConnection Validation Success" });
+    logger.log({
+      level: "info",
+      message: "CreateConnection Validation Success",
+    });
     next();
   } catch (error) {
     logger.log({
