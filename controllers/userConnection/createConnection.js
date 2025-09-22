@@ -30,7 +30,7 @@ async function createConnection(req, res) {
         { fromUserId: userId, toUserId: toUserId },
         { status }
       );
-
+        
       await userModel.bulkWrite([
         { updateOne: { filter: { _id: userId }, update: { $addToSet: { "connections.blocked": toUserId } } } },
       ]);
