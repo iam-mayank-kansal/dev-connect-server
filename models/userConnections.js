@@ -6,10 +6,12 @@ const userConnectionSchema = new mongoose.Schema(
   {
     fromUserId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Added reference to the User model
       required: true,
     },
     toUserId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Added reference to the User model
       required: true,
     },
     status: {
@@ -18,9 +20,22 @@ const userConnectionSchema = new mongoose.Schema(
       enum: COLLECTION_STATUS,
     },
     block: {
-      required: true,
-      fromUser: {
-        required: true,
+      user1: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null,
+      },
+      user2: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null,
+      },
+    },
+    ignore: {
+      user1: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null,
+      },
+      user2: {
+        type: mongoose.Schema.Types.ObjectId,
         default: null,
       },
     },

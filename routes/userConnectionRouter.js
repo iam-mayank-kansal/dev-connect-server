@@ -5,31 +5,46 @@ const userConnectionRouter = express.Router();
 const authRoute = require("../middleware/auth");
 
 //user imports
-const createConnectionValidation = require("../validators/userConnection/createConnectionValidation");
-const createConnection = require("../controllers/userConnection/createConnection");
-const listConnectionValidation = require("../validators/userConnection/listConnectionValidation");
-const listConnection = require("../controllers/userConnection/listConnection");
-const connectionResponseValidation = require("../validators/userConnection/connectionResponseValidation");
-const connectionResponse = require("../controllers/userConnection/connectionResponse");
+const sendConnectionValidation = require("../validators/userConnection/send_connection_request_validation");
+const sendConnection = require("../controllers/userConnection/send_Connection_Request");
+const connectionResponseValidation = require("../validators/userConnection/accept_reject_connection_validation");
+const connectionResponse = require("../controllers/userConnection/accept_reject_connection");
+const blockConnectionValidation = require("../validators/userConnection/block_unblock_connection_validation");
+const blockConnection = require("../controllers/userConnection/block_unblock_connection");
+const ignoreConnectionValidation = require("../validators/userConnection/ignore_unignore_connection_validation");
+const ignoreConnection = require("../controllers/userConnection/ignore_unignore_connection");
+const getUserConnections = require("../controllers/userConnection/get_user_connections");
 
 //user connection routes
 userConnectionRouter.post(
-  "/create-connection",
+  "/send-connection-request",
   authRoute,
-  createConnectionValidation,
-  createConnection
+  sendConnectionValidation,
+  sendConnection
 );
 userConnectionRouter.post(
-  "/accept-connection",
+  "/connection-response",
   authRoute,
   connectionResponseValidation,
   connectionResponse
 );
 userConnectionRouter.post(
-  "/list-connections",
+  "/block-unblock-connection-request",
   authRoute,
-  listConnectionValidation,
-  listConnection
+  blockConnectionValidation,
+  blockConnection
+);
+userConnectionRouter.post(
+  "/ignore-unignore-connection-request",
+  authRoute,
+  ignoreConnectionValidation,
+  ignoreConnection
+);
+
+userConnectionRouter.get(
+  "/get-user-connections",
+  authRoute,
+  getUserConnections
 );
 
 module.exports = userConnectionRouter;
