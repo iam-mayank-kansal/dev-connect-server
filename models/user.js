@@ -116,9 +116,36 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
     connections: {
-      accepted: [],
-      blocked: [],
-      default: [],
+      connected: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      blocked: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      requestReceived: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      requestSent: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      ignored: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
     },
   },
   { timestamps: true }

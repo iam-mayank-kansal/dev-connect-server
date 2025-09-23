@@ -4,10 +4,9 @@ const userModel = require("../../models/user");
 const validateMongoId = require("../../helper/validateMongooseId");
 const { COLLECTION_STATUS } = require("../../utils/enum");
 
-
 async function listConnectionValidation(req, res, next) {
   try {
-    const userId=req.user._id;
+    const userId = req.user._id;
     const { status } = req.body;
 
     // helper for error response
@@ -26,7 +25,6 @@ async function listConnectionValidation(req, res, next) {
       return sendError("Invalid Mongo Document ID");
     }
 
-    
     // 4. Target user must exist
     const existingUser = await userModel.findById(userId);
     if (!existingUser) {
@@ -36,16 +34,20 @@ async function listConnectionValidation(req, res, next) {
     // 5. Status validation (must be in enum, but not accepted)
     if (
       !COLLECTION_STATUS.includes(status.toLowerCase()) ||
-      (status.toLowerCase() !== "accepted" && status.toLowerCase() !== "blocked" && status.toLowerCase() !== "interested")
+      (status.toLowerCase() !== "accepted" &&
+        status.toLowerCase() !== "blocked" &&
+        status.toLowerCase() !== "interested")
     ) {
       return sendError(
         "Kindly pass status as interested , accepted or blocked only"
       );
     }
 
-    
     // Success
-    logger.log({ level: "info", message: "AcceptConnection Validation Success" });
+    logger.log({
+      level: "info",
+      message: "AcceptConnection Validation Success",
+    });
     next();
   } catch (error) {
     logger.log({

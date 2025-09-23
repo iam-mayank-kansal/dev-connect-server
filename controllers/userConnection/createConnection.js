@@ -32,13 +32,26 @@ async function createConnection(req, res) {
       );
         
       await userModel.bulkWrite([
-        { updateOne: { filter: { _id: userId }, update: { $addToSet: { "connections.blocked": toUserId } } } },
+        {
+          updateOne: {
+            filter: { _id: userId },
+            update: { $addToSet: { "connections.blocked": toUserId } },
+          },
+        },
       ]);
     } else if (status === "unblocked") {
-      await userConnectionModel.findOneAndDelete({ fromUserId: userId, toUserId: toUserId });
+      await userConnectionModel.findOneAndDelete({
+        fromUserId: userId,
+        toUserId: toUserId,
+      });
 
       await userModel.bulkWrite([
-        { updateOne: { filter: { _id: userId }, update: { $pull: { "connections.blocked": toUserId } } } },
+        {
+          updateOne: {
+            filter: { _id: userId },
+            update: { $pull: { "connections.blocked": toUserId } },
+          },
+        },
       ]);
     }
 
@@ -78,14 +91,18 @@ async function createConnection(req, res) {
       data: userConnectionData,
     });
 
-    return res.status(201).json(await successTemplate(200, message, userConnectionData));
+    return res
+      .status(201)
+      .json(await successTemplate(200, message, userConnectionData));
   } catch (error) {
     console.error(error);
     logger.log({
       level: "error",
       message: `Error in createConnection controller: ${error.message}`,
     });
-    return res.status(500).json(await failureTemplate(500, "Internal Server Error"));
+    return res
+      .status(500)
+      .json(await failureTemplate(500, "Internal Server Error"));
   }
 }
 
