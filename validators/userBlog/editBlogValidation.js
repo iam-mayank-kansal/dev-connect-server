@@ -4,7 +4,7 @@ const blogModel = require("../../models/blog");
 
 async function editBlogValidation(req, res, next) {
   const userId = req.user._id;
-  const { blogId, blogTitle, blogBody, action } = req.body;
+  const { blogId, blogTitle, blogBody} = req.body;
 
   // Blog ID is required
   if (!blogId) {
@@ -18,16 +18,8 @@ async function editBlogValidation(req, res, next) {
     return sendError(res, "No blog found for the logged-in user!");
   }
 
-
-  // If action is provided, only allow "delete"
-  // If action is delete, skip further validation and attach action info
-  if (action !== undefined) {
-    if (action !== "delete") {
-      return sendError(res, 'Invalid action value. Only "delete" is allowed.');
-    }
-    req.updatedContent = { action: "delete", blogId };
-    logger.log({ level: "info", message: "Blog marked for deletion" });
-    return next();
+  if(!blogTitle || !blogBody){
+    return sendError(res, "Blog Title and  Blog Body is required.");
   }
 
   // Build update object dynamically
@@ -41,7 +33,7 @@ async function editBlogValidation(req, res, next) {
     return sendError(res, "No fields to update.");
   }
 
-  // but what if blogtitle is undefined where is this handled 
+  // but what if blogtitle is undefined where is this handled  --fixed
   // Validate blogTitle if provided
   if (blogTitle !== undefined) {
     if (typeof blogTitle !== "string") {
@@ -58,7 +50,7 @@ async function editBlogValidation(req, res, next) {
   }
 
 
-  // but what if blogbody is undefined where is this handled 
+  // but what if blogbody is undefined where is this handled -- fixed 
   // Validate blogBody if provided
   if (blogBody !== undefined) {
     if (typeof blogBody !== "string") {

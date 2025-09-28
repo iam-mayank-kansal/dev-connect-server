@@ -9,30 +9,7 @@ async function editBlog(req, res) {
     const userNameDoc = await userModel.findById(userId).select("name -_id");
     const userName = userNameDoc?.name || "User";
 
-    const { blogId, action, blogTitle, blogBody } = req.updatedContent;
-
-    // If action is delete, delete the blog
-    if (action === "delete") {
-      const deletedBlog = await blogModel.findOneAndDelete({
-        _id: blogId,
-        userId,
-      });
-
-      logger.log({
-        level: "info",
-        message: await successTemplate(
-          200,
-          `${userName}'s blog deleted successfully`
-        ),
-        userAction: "user blog deleted successfully",
-      });
-
-      return res
-        .status(200)
-        .json(
-          await successTemplate(200, `${userName}'s blog deleted successfully`)
-        );
-    }
+    const { blogId, blogTitle, blogBody } = req.updatedContent;
 
     // Otherwise, update the blog
     const updatedData = {};

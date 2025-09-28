@@ -18,6 +18,8 @@ const listUserBlog = require("../controllers/userBlog/listUserBlog");
 const listAllBlog = require("../controllers/userBlog/listAllBlog");
 const editBlogValidation = require("../validators/userBlog/editBlogValidation");
 const editBlog = require("../controllers/userBlog/editBlog");
+const deleteBlogValidation = require("../validators/userBlog/deleteBlogValidation");
+const deleteBlog = require("../controllers/userBlog/deleteBlog");
 const reactBlogValidation = require("../validators/userBlog/reactBlogValidation");
 const reactBlog = require("../controllers/userBlog/reactBlog");
 
@@ -40,6 +42,7 @@ userBlogRouter.post(
 userBlogRouter.get("/list-user-blogs", authRoute, listUserBlog);
 userBlogRouter.get("/list-all-blogs", authRoute, listAllBlog);
 userBlogRouter.patch("/edit-blog", authRoute, editBlogValidation, editBlog)
+userBlogRouter.patch("/delete-blog", authRoute, deleteBlogValidation, deleteBlog)
 userBlogRouter.put("/react-blog", authRoute, reactBlogValidation, reactBlog)
 
 

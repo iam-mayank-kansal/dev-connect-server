@@ -23,10 +23,9 @@ const postSchema = new mongoose.Schema(
     },
 
 
-    // why we need like agree disagree separately  ------------------------------
-    // isnt like means agree and dislike means disagree  -----------------------------
+    // why we need like agree disagree separately  ------------------------------ fixed
+    // isnt like means agree and dislike means disagree  ----------------------------- fixed
     reactions: {
-      likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
       agreed: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
       disagreed: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
     },

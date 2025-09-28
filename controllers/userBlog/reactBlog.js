@@ -14,7 +14,6 @@ async function reactBlog(req, res) {
       { _id: blogId },
       {
         $pull: {
-          "reactions.likes": userId,
           "reactions.agreed": userId,
           "reactions.disagreed": userId,
         },
@@ -23,7 +22,6 @@ async function reactBlog(req, res) {
 
     // ✅ Add user to the new reaction array
     let reactionField = "";
-    if (normalizedReaction === "like") reactionField = "reactions.likes";
     if (normalizedReaction === "agree") reactionField = "reactions.agreed";
     if (normalizedReaction === "disagree") reactionField = "reactions.disagreed";
 
@@ -35,7 +33,6 @@ async function reactBlog(req, res) {
     // ✅ Fetch updated blog with populated reaction users
     const blogWithReactions = await blogModel
       .findById(blogId)
-      .populate("reactions.likes", "name")
       .populate("reactions.agreed", "name")
       .populate("reactions.disagreed", "name");
 
@@ -44,7 +41,6 @@ async function reactBlog(req, res) {
 
     const responseData = {
       postId: blogWithReactions._id,
-      likesCount: blogWithReactions.reactions.likes.length,
       agreedCount: blogWithReactions.reactions.agreed.length,
       disagreedCount: blogWithReactions.reactions.disagreed.length,
       likes: blogWithReactions.reactions.likes,
