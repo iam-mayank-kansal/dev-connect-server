@@ -30,12 +30,12 @@ async function createBlog(req, res) {
       level: "info",
       message: await successTemplate(
         201,
-        `${blog?.userId?.name} user blog posted successfully`,
+        `Blog posted successfully`,
         blog
       ),
       userAction: "user blog posted successfully",
     });
-
+x``
     return res
       .status(200)
       .json(
@@ -46,7 +46,7 @@ async function createBlog(req, res) {
         )
       );
   } catch (error) {
-    
+
     logger.log({
       level: "error",
       message: `Error in createBlog controller: ${error.message}`,

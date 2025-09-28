@@ -1,6 +1,6 @@
 const blogModel = require("../../models/blog");
 const userModel = require("../../models/user");
-const {failureTemplate , successTemplate } = require("../../helper/template");
+const { failureTemplate, successTemplate } = require("../../helper/template");
 const sendError = require("../../helper/sendError");
 const logger = require("../../helper/logger");
 
@@ -12,8 +12,8 @@ async function listUserBlog(req, res) {
     const listUserBlogs = await blogModel
       .find({ userId: userId })
       .select("-updatedAt  -__v -_id");
-    
-    if(listUserBlogs.length===0){return sendError(res, `${userName.name} hasn't posted any blog !!`);}  
+
+    if (listUserBlogs.length === 0) { return sendError(res, `${userName.name} hasn't posted any blog !!`); }
     logger.log({
       level: "info",
       action: `${userName.name} user blogs displayed successfully`,

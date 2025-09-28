@@ -21,10 +21,6 @@ const editBlog = require("../controllers/userBlog/editBlog");
 const reactBlogValidation = require("../validators/userBlog/reactBlogValidation");
 const reactBlog = require("../controllers/userBlog/reactBlog");
 
-
-
-
-
 //user blog routes
 userBlogRouter.post(
   "/create-blog",
@@ -39,10 +35,12 @@ userBlogRouter.post(
   createBlog
 );
 
+// do  we really need both list user blogs and list all blogs routes ?  -----------------
+// can't we merge both routes with a query param to differentiate ?  -----------------
 userBlogRouter.get("/list-user-blogs", authRoute, listUserBlog);
 userBlogRouter.get("/list-all-blogs", authRoute, listAllBlog);
-userBlogRouter.patch( "/edit-blog",authRoute,editBlogValidation,editBlog)
-userBlogRouter.put( "/react-blog",authRoute,reactBlogValidation,reactBlog)
+userBlogRouter.patch("/edit-blog", authRoute, editBlogValidation, editBlog)
+userBlogRouter.put("/react-blog", authRoute, reactBlogValidation, reactBlog)
 
 
 

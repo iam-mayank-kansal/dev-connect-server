@@ -15,15 +15,16 @@ const postSchema = new mongoose.Schema(
     },
 
     blogPhoto: {
-        type: [],
-      },
-  
+      type: [],
+    },
 
     blogViedo: {
       type: [],
     },
 
-    
+
+    // why we need like agree disagree separately  ------------------------------
+    // isnt like means agree and dislike means disagree  -----------------------------
     reactions: {
       likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
       agreed: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],

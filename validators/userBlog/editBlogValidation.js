@@ -41,6 +41,7 @@ async function editBlogValidation(req, res, next) {
     return sendError(res, "No fields to update.");
   }
 
+  // but what if blogtitle is undefined where is this handled 
   // Validate blogTitle if provided
   if (blogTitle !== undefined) {
     if (typeof blogTitle !== "string") {
@@ -56,6 +57,8 @@ async function editBlogValidation(req, res, next) {
     updateFields.blogTitle = title;
   }
 
+
+  // but what if blogbody is undefined where is this handled 
   // Validate blogBody if provided
   if (blogBody !== undefined) {
     if (typeof blogBody !== "string") {

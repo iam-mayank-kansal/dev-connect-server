@@ -18,7 +18,9 @@ async function reactBlogValidation(req, res, next) {
     return sendError(res,"Only Like , Agree , Disagree reactions are allowed")
   }
 
-  // Check if the blog exists for this user
+  // why not checking blog id is mongo id or not ---------------------
+
+  // Check if the blog exists for this user 
   const existingBlog = await blogModel.findOne({_id: blogId });
 
   if (!existingBlog) {
@@ -26,16 +28,22 @@ async function reactBlogValidation(req, res, next) {
   }
 
   const updateReaction = {};
+
+  // why checking blogid again -------------------
   if (blogId !== undefined) updateReaction.blogId = blogId;
   if (reaction !== undefined) updateReaction.reaction = reaction;
   
+  // why not checking if user has already reacted or not  ----------------- 
+
+  // why checking length with 0 we need to check wuth 1 since blogId is always there  -----------------
+
+  // and how to show on user UI that user has already reacted ?  -----------------
   
   // If nothing to update
   if (Object.keys(updateReaction).length === 0) {
     return sendError(res, "No fields to update.");
   }
  
-  
   logger.log({
     level: "info",
     message: `reactBlogValidation validation successful`,
