@@ -14,6 +14,11 @@ const blockConnection = require("../controllers/userConnection/block_unblock_con
 const ignoreConnectionValidation = require("../validators/userConnection/ignore_unignore_connection_validation");
 const ignoreConnection = require("../controllers/userConnection/ignore_unignore_connection");
 const getUserConnections = require("../controllers/userConnection/get_user_connections");
+const findConnection = require("../controllers/userConnection/find_connection");
+const suspendConnectionValidation = require("../validators/userConnection/suspend_send_connection_request_validation");
+const suspendConnection = require("../controllers/userConnection/suspend_send_Connection_Request");
+const deleteConnectionValidation = require("../validators/userConnection/delete_connection_validation");
+const deleteConnection = require("../controllers/userConnection/delete_connection");
 
 //user connection routes
 userConnectionRouter.post(
@@ -21,6 +26,12 @@ userConnectionRouter.post(
   authRoute,
   sendConnectionValidation,
   sendConnection
+);
+userConnectionRouter.post(
+  "/suspend-sent-connection-request",
+  authRoute,
+  suspendConnectionValidation,
+  suspendConnection
 );
 userConnectionRouter.post(
   "/connection-response",
@@ -40,11 +51,22 @@ userConnectionRouter.post(
   ignoreConnectionValidation,
   ignoreConnection
 );
+userConnectionRouter.post(
+  "/delete-connection",
+  authRoute,
+  deleteConnectionValidation,
+  deleteConnection
+);
 
 userConnectionRouter.get(
   "/get-user-connections",
   authRoute,
   getUserConnections
+);
+userConnectionRouter.get(
+  "/find-connection",
+  authRoute,
+  findConnection
 );
 
 module.exports = userConnectionRouter;

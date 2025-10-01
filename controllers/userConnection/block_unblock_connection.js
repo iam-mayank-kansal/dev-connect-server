@@ -41,24 +41,38 @@ async function blockConnection(req, res) {
         });
       }
 
-      // Update user models to add the user to the 'blocked' list
+      // 🛑 FIX APPLIED HERE 🛑
+      // We must update both user models:
+      // 1. Add 'toUserId' to 'userId's blocked list.
+      // 2. Remove 'toUserId' from 'userId's connection lists.
+      // 3. Remove 'userId' from 'toUserId's connection lists (as was done before).
+
       await userModel.bulkWrite([
+        // --- Updates for the User who is blocking (userId) ---
         {
           updateOne: {
             filter: { _id: userId },
-            update: { $addToSet: { "connections.blocked": toUserId } },
+            update: {
+              $addToSet: { "connections.blocked": toUserId },
+              $pull: {
+                "connections.connected": toUserId,
+                "connections.requestReceived": toUserId,
+                "connections.requestSent": toUserId,
+                "connections.ignored": toUserId,
+              },
+            },
           },
         },
-        // We also pull any other connection statuses to reflect the block's finality
+        // --- Updates for the User who is being blocked (toUserId) ---
         {
           updateOne: {
             filter: { _id: toUserId },
             update: {
               $pull: {
-                "connections.connected": userId,
-                "connections.requestReceived": userId,
-                "connections.requestSent": userId,
-                "connections.ignored": userId,
+                "connections.connected": userId, // Remove from connected
+                "connections.requestReceived": userId, // Remove any pending request
+                "connections.requestSent": userId, // Remove any sent request
+                "connections.ignored": userId, // Remove from ignored
               },
             },
           },
@@ -108,6 +122,7 @@ async function blockConnection(req, res) {
       }
 
       // Update the user model by pulling the user from the 'blocked' list
+      // 🛑 The original unblock logic seems fine as it only needs to remove the toUserId from the blocker's list.
       await userModel.bulkWrite([
         {
           updateOne: {
