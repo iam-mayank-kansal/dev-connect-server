@@ -2,7 +2,6 @@ const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
 const userConnectionModel = require("../../models/userConnections");
-const { COLLECTIONS_STATUS } = require("../../utils/enum");
 
 async function blockConnection(req, res) {
   try {
