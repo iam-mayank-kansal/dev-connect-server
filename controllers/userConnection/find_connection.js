@@ -30,6 +30,20 @@ async function findConnection(req, res) {
       ].forEach(id => excludedIds.add(id.toString()));
     }
 
+    // Check if current userId appears in ANY other user's connection arrays
+    const usersHavingCurrentUser = await userModel.find({
+      $or: [
+        { "connections.connected": userId },
+        { "connections.blocked": userId },
+        { "connections.requestReceived": userId },
+        { "connections.requestSent": userId },
+        { "connections.ignored": userId },
+      ],
+    }).select("_id");
+
+    // Exclude those user IDs too
+    usersHavingCurrentUser.forEach(u => excludedIds.add(u._id.toString()));
+
     // Find users not in excludedIds
     const availableUsers = await userModel
       .find({ _id: { $nin: Array.from(excludedIds) } })
