@@ -8,7 +8,7 @@ async function listAllBlog(req, res) {
     const listAllBlog = await blogModel
       .find({})
       .select("-updatedAt  -__v -_id")
-      .populate("userId","name")
+      .populate("userId","name designation")
 
     if (listAllBlog.length === 0) {
       return sendError(res, 'no blogs are present');
