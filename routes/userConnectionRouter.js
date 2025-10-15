@@ -63,10 +63,6 @@ userConnectionRouter.get(
   authRoute,
   getUserConnections
 );
-userConnectionRouter.get(
-  "/find-connection",
-  authRoute,
-  findConnection
-);
+userConnectionRouter.get("/find-connection", authRoute, findConnection);
 
 module.exports = userConnectionRouter;

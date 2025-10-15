@@ -40,12 +40,14 @@ userBlogRouter.post(
 // do  we really need both list user blogs and list all blogs routes ?  -----------------
 // can't we merge both routes with a query param to differentiate ?  -----------------
 userBlogRouter.get("/list-user-blogs", authRoute, listUserBlog);
-userBlogRouter.get("/list-all-blogs", authRoute, listAllBlog);
-userBlogRouter.patch("/edit-blog", authRoute, editBlogValidation, editBlog)
-userBlogRouter.patch("/delete-blog", authRoute, deleteBlogValidation, deleteBlog)
-userBlogRouter.put("/react-blog", authRoute, reactBlogValidation, reactBlog)
-
-
-
+userBlogRouter.get("/list-all-blogs", listAllBlog);
+userBlogRouter.patch("/edit-blog", authRoute, editBlogValidation, editBlog);
+userBlogRouter.patch(
+  "/delete-blog",
+  authRoute,
+  deleteBlogValidation,
+  deleteBlog
+);
+userBlogRouter.put("/react-blog", authRoute, reactBlogValidation, reactBlog);
 
 module.exports = userBlogRouter;

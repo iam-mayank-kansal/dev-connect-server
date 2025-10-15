@@ -79,6 +79,6 @@ app.use("/devconnect/user", userRouter);
 // otp routes
 app.use("/devconnect/otp", otpRouter);
 //USER-CONNECTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>
-app.use("/devconnect/userconnection",userConnectionRouter)
+app.use("/devconnect/userconnection", userConnectionRouter);
 //USER-BLOGS >>>>>>>>>>>>>>>>>>>>>>>>>>
-app.use("/devconnect/blog",userBlogRouter)
+app.use("/devconnect/blog", userBlogRouter);

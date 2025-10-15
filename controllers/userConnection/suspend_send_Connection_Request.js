@@ -12,7 +12,7 @@ async function suspendConnection(req, res) {
     const deletedConnection = await userConnectionModel.findOneAndDelete({
       fromUserId: userId,
       toUserId: toUserId,
-      status: "interested" 
+      status: "interested",
     });
 
     if (!deletedConnection) {
@@ -45,7 +45,7 @@ async function suspendConnection(req, res) {
     const userConnectionData = {
       fromUserId: userId,
       toUserId: toUserId,
-      action: "withdrawn"
+      action: "withdrawn",
     };
 
     const message = "Connection request withdrawn successfully.";

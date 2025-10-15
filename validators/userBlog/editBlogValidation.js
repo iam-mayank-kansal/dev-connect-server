@@ -4,7 +4,7 @@ const blogModel = require("../../models/blog");
 
 async function editBlogValidation(req, res, next) {
   const userId = req.user._id;
-  const { blogId, blogTitle, blogBody} = req.body;
+  const { blogId, blogTitle, blogBody } = req.body;
 
   // Blog ID is required
   if (!blogId) {
@@ -13,12 +13,12 @@ async function editBlogValidation(req, res, next) {
 
   // Check if the blog exists for this user
   const existingBlog = await blogModel.findOne({ userId, _id: blogId });
-  
+
   if (!existingBlog) {
     return sendError(res, "No blog found for the logged-in user!");
   }
 
-  if(!blogTitle || !blogBody){
+  if (!blogTitle || !blogBody) {
     return sendError(res, "Blog Title and  Blog Body is required.");
   }
 
@@ -49,8 +49,7 @@ async function editBlogValidation(req, res, next) {
     updateFields.blogTitle = title;
   }
 
-
-  // but what if blogbody is undefined where is this handled -- fixed 
+  // but what if blogbody is undefined where is this handled -- fixed
   // Validate blogBody if provided
   if (blogBody !== undefined) {
     if (typeof blogBody !== "string") {

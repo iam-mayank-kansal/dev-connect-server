@@ -25,14 +25,14 @@ async function deleteConnectionValidation(req, res, next) {
     const existingConnection = await userConnectionModel.findOne({
       $or: [
         { fromUserId: userId, toUserId: toUserId, status: "accepted" },
-        { fromUserId: toUserId, toUserId: userId, status: "accepted" }
-      ]
+        { fromUserId: toUserId, toUserId: userId, status: "accepted" },
+      ],
     });
 
     // 4. Check if the connection exists and is accepted
     if (!existingConnection) {
       return sendError(
-        res, 
+        res,
         "No active connection found to delete. Either the connection doesn't exist or it's not in accepted status.",
         404
       );
@@ -55,7 +55,10 @@ async function deleteConnectionValidation(req, res, next) {
     }
 
     // If all checks pass, proceed to the controller
-    logger.log({ level: "info", message: "DeleteConnection Validation Success" });
+    logger.log({
+      level: "info",
+      message: "DeleteConnection Validation Success",
+    });
     next();
   } catch (error) {
     logger.log({

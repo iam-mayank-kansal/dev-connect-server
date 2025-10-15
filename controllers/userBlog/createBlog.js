@@ -25,17 +25,12 @@ async function createBlog(req, res) {
       .select("-_id -updatedAt")
       .populate("userId", "name");
 
-    // log and send the response  
+    // log and send the response
     logger.log({
       level: "info",
-      message: await successTemplate(
-        201,
-        `Blog posted successfully`,
-        blog
-      ),
+      message: await successTemplate(201, `Blog posted successfully`, blog),
       userAction: "user blog posted successfully",
     });
-x``
     return res
       .status(200)
       .json(
@@ -46,7 +41,6 @@ x``
         )
       );
   } catch (error) {
-
     logger.log({
       level: "error",
       message: `Error in createBlog controller: ${error.message}`,

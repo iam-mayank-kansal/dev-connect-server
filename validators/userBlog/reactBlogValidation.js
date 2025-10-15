@@ -10,26 +10,25 @@ async function reactBlogValidation(req, res, next) {
   if (!blogId) {
     return sendError(res, "Blog ID is required.");
   }
-  
-  if(!reaction){
+
+  if (!reaction) {
     return sendError(res, "req without the reaction cannot be processed");
   }
   // why not checking blog id is mongo id or not --------------------- fixed
   if (!validateMongoId(blogId)) {
-      return sendError("Invalid Mongo Document ID");
-    }
-
+    return sendError("Invalid Mongo Document ID");
+  }
 
   // reaction validation
   reaction = reaction.toLowerCase();
-  const allowedReactions=["agree","disagree"]
-  
-  if(!allowedReactions.includes(reaction)) {
-    return sendError(res,"Only Agree and Disagree reactions are allowed")
+  const allowedReactions = ["agree", "disagree"];
+
+  if (!allowedReactions.includes(reaction)) {
+    return sendError(res, "Only Agree and Disagree reactions are allowed");
   }
 
-  // Check if the blog exists for this user 
-  const existingBlog = await blogModel.findOne({_id: blogId });
+  // Check if the blog exists for this user
+  const existingBlog = await blogModel.findOne({ _id: blogId });
 
   if (!existingBlog) {
     return sendError(res, "No blog found !!");
@@ -40,9 +39,7 @@ async function reactBlogValidation(req, res, next) {
   // why checking blogid again ------------------- fixed
   updateReaction.blogId = blogId;
   updateReaction.reaction = reaction;
-  
 
- 
   logger.log({
     level: "info",
     message: `reactBlogValidation validation successful`,
@@ -50,7 +47,7 @@ async function reactBlogValidation(req, res, next) {
 
   // Attach validated update object to request
   req.updateReaction = updateReaction;
-  
+
   next();
 }
 

@@ -22,7 +22,6 @@ const postSchema = new mongoose.Schema(
       type: [],
     },
 
-
     // why we need like agree disagree separately  ------------------------------ fixed
     // isnt like means agree and dislike means disagree  ----------------------------- fixed
     reactions: {

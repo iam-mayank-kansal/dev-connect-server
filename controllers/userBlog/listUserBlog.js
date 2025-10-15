@@ -13,7 +13,9 @@ async function listUserBlog(req, res) {
       .find({ userId: userId })
       .select("-updatedAt  -__v -_id");
 
-    if (listUserBlogs.length === 0) { return sendError(res, `${userName.name} hasn't posted any blog !!`); }
+    if (listUserBlogs.length === 0) {
+      return sendError(res, `${userName.name} hasn't posted any blog !!`);
+    }
     logger.log({
       level: "info",
       action: `${userName.name} user blogs displayed successfully`,

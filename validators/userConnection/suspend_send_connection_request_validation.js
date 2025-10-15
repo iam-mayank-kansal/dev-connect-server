@@ -25,13 +25,13 @@ async function suspendConnectionValidation(req, res, next) {
     const existingConnection = await userConnectionModel.findOne({
       fromUserId: userId,
       toUserId: toUserId,
-      status: "interested"
+      status: "interested",
     });
 
     // 4. Check if the connection request exists and belongs to the user
     if (!existingConnection) {
       return sendError(
-        res, 
+        res,
         "No pending connection request found to withdraw. Either the request doesn't exist, has already been processed, or you don't have permission to withdraw it.",
         404
       );
@@ -70,7 +70,10 @@ async function suspendConnectionValidation(req, res, next) {
     }
 
     // If all checks pass, proceed to the controller
-    logger.log({ level: "info", message: "SuspendConnection Validation Success" });
+    logger.log({
+      level: "info",
+      message: "SuspendConnection Validation Success",
+    });
     next();
   } catch (error) {
     logger.log({
