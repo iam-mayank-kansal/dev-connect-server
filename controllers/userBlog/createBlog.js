@@ -35,7 +35,7 @@ async function createBlog(req, res) {
       ),
       userAction: "user blog posted successfully",
     });
-x``
+
     return res
       .status(200)
       .json(
