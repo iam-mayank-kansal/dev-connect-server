@@ -13,6 +13,10 @@ function uploadStore() {
         uploadPath = path.join(__dirname, "..", "uploads", "profilePicture");
       } else if (file.fieldname === "resume") {
         uploadPath = path.join(__dirname, "..", "uploads", "resume");
+      } else if (file.fieldname === "contentPhoto") {
+        uploadPath = path.join(__dirname, "..", "uploads", "blogs", "images");
+      } else if (file.fieldname === "contentViedo") {
+        uploadPath = path.join(__dirname, "..", "uploads", "blogs", "videos");
       } else {
         uploadPath = path.join(__dirname, "..", "uploads", "others");
       }
@@ -57,8 +61,42 @@ function uploadStore() {
         return cb(null, imageFileName);
       }
 
+      // handling user blogs multer
+
+      const imageExts = [".jpg", ".jpeg", ".png", ".gif"];
+      const videoExts = [".mp4", ".mov", ".mkv"];
+
+      if (file.fieldname === "contentPhoto") {
+        if (!imageExts.includes(ext)) {
+          return cb(new Error("Only image files are allowed for contentPhoto"));
+        }
+
+        // unique filename: fieldname + timestamp + userId
+        const fileName = `contentPhoto-${Date.now()}-${user?._id}${ext}`;
+        logger.log({
+          level: "info",
+          message: `Image upload initiated for user ID: ${user?._id}`,
+          timestamp: new Date().toISOString(),
+        });
+        return cb(null, fileName);
+      }
+
+      if (file.fieldname === "contentViedo") {
+        if (!videoExts.includes(ext)) {
+          return cb(new Error("Only video files are allowed for contentViedo"));
+        }
+
+        // unique filename
+        const fileName = `contentViedo-${Date.now()}-${user?._id}${ext}`;
+        logger.log({
+          level: "info",
+          message: `Video upload initiated for user ID: ${user?._id}`,
+          timestamp: new Date().toISOString(),
+        });
+        return cb(null, fileName);
+      }
       // fallback for other files
-      const genericFileName = `${file.fieldname}.${Date.now()}.${user?._id()}${ext}`;
+      const genericFileName = `${file.fieldname}.${Date.now()}.${user?._id}${ext}`;
       logger.log({
         level: "info",
         message: `File upload initiated for user ID: ${user?._id}, field: ${file.fieldname}`,

@@ -10,6 +10,7 @@ A comprehensive REST API for developer networking and profile management, built 
 - [API Endpoints](#api-endpoints)
   - [Authentication](#authentication)
   - [User Management](#user-management)
+  - [Blog Management](#blog-management)
   - [Utility Services](#utility-services)
 - [Request/Response Examples](#requestresponse-examples)
 - [Error Handling](#error-handling)
@@ -17,13 +18,14 @@ A comprehensive REST API for developer networking and profile management, built 
 
 ## 🚀 Overview
 
-DevConnect API provides a robust backend solution for developer networking platforms. It offers secure authentication, comprehensive user profile management, and utility services like OTP verification for password recovery.
+DevConnect API provides a robust backend solution for developer networking platforms. It offers secure authentication, comprehensive user profile management, blog posting capabilities, and utility services like OTP verification for password recovery.
 
 ## ✨ Features
 
 - **Secure Authentication**: JWT-based login/logout system
 - **Comprehensive User Profiles**: Support for skills, education, experience, certifications
-- **File Upload Support**: Profile pictures and resume uploads
+- **Blog Management**: Create, read, update, and delete blog posts with reactions
+- **File Upload Support**: Profile pictures, resume, and blog media uploads
 - **Password Management**: Reset and recovery functionality with OTP verification
 - **Social Integration**: LinkedIn and GitHub profile linking
 - **RESTful Architecture**: Clean, predictable API design
@@ -139,6 +141,82 @@ PATCH /user/update-user
 - `experience` - Work experience
 - `resume` - Resume file upload
 - `certification` - Professional certifications
+
+---
+
+### Blog Management
+
+#### Create Blog
+
+Create a new blog post with optional media uploads.
+
+```http
+POST /blog/create-blog
+```
+
+**Authentication:** Required
+**Content-Type:** `multipart/form-data`
+
+**Required Fields:** `blogTitle`, `blogBody`
+**Optional Fields:** `blogPhoto` (multiple files), `blogVideo` (multiple files)
+![Screenshot](assets/form-data-blog.png)
+
+#### List User Blogs
+
+Retrieve all blog posts created by the authenticated user.
+
+```http
+GET /blog/list-user-blogs
+```
+
+**Authentication:** Required
+
+#### List All Blogs
+
+Retrieve all blog posts from all users.
+
+```http
+GET /blog/list-all-blogs
+```
+
+**Authentication:** Required
+
+#### Edit Blog
+
+Update an existing blog post.
+
+```http
+PATCH /blog/edit-blog
+```
+
+**Authentication:** Required
+
+**Required Fields:** `blogId`
+**Optional Fields:** `blogTitle`, `blogBody`, `blogPhoto`, `blogVideo`
+
+#### Delete Blog
+
+Delete a blog post.
+
+```http
+PATCH /blog/delete-blog
+```
+
+**Authentication:** Required
+
+**Required Fields:** `blogId`
+
+#### React to Blog
+
+Add or update reaction (agree/disagree) to a blog post.
+
+```http
+PUT /blog/react-blog
+```
+
+**Authentication:** Required
+
+**Required Fields:** `blogId`, `reaction` (values: `agree` or `disagree`)
 
 ---
 
@@ -444,6 +522,243 @@ POST /otp/verify-otp
 }
 ```
 
+### Blog Management Endpoints
+
+#### Create Blog
+
+**Request:**
+
+![Screenshot](assets/form-data-blog.png)
+
+**Response:**
+
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "Mayank Kansal user blog posted successfully",
+  "data": {
+    "reactions": {
+      "agreed": [],
+      "disagreed": []
+    },
+    "userId": {
+      "_id": "68ba952eb7d1f98aa65dd0e5",
+      "name": "Mayank Kansal"
+    },
+    "blogTitle": "A Day in the Life of a Frontend Developer: Behind the Code",
+    "blogBody": "Being a frontend developer is like being the architect of digital experiences. While the backend powers everything behind the scenes, frontend developers bring ideas to life in ways users can see, touch, and interact with.\n\nMy typical day starts with a cup of coffee and reviewing the UI tasks or bug reports from the previous day. I check design updates, sync with the team on priorities, and dive into building or refining user interfaces. A large part of the day is spent writing clean, responsive code, integrating APIs, and ensuring that the design matches perfectly with the vision.\n\nCollaboration is key. I work closely with designers to translate mockups into functional components and coordinate with backend developers to make sure data flows seamlessly. Debugging layout issues, optimizing for performance, and testing across browsers and devices are everyday challenges that keep me sharp.\n\nThe day often ends with polishing small details, pushing updates for review, and documenting changes for the team. Being a frontend developer isn't just about coding; it's about shaping intuitive and engaging experiences that make the digital world enjoyable for users.",
+    "blogPhoto": [
+      "contentPhoto-1760548789757-68ba952eb7d1f98aa65dd0e5.jpg",
+      "contentPhoto-1760548789758-68ba952eb7d1f98aa65dd0e5.png"
+    ],
+    "blogViedo": [],
+    "createdAt": "2025-10-15T17:19:49.813Z",
+    "__v": 0
+  }
+}
+```
+
+#### List User Blogs
+
+**Request:** No request body required
+
+**Response:**
+
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "Mayank Kansal user blogs displayed successfully",
+  "data": [
+    {
+      "reactions": {
+        "agreed": [],
+        "disagreed": []
+      },
+      "userId": "68ba952eb7d1f98aa65dd0e5",
+      "blogTitle": "My Minimalist WFH Setup for Productivity",
+      "blogBody": "Sharing a quick look at my current work-from-home setup! I try to keep things minimal to stay focused.\r\n\r\nMy essentials are my ultrawide monitor for multitasking, a mechanical keyboard (the clicky sounds are so satisfying!), and a good ergonomic chair. Keeping my desk clear of clutter has been a huge productivity booster.\r\n\r\nWhat's one piece of gear you can't live without in your setup?",
+      "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
+      "blogViedo": [],
+      "createdAt": "2025-10-15T12:01:15.442Z"
+    }
+  ]
+}
+```
+
+#### List All Blogs
+
+**Request:** No request body required
+
+**Response:**
+
+```json
+{
+  "responseCode": 201,
+  "status": "success",
+  "message": "All user blogs displayed successfully",
+  "data": [
+    {
+      "reactions": {
+        "agreed": [],
+        "disagreed": []
+      },
+      "userId": {
+        "_id": "68dcc1d5adbd3a709ba327d1",
+        "name": "Krrish Rana",
+        "designation": "User"
+      },
+      "blogTitle": "Today I Learned: The Power of CSS Grid",
+      "blogBody": "I've always used Flexbox for layouts, but today I finally dove into CSS Grid and I'm amazed!\r\n\r\nThe ability to control both columns and rows makes complex layouts so much more intuitive. The `grid-template-areas` property feels like a superpower for organizing a page. I don't think I'll ever build a main page layout without it again.\r\n\r\nDefinitely a game-changer for my workflow.",
+      "blogPhoto": [
+        "contentPhoto-1760528974693-68dcc1d5adbd3a709ba327d1.png",
+        "contentPhoto-1760528974693-68dcc1d5adbd3a709ba327d1.png"
+      ],
+      "blogViedo": [],
+      "createdAt": "2025-10-15T11:49:34.720Z"
+    },
+    {
+      "reactions": {
+        "agreed": [],
+        "disagreed": []
+      },
+      "userId": {
+        "_id": "68ba952eb7d1f98aa65dd0e5",
+        "name": "Mayank Kansal",
+        "designation": "Full Stack Web Developer"
+      },
+      "blogTitle": "My Minimalist WFH Setup for Productivity",
+      "blogBody": "Sharing a quick look at my current work-from-home setup! I try to keep things minimal to stay focused.\r\n\r\nMy essentials are my ultrawide monitor for multitasking, a mechanical keyboard (the clicky sounds are so satisfying!), and a good ergonomic chair. Keeping my desk clear of clutter has been a huge productivity booster.\r\n\r\nWhat's one piece of gear you can't live without in your setup?",
+      "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
+      "blogViedo": [],
+      "createdAt": "2025-10-15T12:01:15.442Z"
+    },
+    {
+      "reactions": {
+        "agreed": [],
+        "disagreed": []
+      },
+      "userId": {
+        "_id": "68ef94fc3934c31ad9a063aa",
+        "name": "Rahul Rana",
+        "designation": "Graphic Designer"
+      },
+      "blogTitle": "Craving Summer: Illustrating a Refreshing Mango Shake",
+      "blogBody": "With summer just around the corner (or maybe I'm just dreaming of it!), I wanted to bring some vibrant, tropical energy into my latest illustration: a delicious mango shake!\r\n\r\nThis project was all about capturing that perfect blend of creaminess, sweetness, and a hint of tang. My focus was on:\r\n\r\n1.  **Color Palette:** How to make those golden mango hues pop, contrasting with the frosty glass and a touch of fresh mint.\r\n2.  **Texture Play:** Using subtle brushes and blending modes to suggest the thick, smooth texture of the shake and the condensation on the glass.\r\n3.  **Composition:** Arranging the elements – the shake, a few mango slices, and a straw – to create an inviting and dynamic visual.\r\n\r\nIt's amazing how much detail goes into making a simple drink look irresistible! What's your go-to summer treat, and how would you illustrate it?",
+      "blogPhoto": ["contentPhoto-1760532843981-68ef94fc3934c31ad9a063aa.jpeg"],
+      "blogViedo": [],
+      "createdAt": "2025-10-15T12:54:04.013Z"
+    }
+  ]
+}
+```
+
+#### Edit Blog
+
+**Request:**
+
+```json
+{
+  "blogId": "68ef8d0b3934c31ad9a0637d",
+  "blogTitle": "updated api working fine for blog 2",
+  "blogBody": "updated api has updated user content 2"
+}
+```
+
+**Response:**
+
+```json
+{
+  "responseCode": 200,
+  "status": "success",
+  "message": "Mayank Kansal's blog updated successfully",
+  "data": {
+    "reactions": {
+      "agreed": [],
+      "disagreed": []
+    },
+    "_id": "68ef8d0b3934c31ad9a0637d",
+    "userId": "68ba952eb7d1f98aa65dd0e5",
+    "blogTitle": "updated api working fine for blog 2",
+    "blogBody": "updated api has updated user content 2",
+    "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
+    "blogViedo": [],
+    "createdAt": "2025-10-15T12:01:15.442Z",
+    "updatedAt": "2025-10-15T17:15:47.837Z",
+    "__v": 0
+  }
+}
+```
+
+#### Delete Blog
+
+**Request:**
+
+```json
+{
+  "blogId": "68ef8d0b3934c31ad9a0637d"
+}
+```
+
+**Response:**
+
+```json
+{
+  "responseCode": 200,
+  "status": "success",
+  "message": "Mayank Kansal's blog deleted successfully",
+  "data": {
+    "reactions": {
+      "agreed": [],
+      "disagreed": []
+    },
+    "_id": "68ef8d0b3934c31ad9a0637d",
+    "userId": "68ba952eb7d1f98aa65dd0e5",
+    "blogTitle": "updated api working fine for blog 2",
+    "blogBody": "updated api has updated user content 2",
+    "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
+    "blogViedo": [],
+    "createdAt": "2025-10-15T12:01:15.442Z",
+    "updatedAt": "2025-10-15T17:15:47.837Z",
+    "__v": 0
+  }
+}
+```
+
+#### React to Blog
+
+**Request:**
+
+```json
+{
+  "blogId": "68ef8a4e3934c31ad9a06326",
+  "reaction": "agree"
+}
+```
+
+**Response:**
+
+```json
+{
+  "responseCode": 200,
+  "status": "success",
+  "message": "Mayank Kansal reacted with agree",
+  "data": {
+    "postId": "68ef8a4e3934c31ad9a06326",
+    "agreedCount": 1,
+    "disagreedCount": 0,
+    "agreed": [
+      {
+        "_id": "68ba952eb7d1f98aa65dd0e5",
+        "name": "Mayank Kansal"
+      }
+    ],
+    "disagreed": []
+  }
+}
+```
+
 ### Utility Service Endpoints
 
 #### Send OTP
@@ -521,7 +836,7 @@ Authorization: Bearer <your-jwt-token>
 
 ## 📁 File Uploads
 
-For profile pictures and resume uploads, use `multipart/form-data`:
+For profile pictures, resume, and blog media uploads, use `multipart/form-data`:
 
 ```javascript
 const formData = new FormData();

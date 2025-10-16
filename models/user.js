@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "default-profile.png", 
+      default: "default-profile.png",
     },
     bio: {
       type: String,
@@ -40,15 +40,15 @@ const userSchema = new mongoose.Schema(
     },
 
     mobile: {
-      countryCode: { type: String, default: "+91" }, 
-      number: { type: String, default: "" }, 
+      countryCode: { type: String, default: "+91" },
+      number: { type: String, default: "" },
     },
 
     location: {
-      country: { type: String, default: "" }, 
+      country: { type: String, default: "" },
       state: { type: String, default: "" },
-      city: { type: String, default: "" }, 
-      address: { type: String, default: "" }, 
+      city: { type: String, default: "" },
+      address: { type: String, default: "" },
     },
 
     skills: {
@@ -114,6 +114,38 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["user", "admin"],
       default: "user",
+    },
+    connections: {
+      connected: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      blocked: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      requestReceived: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      requestSent: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      ignored: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
     },
   },
   { timestamps: true }

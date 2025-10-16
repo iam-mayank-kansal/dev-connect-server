@@ -1,3 +1,5 @@
+const logger = require("./logger");
+
 async function failureTemplate(scode, message) {
   const template = {
     responseCode: scode,
@@ -26,8 +28,21 @@ async function otpSentTemplate(destination) {
   };
 }
 
+const sendError = async (res, msg, code = 400) => {
+  const errorResponse = await failureTemplate(code, msg);
+
+  logger.log({
+    level: "info",
+    message: JSON.stringify(errorResponse),
+    timestamp: new Date().toISOString(),
+  });
+
+  return res.status(code).json(errorResponse);
+};
+
 module.exports = {
   failureTemplate,
   successTemplate,
   otpSentTemplate,
+  sendError,
 };

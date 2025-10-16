@@ -1,0 +1,51 @@
+#!/usr/bin/env sh
+# ────────────────────────────────────────────────
+# DevConnect's Advanced Pre-Commit Hook (with Colors!)
+# ────────────────────────────────────────────────
+
+# --- Color Definitions ---
+# Defines the color codes we'll use in the script.
+CYAN='\033[0;36m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color (resets the text color)
+
+# --- Script Start ---
+echo "${CYAN}────────────────────────────────────────────────${NC}"
+echo "${YELLOW}🚀 Starting DevConnect Pre-Commit Checks...${NC}"
+echo "${CYAN}────────────────────────────────────────────────${NC}"
+
+# STEP 1: Format all files with Prettier
+echo "${YELLOW}💅 Step 1: Running Prettier to format code...${NC}"
+npx prettier --write .
+
+# Check which files were changed by Prettier
+FORMATTED_FILES=$(git status --porcelain | grep '^[AM]' | awk '{print "   - " $2}')
+
+if [ -n "$FORMATTED_FILES" ]; then
+    echo "" # Add a newline for spacing
+    echo "${GREEN}✨ Prettier automatically formatted the following files:${NC}"
+    echo "${GREEN}$FORMATTED_FILES${NC}"
+    echo "${GREEN}✅ Staging the new formatting changes...${NC}"
+    git add .
+else
+    echo "${GREEN}👍 All files are perfectly formatted. No changes needed.${NC}"
+fi
+
+echo "${CYAN}────────────────────────────────────────────────${NC}"
+
+# STEP 2: Run ESLint to check for code quality issues
+echo "${YELLOW}🔍 Step 2: Running ESLint to check for errors...${NC}"
+npx eslint . --ext .js,.ts
+ESLINT_EXIT_CODE=$?
+
+if [ $ESLINT_EXIT_CODE -ne 0 ]; then
+    echo "${RED}❌ ESLint found errors! Your commit has been blocked.${NC}"
+    echo "${RED}   Please fix the errors listed above and try committing again.${NC}"
+    exit 1
+fi
+
+echo "${GREEN}✅ ESLint found no errors.${NC}"
+echo "${CYAN}────────────────────────────────────────────────${NC}"
+echo "${GREEN}🎉 All checks passed! Your commit is good to go!${NC}"
