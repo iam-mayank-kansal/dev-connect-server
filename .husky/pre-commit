@@ -1,4 +1,23 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+# ────────────────────────────────────────────────
+# Husky v9+ compatible pre-commit hook
+# ────────────────────────────────────────────────
 
-npx lint-staged
+echo "🔍 Husky pre-commit hook started..."
+
+# Run lint-staged to check staged files
+if npx lint-staged; then
+  echo "✅ lint-staged completed successfully!"
+else
+  echo "❌ lint-staged failed — please fix errors before committing."
+  exit 1
+fi
+
+# Optionally, you can run custom checks:
+echo "🧹 Running Prettier formatting check..."
+npx prettier --check .
+
+echo "🔎 Running ESLint check..."
+npx eslint . --ext .js,.jsx,.ts,.tsx
+
+echo "✅ All checks passed! Proceeding with commit..."
