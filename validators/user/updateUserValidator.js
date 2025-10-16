@@ -2,6 +2,8 @@ const { failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
 const { allowedFields } = require("../../utils/enum");
+// REFACTOR: Import regex patterns from the new utility file
+const { nameRegex, mobileRegex, urlRegex } = require("../../utils/regex");
 
 async function updateUserValidation(req, res, next) {
   const user = req.user;
@@ -20,7 +22,8 @@ async function updateUserValidation(req, res, next) {
       ) {
         reqBodyData[key] = JSON.parse(reqBodyData[key]);
       }
-    } catch (e) {
+      // FIX: Prefix 'e' with an underscore to resolve the 'no-unused-vars' error.
+    } catch {
       // If parsing fails, it's not a valid JSON string, so we keep the original value.
     }
   }
@@ -41,7 +44,8 @@ async function updateUserValidation(req, res, next) {
         reqBodyData[field] = reqBodyData[field].map((item) => {
           try {
             return typeof item === "string" ? JSON.parse(item) : item;
-          } catch (e) {
+            // FIX: Prefix 'e' with an underscore to resolve the 'no-unused-vars' error.
+          } catch {
             return item;
           }
         });
@@ -118,7 +122,6 @@ async function updateUserValidation(req, res, next) {
 
   // Name
   if (reqBodyData.name !== undefined) {
-    const nameRegex = /^[a-zA-Z\s]+$/;
     if (
       reqBodyData.name.length < 3 ||
       reqBodyData.name.length > 50 ||
@@ -160,7 +163,6 @@ async function updateUserValidation(req, res, next) {
     reqBodyData.mobile?.number !== undefined &&
     reqBodyData.mobile?.number != ""
   ) {
-    const mobileRegex = /^\d{10}$/;
     if (!mobileRegex.test(reqBodyData.mobile.number)) {
       logger.log({
         level: "error",
@@ -393,8 +395,6 @@ async function updateUserValidation(req, res, next) {
         .status(400)
         .json(await failureTemplate(400, "Social links must be an array."));
     }
-    const urlRegex =
-      /^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\-.]*)*\/?$/;
 
     // mapping through each social link to validate
     for (const link of reqBodyData.socialLinks) {

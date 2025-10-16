@@ -3,21 +3,23 @@
 # Husky v9+ compatible pre-commit hook
 # ────────────────────────────────────────────────
 
-echo "🔍 Husky pre-commit hook started..."
+echo "🔍 Running lint-staged on staged files (format & fix)..."
+npx lint-staged
+LINT_STAGED_EXIT_CODE=$?
 
-# Run lint-staged to check staged files
-if npx lint-staged; then
-  echo "✅ lint-staged completed successfully!"
-else
-  echo "❌ lint-staged failed — please fix errors before committing."
+if [ $LINT_STAGED_EXIT_CODE -ne 0 ]; then
+  echo "❌ lint-staged failed. Please fix the errors and try again."
   exit 1
 fi
 
-# Optionally, you can run custom checks:
-echo "🧹 Running Prettier formatting check..."
-npx prettier --check .
+echo "✅ lint-staged completed successfully."
+echo "🔎 Running ESLint on the entire project to catch remaining errors..."
+npx eslint . --ext .js,.ts
+ESLINT_EXIT_CODE=$?
 
-echo "🔎 Running ESLint check..."
-npx eslint . --ext .js,.jsx,.ts,.tsx
+if [ $ESLINT_EXIT_CODE -ne 0 ]; then
+  echo "❌ ESLint found errors in the project. Please fix them before committing."
+  exit 1
+fi
 
 echo "✅ All checks passed! Proceeding with commit..."
