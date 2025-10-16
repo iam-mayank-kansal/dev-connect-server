@@ -8,12 +8,14 @@ echo "────────────────────────�
 
 # STEP 1: Format all files with Prettier
 echo "💅 Step 1: Running Prettier to format code..."
-npx prettier --write . --log-level warn
+# CHANGED: Removed --log-level warn to get detailed file output
+npx prettier --write .
 
 # Check which files were changed by Prettier
 FORMATTED_FILES=$(git status --porcelain | grep '^[AM]' | awk '{print "   - " $2}')
 
 if [ -n "$FORMATTED_FILES" ]; then
+    echo "" # Add a newline for spacing
     echo "✨ Prettier automatically formatted the following files:"
     echo "$FORMATTED_FILES"
     echo "✅ Staging the new formatting changes..."
