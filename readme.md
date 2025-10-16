@@ -528,9 +528,7 @@ POST /otp/verify-otp
 
 **Request:**
 
-
 ![Screenshot](assets/form-data-blog.png)
-
 
 **Response:**
 
@@ -581,9 +579,7 @@ POST /otp/verify-otp
       "userId": "68ba952eb7d1f98aa65dd0e5",
       "blogTitle": "My Minimalist WFH Setup for Productivity",
       "blogBody": "Sharing a quick look at my current work-from-home setup! I try to keep things minimal to stay focused.\r\n\r\nMy essentials are my ultrawide monitor for multitasking, a mechanical keyboard (the clicky sounds are so satisfying!), and a good ergonomic chair. Keeping my desk clear of clutter has been a huge productivity booster.\r\n\r\nWhat's one piece of gear you can't live without in your setup?",
-      "blogPhoto": [
-        "contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"
-      ],
+      "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
       "blogViedo": [],
       "createdAt": "2025-10-15T12:01:15.442Z"
     }
@@ -634,9 +630,7 @@ POST /otp/verify-otp
       },
       "blogTitle": "My Minimalist WFH Setup for Productivity",
       "blogBody": "Sharing a quick look at my current work-from-home setup! I try to keep things minimal to stay focused.\r\n\r\nMy essentials are my ultrawide monitor for multitasking, a mechanical keyboard (the clicky sounds are so satisfying!), and a good ergonomic chair. Keeping my desk clear of clutter has been a huge productivity booster.\r\n\r\nWhat's one piece of gear you can't live without in your setup?",
-      "blogPhoto": [
-        "contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"
-      ],
+      "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
       "blogViedo": [],
       "createdAt": "2025-10-15T12:01:15.442Z"
     },
@@ -652,9 +646,7 @@ POST /otp/verify-otp
       },
       "blogTitle": "Craving Summer: Illustrating a Refreshing Mango Shake",
       "blogBody": "With summer just around the corner (or maybe I'm just dreaming of it!), I wanted to bring some vibrant, tropical energy into my latest illustration: a delicious mango shake!\r\n\r\nThis project was all about capturing that perfect blend of creaminess, sweetness, and a hint of tang. My focus was on:\r\n\r\n1.  **Color Palette:** How to make those golden mango hues pop, contrasting with the frosty glass and a touch of fresh mint.\r\n2.  **Texture Play:** Using subtle brushes and blending modes to suggest the thick, smooth texture of the shake and the condensation on the glass.\r\n3.  **Composition:** Arranging the elements – the shake, a few mango slices, and a straw – to create an inviting and dynamic visual.\r\n\r\nIt's amazing how much detail goes into making a simple drink look irresistible! What's your go-to summer treat, and how would you illustrate it?",
-      "blogPhoto": [
-        "contentPhoto-1760532843981-68ef94fc3934c31ad9a063aa.jpeg"
-      ],
+      "blogPhoto": ["contentPhoto-1760532843981-68ef94fc3934c31ad9a063aa.jpeg"],
       "blogViedo": [],
       "createdAt": "2025-10-15T12:54:04.013Z"
     }
@@ -690,9 +682,7 @@ POST /otp/verify-otp
     "userId": "68ba952eb7d1f98aa65dd0e5",
     "blogTitle": "updated api working fine for blog 2",
     "blogBody": "updated api has updated user content 2",
-    "blogPhoto": [
-      "contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"
-    ],
+    "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
     "blogViedo": [],
     "createdAt": "2025-10-15T12:01:15.442Z",
     "updatedAt": "2025-10-15T17:15:47.837Z",
@@ -727,9 +717,7 @@ POST /otp/verify-otp
     "userId": "68ba952eb7d1f98aa65dd0e5",
     "blogTitle": "updated api working fine for blog 2",
     "blogBody": "updated api has updated user content 2",
-    "blogPhoto": [
-      "contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"
-    ],
+    "blogPhoto": ["contentPhoto-1760529675414-68ba952eb7d1f98aa65dd0e5.jpg"],
     "blogViedo": [],
     "createdAt": "2025-10-15T12:01:15.442Z",
     "updatedAt": "2025-10-15T17:15:47.837Z",

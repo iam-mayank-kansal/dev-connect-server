@@ -28,8 +28,8 @@ export default [
       "no-unused-vars": [
         "error",
         {
-          "argsIgnorePattern": "^_", // For function arguments: (req, res, _next)
-          "varsIgnorePattern": "^_", // For variables: const _e = ...
+          argsIgnorePattern: "^_", // For function arguments: (req, res, _next)
+          varsIgnorePattern: "^_", // For variables: const _e = ...
         },
       ],
     },

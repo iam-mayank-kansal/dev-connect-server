@@ -1,25 +1,40 @@
 #!/usr/bin/env sh
 # ────────────────────────────────────────────────
-# Husky v9+ compatible pre-commit hook
+# DevConnect's Advanced Pre-Commit Hook
 # ────────────────────────────────────────────────
 
-echo "🔍 Running lint-staged on staged files (format & fix)..."
-npx lint-staged
-LINT_STAGED_EXIT_CODE=$?
+echo "🚀 Starting DevConnect Pre-Commit Checks..."
+echo "────────────────────────────────────────────────"
 
-if [ $LINT_STAGED_EXIT_CODE -ne 0 ]; then
-  echo "❌ lint-staged failed. Please fix the errors and try again."
-  exit 1
+# STEP 1: Format all files with Prettier
+echo "💅 Step 1: Running Prettier to format code..."
+npx prettier --write . --log-level warn
+
+# Check which files were changed by Prettier
+FORMATTED_FILES=$(git status --porcelain | grep '^[AM]' | awk '{print "   - " $2}')
+
+if [ -n "$FORMATTED_FILES" ]; then
+    echo "✨ Prettier automatically formatted the following files:"
+    echo "$FORMATTED_FILES"
+    echo "✅ Staging the new formatting changes..."
+    git add .
+else
+    echo "👍 All files are perfectly formatted. No changes needed."
 fi
 
-echo "✅ lint-staged completed successfully."
-echo "🔎 Running ESLint on the entire project to catch remaining errors..."
+echo "────────────────────────────────────────────────"
+
+# STEP 2: Run ESLint to check for code quality issues
+echo "🔍 Step 2: Running ESLint to check for errors..."
 npx eslint . --ext .js,.ts
 ESLINT_EXIT_CODE=$?
 
 if [ $ESLINT_EXIT_CODE -ne 0 ]; then
-  echo "❌ ESLint found errors in the project. Please fix them before committing."
-  exit 1
+    echo "❌ ESLint found errors! Your commit has been blocked."
+    echo "   Please fix the errors listed above and try committing again."
+    exit 1
 fi
 
-echo "✅ All checks passed! Proceeding with commit..."
+echo "✅ ESLint found no errors."
+echo "────────────────────────────────────────────────"
+echo "🎉 All checks passed! Your commit is good to go!"
