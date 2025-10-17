@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const logger = require("../helper/logger");
 
-console.log("Hello from database config");
-
 async function connectToDB() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
