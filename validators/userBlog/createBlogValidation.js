@@ -1,5 +1,5 @@
-const sendError = require("../../helper/sendError");
 const logger = require("../../helper/logger");
+const { sendError } = require("../../helper/template");
 const blogModel = require("../../models/blog");
 
 async function updateUserValidation(req, res, next) {

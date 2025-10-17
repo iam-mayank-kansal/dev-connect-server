@@ -1,7 +1,7 @@
 const blogModel = require("../../models/blog");
 const userModel = require("../../models/user");
 const { failureTemplate, successTemplate } = require("../../helper/template");
-const sendError = require("../../helper/sendError");
+const {sendError} = require("../../helper/template");
 const logger = require("../../helper/logger");
 
 async function listUserBlog(req, res) {

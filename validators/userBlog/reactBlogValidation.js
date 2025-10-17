@@ -1,4 +1,4 @@
-const sendError = require("../../helper/sendError");
+const {sendError} = require("../../helper/template");
 const logger = require("../../helper/logger");
 const blogModel = require("../../models/blog");
 const validateMongoId = require("../../helper/validateMongooseId");
