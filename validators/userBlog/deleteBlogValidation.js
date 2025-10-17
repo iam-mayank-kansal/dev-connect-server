@@ -1,4 +1,4 @@
-const {sendError} = require("../../helper/template");
+const { sendError } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const blogModel = require("../../models/blog");
 

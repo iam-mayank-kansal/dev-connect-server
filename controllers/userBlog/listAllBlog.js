@@ -1,6 +1,6 @@
 const blogModel = require("../../models/blog");
 const { failureTemplate, successTemplate } = require("../../helper/template");
-const {sendError} = require("../../helper/template");
+const { sendError } = require("../../helper/template");
 const logger = require("../../helper/logger");
 
 async function listAllBlog(req, res) {
