@@ -11,17 +11,19 @@ async function reactBlogValidation(req, res, next) {
     return sendError(res, "Blog ID is required.");
   }
 
-  if (!reaction) {
+  // CHANGE: Check if reaction is undefined, allowing an empty string.
+  if (reaction === undefined) {
     return sendError(res, "req without the reaction cannot be processed");
   }
-  // why not checking blog id is mongo id or not --------------------- fixed
+
   if (!validateMongoId(blogId)) {
-    return sendError("Invalid Mongo Document ID");
+    return sendError(res, "Invalid Mongo Document ID");
   }
 
   // reaction validation
   reaction = reaction.toLowerCase();
-  const allowedReactions = ["agree", "disagree"];
+  // CHANGE: Add empty string to the list of allowed reactions.
+  const allowedReactions = ["agree", "disagree", ""];
 
   if (!allowedReactions.includes(reaction)) {
     return sendError(res, "Only Agree and Disagree reactions are allowed");
@@ -35,8 +37,6 @@ async function reactBlogValidation(req, res, next) {
   }
 
   const updateReaction = {};
-
-  // why checking blogid again ------------------- fixed
   updateReaction.blogId = blogId;
   updateReaction.reaction = reaction;
 

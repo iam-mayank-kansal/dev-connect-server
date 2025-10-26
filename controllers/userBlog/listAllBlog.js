@@ -7,7 +7,7 @@ async function listAllBlog(req, res) {
   try {
     const listAllBlog = await blogModel
       .find({})
-      .select("-updatedAt  -__v -_id")
+      .select("-updatedAt  -__v")
       .populate("userId", "name designation profilePicture");
 
     if (listAllBlog.length === 0) {
