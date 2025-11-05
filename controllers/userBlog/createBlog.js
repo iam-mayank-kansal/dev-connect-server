@@ -1,11 +1,17 @@
 const blogModel = require("../../models/blog");
+const userModel = require("../../models/user"); // 1. Import userModel
+const mongoose = require("mongoose"); // 2. Import mongoose for transactions
 const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 
 async function createBlog(req, res) {
+  // 3. Start a session for the transaction
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const userId = req.user._id;
-    let { blogTitle, blogBody } = req.body; // extract required fields
+    let { blogTitle, blogBody } = req.body;
     const reqFileData = req.files;
 
     const updateData = {
@@ -16,10 +22,22 @@ async function createBlog(req, res) {
       blogViedo: reqFileData?.contentViedo?.map((file) => file.filename) || [],
     };
 
-    // console.log(updateData);
+    // 4. Create the blog post within the session
+    // Note: .create() returns an array when used with sessions
+    const newBlogArray = await blogModel.create([updateData], { session });
+    const uploadedBlog = newBlogArray[0]; // Get the actual blog document
 
-    //Update User blog Document
-    const uploadedBlog = await blogModel.create(updateData);
+    // 5. Update the user's 'blogs' array with the new blog's ID
+    await userModel.findByIdAndUpdate(
+      userId,
+      { $push: { blogs: uploadedBlog._id } }, // Add the new blog ID to the array
+      { session, new: true } // Pass the session
+    );
+
+    // 6. If both operations succeed, commit the transaction
+    await session.commitTransaction();
+
+    // Now that the transaction is complete, fetch the populated blog for the response
     const blog = await blogModel
       .findById(uploadedBlog._id)
       .select("-_id -updatedAt")
@@ -41,6 +59,9 @@ async function createBlog(req, res) {
         )
       );
   } catch (error) {
+    // 7. If any error occurs, abort the transaction
+    await session.abortTransaction();
+
     logger.log({
       level: "error",
       message: `Error in createBlog controller: ${error.message}`,
@@ -48,6 +69,9 @@ async function createBlog(req, res) {
     return res
       .status(500)
       .json(await failureTemplate(500, "Internal Server Error"));
+  } finally {
+    // 8. Always end the session
+    session.endSession();
   }
 }
 
