@@ -11,6 +11,7 @@ const userRouter = require("./routes/userRouter");
 const otpRouter = require("./routes/otpRouter");
 const userConnectionRouter = require("./routes/userConnectionRouter");
 const userBlogRouter = require("./routes/userBlogRouter");
+const notificationRouter = require("./routes/notificationRouter");
 const serverListenMessage = require("./helper/serverListenMessage");
 
 const app = express();
@@ -79,6 +80,8 @@ app.use("/devconnect/user", userRouter);
 // otp routes
 app.use("/devconnect/otp", otpRouter);
 //USER-CONNECTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>
-app.use("/devconnect/userconnection",userConnectionRouter)
+app.use("/devconnect/userconnection", userConnectionRouter);
 //USER-BLOGS >>>>>>>>>>>>>>>>>>>>>>>>>>
-app.use("/devconnect/blog",userBlogRouter)
+app.use("/devconnect/blog", userBlogRouter);
+//NOTIFICATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+app.use("/devconnect/notification", notificationRouter);

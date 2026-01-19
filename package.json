@@ -1,23 +1,32 @@
 {
   "name": "dev-connect-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend server for Dev Connect — a social media platform for developers.",
   "main": "app.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "format": "prettier --write ."
+    "lint": "eslint . --ext .js --fix",
+    "format": "prettier --write .",
+    "build": "npm run clean && mkdir -p dist && cp -r src/* dist/",
+    "clean": "rm -rf dist",
+    "prepare": "husky",
+    "check": "npm run lint && npm run format"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iam-mayank-kansal/dev-connect-server.git"
   },
   "keywords": [
-    "social media for developer"
+    "social media",
+    "developer",
+    "express",
+    "nodejs",
+    "backend"
   ],
   "author": "Mayank Kansal",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/iam-mayank-kansal/dev-connect-server/issues"
   },
@@ -42,8 +51,22 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.37.0",
+    "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.4.0",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.2",
     "prettier": "^3.6.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,html,css}": [
+      "prettier --write"
+    ]
   }
 }

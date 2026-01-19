@@ -23,7 +23,8 @@ async function reactBlog(req, res) {
     // ✅ Add user to the new reaction array
     let reactionField = "";
     if (normalizedReaction === "agree") reactionField = "reactions.agreed";
-    if (normalizedReaction === "disagree") reactionField = "reactions.disagreed";
+    if (normalizedReaction === "disagree")
+      reactionField = "reactions.disagreed";
 
     await blogModel.updateOne(
       { _id: blogId },
@@ -58,13 +59,15 @@ async function reactBlog(req, res) {
       userAction: `user reacted with ${normalizedReaction}`,
     });
 
-    return res.status(200).json(
-      await successTemplate(
-        200,
-        `${userName} reacted with ${normalizedReaction}`,
-        responseData
-      )
-    );
+    return res
+      .status(200)
+      .json(
+        await successTemplate(
+          200,
+          `${userName} reacted with ${normalizedReaction}`,
+          responseData
+        )
+      );
   } catch (error) {
     console.error(error.message);
 

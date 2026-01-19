@@ -5,7 +5,7 @@ const { otpSentTemplate, failureTemplate } = require("../../helper/template");
 const OTPModel = require("../../models/otp");
 const OTP_LENGTH = process.env.OTP_LENGTH || 6;
 
-async function sendOTP(req, res, next) {
+async function sendOTP(req, res) {
   const user = req.user;
   const otp = genrateOtp(OTP_LENGTH);
 

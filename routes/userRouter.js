@@ -15,12 +15,16 @@ const setNewPasswordValidation = require("../validators/user/setNewPasswordValid
 const setNewPassword = require("../controllers/user/setNewPassword");
 const displayUser = require("../controllers/user/displayUserProfile");
 const handleMulter = require("../helper/uploadErrorHandler");
+const getPublicProfile = require("../controllers/user/getPublicProfile");
+const searchUsers = require("../controllers/user/searchUsers");
 
 //middleware for image uploading
 const upload = uploadStore();
 
 //user routes
-userRouter.get("/profile", authRoute, displayUser);
+userRouter.get("/profile/", authRoute, displayUser);
+userRouter.get("/profile/:userId", authRoute, getPublicProfile);
+userRouter.get("/search", searchUsers);
 userRouter.delete("/delete", authRoute, delteValidation, deleteUser);
 userRouter.patch(
   "/update-user",

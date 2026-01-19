@@ -4,8 +4,6 @@ const logger = require("../../helper/logger");
 
 async function deleteUser(req, res) {
   const user = req.user;
-  let { password } = req.body;
-  password = password.trim();
 
   const findUser = await userModel.findByIdAndDelete(user._id);
   logger.log({

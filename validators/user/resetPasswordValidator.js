@@ -1,7 +1,6 @@
 const { failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
-const jwt = require("jsonwebtoken");
 const encPassword = require("../../helper/encPassword");
 
 async function resetPasswordValidation(req, res, next) {

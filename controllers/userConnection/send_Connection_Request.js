@@ -2,6 +2,7 @@ const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
 const userConnectionModel = require("../../models/userConnections");
+const handleNotification = require("../../helper/notification");
 
 async function sendConnection(req, res) {
   try {
@@ -52,13 +53,18 @@ async function sendConnection(req, res) {
 
     const message = "Connection request sent successfully.";
 
+    // helper fn for sending notification to reciver user (toUserName)
+    const eventName = "send-connectionRequest";
+    const eventDesc = `received connection request from ${toUserName}`;
+
+    handleNotification(userId, toUserId, eventName, eventDesc, res);
+
     // Log and send the success response
     logger.log({
       level: "info",
       message: await successTemplate(201, message),
       data: userConnectionData,
     });
-
     return res
       .status(201)
       .json(await successTemplate(201, message, userConnectionData));

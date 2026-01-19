@@ -29,8 +29,15 @@ async function otpSentTemplate(destination) {
 }
 
 const sendError = async (res, msg, code = 400) => {
-  logger.log({ level: "info", message: await failureTemplate(code, msg) });
-  return res.status(code).json(await failureTemplate(code, msg));
+  const errorResponse = await failureTemplate(code, msg);
+
+  logger.log({
+    level: "info",
+    message: JSON.stringify(errorResponse),
+    timestamp: new Date().toISOString(),
+  });
+
+  return res.status(code).json(errorResponse);
 };
 
 module.exports = {

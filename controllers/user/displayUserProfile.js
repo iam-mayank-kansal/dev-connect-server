@@ -4,9 +4,10 @@ const logger = require("../../helper/logger");
 
 async function displayUser(req, res) {
   const user = req.user;
+  const userBodyData = req.body; // unused variable
 
   const findUser = await userModel
-    .findById(user._id)
+    .findById(userBodyData?._id ? userBodyData?._id : user._id)
     .select("-password -updatedAt -resetToken -resetTokenExpiry -__v -role");
   logger.log({
     level: "info",

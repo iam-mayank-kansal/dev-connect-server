@@ -1,4 +1,4 @@
-const sendError = require("../../helper/sendError");
+const { sendError } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const blogModel = require("../../models/blog");
 const validateMongoId = require("../../helper/validateMongooseId");
@@ -10,39 +10,36 @@ async function reactBlogValidation(req, res, next) {
   if (!blogId) {
     return sendError(res, "Blog ID is required.");
   }
-  
-  if(!reaction){
+
+  // CHANGE: Check if reaction is undefined, allowing an empty string.
+  if (reaction === undefined) {
     return sendError(res, "req without the reaction cannot be processed");
   }
-  // why not checking blog id is mongo id or not --------------------- fixed
-  if (!validateMongoId(blogId)) {
-      return sendError("Invalid Mongo Document ID");
-    }
 
+  if (!validateMongoId(blogId)) {
+    return sendError(res, "Invalid Mongo Document ID");
+  }
 
   // reaction validation
   reaction = reaction.toLowerCase();
-  const allowedReactions=["agree","disagree"]
-  
-  if(!allowedReactions.includes(reaction)) {
-    return sendError(res,"Only Agree and Disagree reactions are allowed")
+  // CHANGE: Add empty string to the list of allowed reactions.
+  const allowedReactions = ["agree", "disagree", ""];
+
+  if (!allowedReactions.includes(reaction)) {
+    return sendError(res, "Only Agree and Disagree reactions are allowed");
   }
 
-  // Check if the blog exists for this user 
-  const existingBlog = await blogModel.findOne({_id: blogId });
+  // Check if the blog exists for this user
+  const existingBlog = await blogModel.findOne({ _id: blogId });
 
   if (!existingBlog) {
     return sendError(res, "No blog found !!");
   }
 
   const updateReaction = {};
-
-  // why checking blogid again ------------------- fixed
   updateReaction.blogId = blogId;
   updateReaction.reaction = reaction;
-  
 
- 
   logger.log({
     level: "info",
     message: `reactBlogValidation validation successful`,
@@ -50,7 +47,7 @@ async function reactBlogValidation(req, res, next) {
 
   // Attach validated update object to request
   req.updateReaction = updateReaction;
-  
+
   next();
 }
 

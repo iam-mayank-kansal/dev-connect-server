@@ -1,4 +1,8 @@
-const { successTemplate, failureTemplate } = require("../../helper/template");
+const {
+  successTemplate,
+  failureTemplate,
+  sendError,
+} = require("../../helper/template");
 const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
 const userConnectionModel = require("../../models/userConnections");
@@ -12,16 +16,12 @@ async function deleteConnection(req, res) {
     const deletedConnection = await userConnectionModel.findOneAndDelete({
       $or: [
         { fromUserId: userId, toUserId: toUserId, status: "accepted" },
-        { fromUserId: toUserId, toUserId: userId, status: "accepted" }
-      ]
+        { fromUserId: toUserId, toUserId: userId, status: "accepted" },
+      ],
     });
 
     if (!deletedConnection) {
-      return sendError(
-        res,
-        "Connection not found or already deleted.",
-        404
-      );
+      return sendError(res, "Connection not found or already deleted.", 404);
     }
 
     // Update both users' connection arrays
@@ -30,12 +30,12 @@ async function deleteConnection(req, res) {
       {
         updateOne: {
           filter: { _id: userId },
-          update: { 
-            $pull: { 
+          update: {
+            $pull: {
               "connections.connected": toUserId,
               "connections.requestSent": toUserId,
-              "connections.requestReceived": toUserId
-            } 
+              "connections.requestReceived": toUserId,
+            },
           },
         },
       },
@@ -43,12 +43,12 @@ async function deleteConnection(req, res) {
       {
         updateOne: {
           filter: { _id: toUserId },
-          update: { 
-            $pull: { 
+          update: {
+            $pull: {
               "connections.connected": userId,
               "connections.requestSent": userId,
-              "connections.requestReceived": userId
-            } 
+              "connections.requestReceived": userId,
+            },
           },
         },
       },
@@ -58,7 +58,7 @@ async function deleteConnection(req, res) {
     const userConnectionData = {
       fromUserId: userId,
       toUserId: toUserId,
-      action: "deleted"
+      action: "deleted",
     };
 
     const message = "Connection deleted successfully.";
