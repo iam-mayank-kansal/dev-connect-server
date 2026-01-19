@@ -2,9 +2,11 @@ const userConnectionModel = require("../../models/userConnections");
 const userModel = require("../../models/user");
 const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
+const handleNotification = require("../../helper/notification");
 
 async function connectionResponse(req, res) {
   try {
+    const userName = req.user.name;
     const userId = req.user._id;
     const { fromUserId, status } = req.body;
     const normalizedStatus = status.toLowerCase();
@@ -47,6 +49,11 @@ async function connectionResponse(req, res) {
         },
       ]);
       message = "Connection request accepted successfully";
+      // helper fn for sending notification to reciver user (toUserName)
+      const eventName = "accept-connectionRequest";
+      const eventDesc = `connection request accepted by ${userName}`;
+
+      handleNotification(userId, fromUserId, eventName, eventDesc, res);
     }
 
     // 2. Handle the 'rejected' status

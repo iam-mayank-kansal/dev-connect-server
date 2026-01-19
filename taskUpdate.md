@@ -1,51 +1,9 @@
-## user connection
+## notification system
 
-## create-connection
+1. To send the notifications --> calling a helper fn (handleNotification) at the time of (send-connection request) and (accept-connection request)
 
-## validations
+2. created /get-notification to list all notifications related to the current logged in user
 
-Check if toUserId and status are present in request body
-Validate toUserId as a valid MongoDB ObjectId
-Verify that the user with toUserId exists in DB
-Ensure status is in COLLECTION_STATUS
-Explicitly block status = "accepted"
-Prevent duplicate "interested" request between same users
-Prevent sending connection request to ourself only
-Log success if all validations pass
+3. created /read-notification to change the status of notification from unread to read as we will pass a key in our request body like ({"key":"send"})
 
-## middleware
-
-insert the record if it passes all the validations configured
-return the usename from userids in api response using aggregation pipelines
-
-## accept-connection
-
-## validations
-
-Check if toUserId and status are present in request body
-Validate toUserId as a valid MongoDB ObjectId
-Verify that the user with toUserId exists in DB
-Ensure status is in COLLECTION_STATUS
-Explicitly block status other than = "accepted" || "rejected"
-Prevent duplicate "accepted" || "rejected" request between same users
-Prevent accepting || rejecting connection request to ourself only
-Log success if all validations pass
-
-## middleware
-
-insert the record if it passes all the validations configured
-return the usename from userids in api response using aggregation pipelines
-
-## list-connection
-
-## validations
-
-Check if status is present in request body
-Verify that the user with toUserId exists in DB
-Ensure status is in COLLECTION_STATUS
-Explicitly block status other than = "accepted" || "blocked" || "interested"
-Log success if all validations pass
-
-## middleware
-
-list the record if it passes all the validations configured
+4. created notification collection to store all the notifications with proper indexing to query the result fast
