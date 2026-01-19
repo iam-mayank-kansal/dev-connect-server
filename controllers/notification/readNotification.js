@@ -42,8 +42,6 @@ async function readNotification(req, res) {
       { new: true }
     );
 
-    console.log(readNotification);
-
     logger.log({
       level: "info",
       message: await successTemplate(

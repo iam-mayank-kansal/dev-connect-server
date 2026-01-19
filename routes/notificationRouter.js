@@ -10,5 +10,6 @@ const readNotification = require("../controllers/notification/readNotification")
 
 //notification routes
 notificationRouter.get("/get-notifications", authRoute, getNotifications);
-(notificationRouter.post("/read-notification", authRoute, readNotification),
-  (module.exports = notificationRouter));
+notificationRouter.post("/read-notification", authRoute, readNotification);
+
+module.exports = notificationRouter;

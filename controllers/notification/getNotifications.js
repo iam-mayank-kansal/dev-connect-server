@@ -4,7 +4,6 @@ const logger = require("../../helper/logger");
 
 async function getNotifications(req, res) {
   const user = req.user;
-  console.log(user);
 
   const displayNotifications = await NotificationModel.find({
     receiverId: user._id,
