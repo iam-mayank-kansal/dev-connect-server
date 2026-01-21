@@ -6,6 +6,7 @@ const {
 const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
 const userConnectionModel = require("../../models/userConnections");
+const NotificationModel = require("../../models/notification");
 
 async function suspendConnection(req, res) {
   try {
@@ -44,6 +45,12 @@ async function suspendConnection(req, res) {
         },
       },
     ]);
+
+    // remove the notification document from notification collection
+    await NotificationModel.findOneAndDelete({
+      senderId: userId,
+      eventName: "send-connectionRequest",
+    });
 
     // Prepare response data
     const userConnectionData = {

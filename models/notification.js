@@ -4,11 +4,11 @@ const NotificationSchema = new mongoose.Schema(
   {
     senderId: {
       type: String,
-      unique: true,
+      unique: false,
     },
     receiverId: {
       type: String,
-      unique: true,
+      unique: false,
     },
     status: {
       type: String,

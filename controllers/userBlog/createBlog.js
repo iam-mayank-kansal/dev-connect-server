@@ -3,6 +3,7 @@ const userModel = require("../../models/user"); // 1. Import userModel
 const mongoose = require("mongoose"); // 2. Import mongoose for transactions
 const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
+const handleNotification = require("../../helper/notification");
 
 async function createBlog(req, res) {
   // 3. Start a session for the transaction
@@ -43,6 +44,32 @@ async function createBlog(req, res) {
       .select("-_id -updatedAt")
       .populate("userId", "name");
 
+    //sending notification on successblog upload
+    if (blog) {
+      //fetch user connected to current logged in user
+      const userList = await userModel
+        .findById(userId)
+        .select("connections.connected -_id");
+
+      //to get array list of all freinds of that user
+      const userArray = userList?.connections?.connected;
+      // console.log(userArray);
+
+      //lopping all userArray input if userArray exists
+      if (userArray) {
+        const userName = req.user?.name;
+        const eventName = "Blog Uploaded";
+        const evenDesc = `${userName} just now has uploaded a blog ! `;
+        for (const userArr of userArray) {
+          handleNotification(userId, userArr, eventName, evenDesc).catch(
+            (err) => {
+              console.log(err);
+              logger.error("Notification failed", err.message);
+            }
+          );
+        }
+      }
+    }
     // log and send the response
     logger.log({
       level: "info",

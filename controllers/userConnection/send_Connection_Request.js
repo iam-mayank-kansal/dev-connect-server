@@ -57,7 +57,9 @@ async function sendConnection(req, res) {
     const eventName = "send-connectionRequest";
     const eventDesc = `received connection request from ${toUserName}`;
 
-    handleNotification(userId, toUserId, eventName, eventDesc, res);
+    handleNotification(userId, toUserId, eventName, eventDesc).catch((err) => {
+      logger.error("Notification failed", err.message);
+    });
 
     // Log and send the success response
     logger.log({

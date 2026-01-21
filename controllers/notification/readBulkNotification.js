@@ -2,7 +2,7 @@ const NotificationModel = require("../../models/notification");
 const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 
-async function readNotification(req, res) {
+async function readBulkNotification(req, res) {
   try {
     const user = req.user;
     const { key, notificationId } = req.body;
@@ -12,7 +12,7 @@ async function readNotification(req, res) {
         .status(400)
         .json(await failureTemplate(400, "key cannot be null or empty"));
     }
-    if (key != "read") {
+    if (key != "bulkRead") {
       return res
         .status(400)
         .json(
@@ -37,10 +37,9 @@ async function readNotification(req, res) {
     }
 
     //to update notification status to read from unread
-    const readNotification = await NotificationModel.findOneAndUpdate(
-      { _id: notificationId, receiverId: user._id, status: "unread" },
-      { $set: { status: "read" } },
-      { new: true }
+    const readBulkNotification = await NotificationModel.updateMany(
+      { receiverId: user._id, status: "unread" },
+      { $set: { status: "read" } }
     );
 
     // console.log(readNotification);
@@ -50,7 +49,7 @@ async function readNotification(req, res) {
       message: await successTemplate(
         201,
         `notification read successfully`,
-        readNotification
+        readBulkNotification
       ),
     });
     res
@@ -58,20 +57,20 @@ async function readNotification(req, res) {
       .json(
         await successTemplate(
           201,
-          `notification read successfully`,
-          readNotification
+          `bulk notification read successfully`,
+          readBulkNotification
         )
       );
   } catch (error) {
     logger.log({
       level: "error",
-      message: `Failed to read notification ${error.message}`,
+      message: `Failed to read bulk notification ${error.message}`,
     });
     return res.status(500).json({
       status: 500,
-      message: "Failed to read notification",
+      message: "Failed to read bulk notification",
     });
   }
 }
 
-module.exports = readNotification;
+module.exports = readBulkNotification;

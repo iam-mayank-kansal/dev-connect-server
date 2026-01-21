@@ -1,20 +1,14 @@
 //to send-recieve  notification function
 const logger = require("./logger");
 const NotificationModel = require("../models/notification");
-const { successTemplate, failureTemplate } = require("./template");
+const { successTemplate } = require("./template");
 
 //send notification case
 //request : fromUserName(senderId),status(read),eventName(connection-request),eventDesc(<senderId> has sent u a connection request)
 
 // at receiver end we will just modify the existing doucment that belongs to the reciver
 
-async function handleNotification(
-  senderId,
-  receiverId,
-  eventName,
-  eventDesc,
-  res
-) {
+async function handleNotification(senderId, receiverId, eventName, eventDesc) {
   try {
     const sendNotification = await NotificationModel.create({
       senderId: senderId,
@@ -36,9 +30,7 @@ async function handleNotification(
       level: "error",
       message: `Error in handleNotification : ${error.message}`,
     });
-    return res
-      .status(500)
-      .json(await failureTemplate(500, "Internal Server Error"));
+    throw error;
   }
 }
 
