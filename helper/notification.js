@@ -17,7 +17,6 @@ async function handleNotification(senderId, receiverId, eventName, eventDesc) {
       eventName: eventName,
       eventDesc: eventDesc,
     });
-    // console.log(sendNotification)
 
     // Log and send the success response
     logger.log({

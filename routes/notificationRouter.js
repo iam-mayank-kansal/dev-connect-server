@@ -11,6 +11,7 @@ const readBulkNotification = require("../controllers/notification/readBulkNotifi
 
 //notification routes
 notificationRouter.get("/get-notifications", authRoute, getNotifications);
+
 (notificationRouter.post("/read-notification", authRoute, readNotification),
   notificationRouter.post(
     "/read-bulk-notification",

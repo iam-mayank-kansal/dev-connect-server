@@ -42,7 +42,6 @@ async function readNotification(req, res) {
       { $set: { status: "read" } },
       { new: true }
     );
-
     // console.log(readNotification);
 
     logger.log({
