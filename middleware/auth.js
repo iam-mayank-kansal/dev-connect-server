@@ -22,7 +22,9 @@ async function authRoute(req, res, next) {
         .status(401)
         .json(await failureTemplate(400, "unautorized route"));
     }
+
     let decoded = jwt.verify(userCookie, process.env.JWT_SECRET_KEY);
+
     logger.log({
       level: "info",
       message: "decoded value from user cookie.",

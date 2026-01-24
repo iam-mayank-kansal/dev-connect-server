@@ -13,21 +13,16 @@ async function login(req, res) {
   res.cookie("devconnect-auth-token", token, { httpOnly: true, secure: false });
   logger.log({
     level: "info",
-    message: await successTemplate(
+    message: successTemplate(
       201,
       `${user.name} user logged in successfully`,
-      user
+      payload
     ),
-    jwtToken: token,
   });
   res
     .status(201)
     .json(
-      await successTemplate(
-        201,
-        `${user.name} user logged in successfully`,
-        user
-      )
+      successTemplate(201, `${user.name} user logged in successfully`, payload)
     );
 }
 

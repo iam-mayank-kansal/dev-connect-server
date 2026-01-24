@@ -12,8 +12,8 @@ const otpRouter = require("./routes/otpRouter");
 const userConnectionRouter = require("./routes/userConnectionRouter");
 const userBlogRouter = require("./routes/userBlogRouter");
 const serverListenMessage = require("./helper/serverListenMessage");
-
-const app = express();
+const messageRouter = require("./routes/messageRouter");
+const { app, httpServer } = require("./socket");
 
 // configuring dotenv in main file to use it across all over the project
 dotenv.config();
@@ -52,7 +52,7 @@ app.use("/uploads", express.static("uploads"));
 // listening to server if it's DB connection Successful
 connectToDB()
   .then(() => {
-    app.listen(process.env.PORT, () => {
+    httpServer.listen(process.env.PORT, () => {
       serverListenMessage();
       logger.log({
         level: "info",
@@ -69,16 +69,15 @@ connectToDB()
   });
 
 //routes ------------------------->
-
-//USER-ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>
-
 //auth routes
 app.use("/devconnect/auth", authRouter);
 //user routes
 app.use("/devconnect/user", userRouter);
 // otp routes
 app.use("/devconnect/otp", otpRouter);
-//USER-CONNECTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>
+// user connection routes
 app.use("/devconnect/userconnection", userConnectionRouter);
-//USER-BLOGS >>>>>>>>>>>>>>>>>>>>>>>>>>
+// user blog routes
 app.use("/devconnect/blog", userBlogRouter);
+// chat routes
+app.use("/devconnect/message", messageRouter);

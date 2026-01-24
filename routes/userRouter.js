@@ -7,12 +7,8 @@ const authRoute = require("../middleware/auth");
 //user imports
 const delteValidation = require("../validators/user/deleteValidator");
 const deleteUser = require("../controllers/user/delete");
-const resetPasswordValidation = require("../validators/user/resetPasswordValidator");
-const resetPassword = require("../controllers/user/resetPassword");
 const updateUserValidation = require("../validators/user/updateUserValidator");
 const updateUser = require("../controllers/user/updateUser");
-const setNewPasswordValidation = require("../validators/user/setNewPasswordValidation");
-const setNewPassword = require("../controllers/user/setNewPassword");
 const displayUser = require("../controllers/user/displayUserProfile");
 const handleMulter = require("../helper/uploadErrorHandler");
 const getPublicProfile = require("../controllers/user/getPublicProfile");
@@ -38,12 +34,5 @@ userRouter.patch(
   updateUserValidation,
   updateUser
 );
-userRouter.patch(
-  "/reset-password",
-  authRoute,
-  resetPasswordValidation,
-  resetPassword
-);
-userRouter.patch("/set-new-password", setNewPasswordValidation, setNewPassword);
 
 module.exports = userRouter;
