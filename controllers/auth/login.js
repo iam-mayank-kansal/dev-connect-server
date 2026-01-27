@@ -8,7 +8,7 @@ async function login(req, res) {
   //creating jwt token on successful login
   const payload = user;
   const token = jwt.sign({ payload }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "1h",
+    expiresIn: "5h",
   });
   res.cookie("devconnect-auth-token", token, { httpOnly: true, secure: false });
   logger.log({

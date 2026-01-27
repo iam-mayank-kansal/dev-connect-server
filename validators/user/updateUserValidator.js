@@ -2,34 +2,28 @@ const { failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const userModel = require("../../models/user");
 const { allowedFields } = require("../../utils/enum");
-// REFACTOR: Import regex patterns from the new utility file
 const { nameRegex, mobileRegex, urlRegex } = require("../../utils/regex");
 
 async function updateUserValidation(req, res, next) {
   const user = req.user;
   const reqBodyData = req.body;
-  const reqFileData = req.files;
 
   // --- Start of the corrected data parsing code ---
 
   // Iterate through the body keys and attempt to parse any stringified JSON
   for (const key of Object.keys(reqBodyData)) {
     try {
-      // Check if the string starts with '{' or '[' to hint at JSON
       if (
         typeof reqBodyData[key] === "string" &&
         (reqBodyData[key].startsWith("{") || reqBodyData[key].startsWith("["))
       ) {
         reqBodyData[key] = JSON.parse(reqBodyData[key]);
       }
-      // FIX: Prefix 'e' with an underscore to resolve the 'no-unused-vars' error.
     } catch {
       // If parsing fails, it's not a valid JSON string, so we keep the original value.
     }
   }
 
-  // A separate step to handle nested stringified objects within arrays,
-  // which can happen with `multipart/form-data`.
   const fieldsToParse = [
     "socialLinks",
     "experience",
@@ -39,20 +33,15 @@ async function updateUserValidation(req, res, next) {
 
   for (const field of fieldsToParse) {
     if (reqBodyData[field] !== undefined) {
-      // If the field is an array, iterate and parse its string elements
       if (Array.isArray(reqBodyData[field])) {
         reqBodyData[field] = reqBodyData[field].map((item) => {
           try {
             return typeof item === "string" ? JSON.parse(item) : item;
-            // FIX: Prefix 'e' with an underscore to resolve the 'no-unused-vars' error.
           } catch {
             return item;
           }
         });
-      }
-      // If it's a single object (e.g., certification), and the validation expects an array,
-      // wrap the object in an array to match the validation.
-      else if (
+      } else if (
         typeof reqBodyData[field] === "object" &&
         !Array.isArray(reqBodyData[field])
       ) {
@@ -63,12 +52,8 @@ async function updateUserValidation(req, res, next) {
 
   // --- End of the corrected data parsing code ---
 
-  // checking if the request body or files are empty
-  if (
-    (!reqBodyData || Object.keys(reqBodyData).length === 0) &&
-    !reqFileData &&
-    (!reqFileData || Object.keys(reqFileData).length === 0)
-  ) {
+  // checking if the request body is empty
+  if (!reqBodyData || Object.keys(reqBodyData).length === 0) {
     return res
       .status(400)
       .json(
@@ -455,7 +440,6 @@ async function updateUserValidation(req, res, next) {
         .json(await failureTemplate(400, "Education must be an array."));
     }
 
-    // mapping through each education entry to validate
     for (const edu of reqBodyData.education) {
       if (
         typeof edu.degree !== "string" ||
@@ -526,7 +510,6 @@ async function updateUserValidation(req, res, next) {
         .json(await failureTemplate(400, "Experience must be an array."));
     }
 
-    // mapping through each experience entry to validate
     for (const exp of reqBodyData.experience) {
       if (typeof exp.position !== "string" || typeof exp.company !== "string") {
         logger.log({
@@ -594,7 +577,6 @@ async function updateUserValidation(req, res, next) {
         .json(await failureTemplate(400, "Certification must be an array."));
     }
 
-    // mapping through each certification entry to validate
     for (const cert of reqBodyData.certification) {
       if (
         typeof cert.certificate !== "string" ||
@@ -637,89 +619,38 @@ async function updateUserValidation(req, res, next) {
     }
   }
 
-  // File Uploads
-  if (reqFileData) {
-    // const profilePicture = reqFileData.find(file => file.fieldname === "profilePicture");
-    const profilePicture = reqFileData?.profilePicture?.[0];
-    const resumePdf = reqFileData?.resume?.[0];
-
-    if (profilePicture) {
-      if (!profilePicture.mimetype.startsWith("image/")) {
-        logger.log({
-          level: "error",
-          message: await failureTemplate(
-            400,
-            "Only image files are allowed for profile picture"
-          ),
-        });
-        return res
-          .status(400)
-          .json(
-            await failureTemplate(
-              400,
-              "Only image files are allowed for profile picture"
-            )
-          );
-      }
-      const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
-      if (profilePicture.size > MAX_IMAGE_SIZE) {
-        logger.log({
-          level: "error",
-          message: await failureTemplate(
-            400,
-            `Profile picture cannot exceed ${MAX_IMAGE_SIZE / 1024 / 1024} MB`
-          ),
-        });
-        return res
-          .status(400)
-          .json(
-            await failureTemplate(
-              400,
-              `Profile picture cannot exceed ${MAX_IMAGE_SIZE / 1024 / 1024} MB`
-            )
-          );
-      }
+  // --- Upload Validation (Cloudinary/ImageKit URL Strings) ---
+  if (reqBodyData.profilePicture !== undefined) {
+    if (typeof reqBodyData.profilePicture !== "string") {
+      logger.log({
+        level: "error",
+        message: await failureTemplate(
+          400,
+          "Profile picture must be a string URL."
+        ),
+      });
+      return res
+        .status(400)
+        .json(
+          await failureTemplate(400, "Profile picture must be a string URL.")
+        );
     }
+  }
 
-    // resume pdf
-    if (resumePdf) {
-      if (resumePdf.mimetype !== "application/pdf") {
-        logger.log({
-          level: "error",
-          message: await failureTemplate(
-            400,
-            "Only PDF files are allowed for Resume"
-          ),
-        });
-        return res
-          .status(400)
-          .json(
-            await failureTemplate(400, "Only PDF files are allowed for Resume")
-          );
-      }
-      const MAX_PDF_SIZE = 5 * 1024 * 1024;
-      if (resumePdf.size > MAX_PDF_SIZE) {
-        logger.log({
-          level: "error",
-          message: await failureTemplate(
-            400,
-            `Resume cannot exceed ${MAX_PDF_SIZE / 1024 / 1024} MB`
-          ),
-        });
-        return res
-          .status(400)
-          .json(
-            await failureTemplate(
-              400,
-              `Resume cannot exceed ${MAX_PDF_SIZE / 1024 / 1024} MB`
-            )
-          );
-      }
+  if (reqBodyData.resume !== undefined) {
+    if (typeof reqBodyData.resume !== "string") {
+      logger.log({
+        level: "error",
+        message: await failureTemplate(400, "Resume must be a string URL."),
+      });
+      return res
+        .status(400)
+        .json(await failureTemplate(400, "Resume must be a string URL."));
     }
   }
 
   logger.log({ level: "info", message: `Update User Validation Successful` });
-  req.updatedBody = { ...reqBodyData, file: reqFileData };
+  req.updatedBody = reqBodyData;
 
   next();
 }

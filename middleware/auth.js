@@ -38,9 +38,14 @@ async function authRoute(req, res, next) {
   } catch (error) {
     logger.log({
       level: "error",
-      message: "decoded value from user cookie.",
+      message: "error in auth middleware",
       error,
     });
+    return res
+      .status(401)
+      .json(
+        await failureTemplate(401, "Unauthorized - Invalid or expired token")
+      );
   }
 }
 

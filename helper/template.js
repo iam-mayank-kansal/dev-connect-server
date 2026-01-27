@@ -1,6 +1,6 @@
 const logger = require("./logger");
 
-async function failureTemplate(scode, message) {
+function failureTemplate(scode, message) {
   const template = {
     responseCode: scode,
     status: "failure",

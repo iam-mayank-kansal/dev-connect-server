@@ -8,7 +8,9 @@ async function updateUser(req, res) {
   try {
     const user = req.user;
     const findUser = await userModel.findById(user._id);
-    const updateData = await { ...req.updatedBody };
+
+    // Merge req.body in case specific middleware didn't catch the new URL fields
+    const updateData = { ...(req.updatedBody || req.body) };
 
     if (updateData.name) {
       updateData.name = updateData.name.trim();
@@ -29,7 +31,7 @@ async function updateUser(req, res) {
 
     // Skills array
     if (updateData.skills && Array.isArray(updateData.skills)) {
-      updateData.skills = updateData?.skills?.map((skill) => skill.trim());
+      updateData.skills = updateData.skills.map((skill) => skill.trim());
     }
 
     // Education dates
@@ -77,14 +79,19 @@ async function updateUser(req, res) {
       updateData.socialLinks = filteredLinks;
     }
 
-    // Profile Picture - Only update if a file was actually uploaded
-    if (req.files?.profilePicture?.[0]) {
-      updateData.profilePicture = req.files.profilePicture[0].filename;
+    // --- CHANGED: Handle Profile Picture (URL string from ImageKit) ---
+    // We now expect a string URL in the body, not a file in req.files
+    if (
+      updateData.profilePicture &&
+      typeof updateData.profilePicture === "string"
+    ) {
+      updateData.profilePicture = updateData.profilePicture.trim();
     }
 
-    // Resume - Only update if a file was actually uploaded
-    if (req.files?.resume?.[0]) {
-      updateData.resume = req.files.resume[0].filename;
+    // --- CHANGED: Handle Resume (URL string from ImageKit) ---
+    // We now expect a string URL in the body, not a file in req.files
+    if (updateData.resume && typeof updateData.resume === "string") {
+      updateData.resume = updateData.resume.trim();
     }
 
     // Update User Document

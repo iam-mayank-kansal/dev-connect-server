@@ -13,10 +13,10 @@ const setNewPasswordValidation = require("../validators/auth/setNewPasswordValid
 const setNewPassword = require("../controllers/auth/setNewPassword");
 const resetPasswordValidation = require("../validators/auth/resetPasswordValidator");
 const resetPassword = require("../controllers/auth/resetPassword");
+const getImageKitAuth = require("../controllers/auth/getImageKitAuth");
 
 //auth routes
 authRouter.get("/check-auth", authRoute, checkAuth);
-authRouter.post("/refresh-token", authRoute, checkAuth);
 authRouter.post("/sign-up", signUpValidation, signUp);
 authRouter.post("/login", loginValidation, login);
 authRouter.post("/logout", logout);
@@ -27,5 +27,6 @@ authRouter.patch(
   resetPasswordValidation,
   resetPassword
 );
+authRouter.get("/imageKit-access", authRoute, getImageKitAuth);
 
 module.exports = authRouter;

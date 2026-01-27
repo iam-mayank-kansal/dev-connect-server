@@ -1,5 +1,8 @@
-const express = require("express");
+// configuring dotenv in main file to use it across all over the project
 const dotenv = require("dotenv");
+dotenv.config();
+
+const express = require("express");
 const cors = require("cors");
 
 // imports
@@ -15,8 +18,6 @@ const serverListenMessage = require("./helper/serverListenMessage");
 const messageRouter = require("./routes/messageRouter");
 const { app, httpServer } = require("./socket");
 
-// configuring dotenv in main file to use it across all over the project
-dotenv.config();
 logger.log({
   level: "info",
   message: `Environment variables loaded from .env file`,

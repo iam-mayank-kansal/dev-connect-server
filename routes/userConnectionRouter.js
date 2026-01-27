@@ -1,63 +1,90 @@
 const express = require("express");
 const userConnectionRouter = express.Router();
 
-//auth middleware
+// Auth Middleware
 const authRoute = require("../middleware/auth");
 
-//user imports
-const sendConnectionValidation = require("../validators/userConnection/send_connection_request_validation");
-const sendConnection = require("../controllers/userConnection/send_Connection_Request");
-const connectionResponseValidation = require("../validators/userConnection/accept_reject_connection_validation");
-const connectionResponse = require("../controllers/userConnection/accept_reject_connection");
-const blockConnectionValidation = require("../validators/userConnection/block_unblock_connection_validation");
-const blockConnection = require("../controllers/userConnection/block_unblock_connection");
-const ignoreConnectionValidation = require("../validators/userConnection/ignore_unignore_connection_validation");
-const ignoreConnection = require("../controllers/userConnection/ignore_unignore_connection");
-const getUserConnections = require("../controllers/userConnection/get_user_connections");
-const findConnection = require("../controllers/userConnection/find_connection");
-const suspendConnectionValidation = require("../validators/userConnection/suspend_send_connection_request_validation");
-const suspendConnection = require("../controllers/userConnection/suspend_send_Connection_Request");
-const deleteConnectionValidation = require("../validators/userConnection/delete_connection_validation");
-const deleteConnection = require("../controllers/userConnection/delete_connection");
+// --- Validators ---
+const sendConnectionValidation = require("../validators/userConnection/sendConnectionRequestValidation");
+const suspendConnectionValidation = require("../validators/userConnection/suspendConnectionValidation");
+const blockUserValidation = require("../validators/userConnection/blockUserValidation");
+const unblockUserValidation = require("../validators/userConnection/unblockUserValidation");
+const ignoreUserValidation = require("../validators/userConnection/ignoreUserValidation");
+const unignoreUserValidation = require("../validators/userConnection/unignoreUserValidation");
 
-//user connection routes
+// --- Controllers ---
+const sendConnection = require("../controllers/userConnection/sendConnectionRequest");
+const suspendConnection = require("../controllers/userConnection/suspendConnectionRequest");
+const connectionResponse = require("../controllers/userConnection/connectionResponse");
+const deleteConnection = require("../controllers/userConnection/deleteConnection");
+const getUserConnections = require("../controllers/userConnection/getUserConnections");
+const findConnection = require("../controllers/userConnection/findConnection");
+const blockUser = require("../controllers/userConnection/blockUser");
+const unblockUser = require("../controllers/userConnection/unblockUser");
+const ignoreUser = require("../controllers/userConnection/ignoreUser");
+const unignoreUser = require("../controllers/userConnection/unignoreUser");
+const connectionResponseValidation = require("../validators/userConnection/connectionResponseValidation");
+const deleteConnectionValidation = require("../validators/userConnection/deleteConnectionValidation");
+
+// 1. Connection Requests (Creation / Cancellation)
 userConnectionRouter.post(
   "/send-connection-request",
   authRoute,
   sendConnectionValidation,
   sendConnection
 );
-userConnectionRouter.post(
-  "/suspend-sent-connection-request",
+userConnectionRouter.delete(
+  "/suspend-connection-request",
   authRoute,
   suspendConnectionValidation,
   suspendConnection
 );
+
+// 2. Response (Accept / Reject)
 userConnectionRouter.post(
   "/connection-response",
   authRoute,
   connectionResponseValidation,
   connectionResponse
 );
-userConnectionRouter.post(
-  "/block-unblock-connection-request",
-  authRoute,
-  blockConnectionValidation,
-  blockConnection
-);
-userConnectionRouter.post(
-  "/ignore-unignore-connection-request",
-  authRoute,
-  ignoreConnectionValidation,
-  ignoreConnection
-);
-userConnectionRouter.post(
+
+// 3. Connection Management (Unfriend)
+userConnectionRouter.delete(
   "/delete-connection",
   authRoute,
   deleteConnectionValidation,
   deleteConnection
 );
 
+// 4. Blocking
+userConnectionRouter.post(
+  "/block-user",
+  authRoute,
+  blockUserValidation,
+  blockUser
+);
+userConnectionRouter.post(
+  "/unblock-user",
+  authRoute,
+  unblockUserValidation,
+  unblockUser
+);
+
+// 5. Ignoring
+userConnectionRouter.post(
+  "/ignore-user",
+  authRoute,
+  ignoreUserValidation,
+  ignoreUser
+);
+userConnectionRouter.post(
+  "/unignore-user",
+  authRoute,
+  unignoreUserValidation,
+  unignoreUser
+);
+
+// 6. Getters
 userConnectionRouter.get(
   "/get-user-connections",
   authRoute,

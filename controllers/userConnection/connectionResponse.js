@@ -77,30 +77,29 @@ async function connectionResponse(req, res) {
       message = "Connection request rejected successfully";
     }
 
-    // 3. Prepare and send the final response
     const userConnectionData = {
-      fromUserId,
+      fromUserId: fromUserId,
       toUserId: userId,
       status: normalizedStatus,
     };
 
+    console.log("User Connection Data:", userConnectionData);
+
     logger.log({
       level: "info",
-      message: await successTemplate(200, message),
+      message: successTemplate(200, message),
       data: userConnectionData,
     });
 
     return res
       .status(200)
-      .json(await successTemplate(200, message, userConnectionData));
+      .json(successTemplate(200, message, userConnectionData));
   } catch (error) {
     logger.log({
       level: "error",
       message: `Error in connectionResponse controller: ${error.message}`,
     });
-    return res
-      .status(500)
-      .json(await failureTemplate(500, "Internal Server Error"));
+    return res.status(500).json(failureTemplate(500, "Internal Server Error"));
   }
 }
 
