@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "build": "npm run clean && mkdir -p dist && cp -r src/* dist/",
     "clean": "rm -rf dist",
-    "prepare": "husky",
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky; fi",
     "check": "npm run lint && npm run format"
   },
   "repository": {
