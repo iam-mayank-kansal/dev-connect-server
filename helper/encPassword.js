@@ -3,7 +3,7 @@ const logger = require("./logger");
 
 async function encPassword(value, password, storedHash) {
   const genSalt = await bcrypt.genSalt(10);
-  if (value === "genrate") {
+  if (value === "generate") {
     const encryptPassword = await bcrypt.hash(password.trim(), genSalt);
     logger.log({
       level: "info",

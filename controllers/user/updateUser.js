@@ -3,6 +3,7 @@ const { successTemplate, failureTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 const calculateAge = require("../../helper/calculateAge");
 const { allowedSocialLinks } = require("../../utils/enum");
+const jwt = require("jsonwebtoken");
 
 async function updateUser(req, res) {
   try {
@@ -88,10 +89,23 @@ async function updateUser(req, res) {
       updateData.profilePicture = updateData.profilePicture.trim();
     }
 
+    // Handle Profile Picture ID (for deletion later)
+    if (
+      updateData.profilePictureId &&
+      typeof updateData.profilePictureId === "string"
+    ) {
+      updateData.profilePictureId = updateData.profilePictureId.trim();
+    }
+
     // --- CHANGED: Handle Resume (URL string from ImageKit) ---
     // We now expect a string URL in the body, not a file in req.files
     if (updateData.resume && typeof updateData.resume === "string") {
       updateData.resume = updateData.resume.trim();
+    }
+
+    // Handle Resume ID (for deletion later)
+    if (updateData.resumeId && typeof updateData.resumeId === "string") {
+      updateData.resumeId = updateData.resumeId.trim();
     }
 
     // Update User Document
@@ -106,7 +120,7 @@ async function updateUser(req, res) {
 
     logger.log({
       level: "info",
-      message: await successTemplate(
+      message: successTemplate(
         201,
         `${findUser.name} user updated successfully`,
         updatedUser
@@ -114,10 +128,20 @@ async function updateUser(req, res) {
       userAction: "user updated successfully",
     });
 
+    // Generate new token with updated user data
+    const payload = updatedUser.toObject ? updatedUser.toObject() : updatedUser;
+    const token = jwt.sign({ payload }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "5h",
+    });
+    res.cookie("devconnect-auth-token", token, {
+      httpOnly: true,
+      secure: false,
+    });
+
     return res
       .status(200)
       .json(
-        await successTemplate(
+        successTemplate(
           201,
           `${findUser.name} user updated successfully`,
           updatedUser
@@ -128,9 +152,7 @@ async function updateUser(req, res) {
       level: "error",
       message: `Error in updateUser controller: ${error.message}`,
     });
-    return res
-      .status(500)
-      .json(await failureTemplate(500, "Internal Server Error"));
+    return res.status(500).json(failureTemplate(500, "Internal Server Error"));
   }
 }
 

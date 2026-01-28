@@ -10,7 +10,7 @@ async function signUp(req, res) {
   const newUser = await userModel.create({
     name: name.trim(),
     email: email.trim(),
-    password: await encPassword("genrate", password),
+    password: await encPassword("generate", password),
   });
 
   // if you only want certain fields returned

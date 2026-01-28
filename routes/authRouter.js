@@ -14,6 +14,7 @@ const setNewPassword = require("../controllers/auth/setNewPassword");
 const resetPasswordValidation = require("../validators/auth/resetPasswordValidator");
 const resetPassword = require("../controllers/auth/resetPassword");
 const getImageKitAuth = require("../controllers/auth/getImageKitAuth");
+const deleteImageKitResource = require("../controllers/auth/deleteImageKitResource");
 
 //auth routes
 authRouter.get("/check-auth", authRoute, checkAuth);
@@ -28,5 +29,6 @@ authRouter.patch(
   resetPassword
 );
 authRouter.get("/imageKit-access", authRoute, getImageKitAuth);
+authRouter.delete("/imagekit-delete", authRoute, deleteImageKitResource);
 
 module.exports = authRouter;
