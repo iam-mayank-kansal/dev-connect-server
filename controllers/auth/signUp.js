@@ -29,7 +29,12 @@ async function signUp(req, res) {
     expiresIn: "5h",
   });
 
-  res.cookie("devconnect-auth-token", token, { httpOnly: true, secure: false });
+  res.cookie("devconnect-auth-token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax",
+    maxAge: 5 * 60 * 60 * 1000, // 5 hours
+  });
 
   logger.log({
     level: "info",
