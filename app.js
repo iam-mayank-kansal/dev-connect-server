@@ -1,5 +1,8 @@
-const express = require("express");
+// configuring dotenv in main file to use it across all over the project
 const dotenv = require("dotenv");
+dotenv.config();
+
+const express = require("express");
 const cors = require("cors");
 
 // imports
@@ -12,11 +15,9 @@ const otpRouter = require("./routes/otpRouter");
 const userConnectionRouter = require("./routes/userConnectionRouter");
 const userBlogRouter = require("./routes/userBlogRouter");
 const serverListenMessage = require("./helper/serverListenMessage");
+const messageRouter = require("./routes/messageRouter");
+const { app, httpServer } = require("./socket");
 
-const app = express();
-
-// configuring dotenv in main file to use it across all over the project
-dotenv.config();
 logger.log({
   level: "info",
   message: `Environment variables loaded from .env file`,
@@ -52,7 +53,7 @@ app.use("/uploads", express.static("uploads"));
 // listening to server if it's DB connection Successful
 connectToDB()
   .then(() => {
-    app.listen(process.env.PORT, () => {
+    httpServer.listen(process.env.PORT, () => {
       serverListenMessage();
       logger.log({
         level: "info",
@@ -69,16 +70,15 @@ connectToDB()
   });
 
 //routes ------------------------->
-
-//USER-ROUTES >>>>>>>>>>>>>>>>>>>>>>>>>>
-
 //auth routes
 app.use("/devconnect/auth", authRouter);
 //user routes
 app.use("/devconnect/user", userRouter);
 // otp routes
 app.use("/devconnect/otp", otpRouter);
-//USER-CONNECTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>
+// user connection routes
 app.use("/devconnect/userconnection", userConnectionRouter);
-//USER-BLOGS >>>>>>>>>>>>>>>>>>>>>>>>>>
+// user blog routes
 app.use("/devconnect/blog", userBlogRouter);
+// chat routes
+app.use("/devconnect/message", messageRouter);

@@ -10,12 +10,14 @@ const allowedFields = [
   "dob",
   "designation",
   "profilePicture",
+  "profilePictureId",
   "location",
   "socialLinks",
   "skills",
   "education",
   "experience",
   "resume",
+  "resumeId",
   "certification",
 ];
 

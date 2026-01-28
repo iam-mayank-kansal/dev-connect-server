@@ -8,22 +8,18 @@ async function loginValidation(req, res, next) {
   if (!email || !password) {
     logger.log({
       level: "info",
-      message: await failureTemplate(400, "invalid request body"),
+      message: failureTemplate(400, "invalid request body"),
     });
-    return res
-      .status(400)
-      .json(await failureTemplate(400, "invalid request body"));
+    return res.status(400).json(failureTemplate(400, "invalid request body"));
   }
 
   const emailRegex = /^[A-Za-z0-9._%+-]{6,}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   if (!emailRegex.test(email)) {
     logger.log({
       level: "info",
-      message: await failureTemplate(400, "Enter Valid Email"),
+      message: failureTemplate(400, "Enter Valid Email"),
     });
-    return res
-      .status(400)
-      .json(await failureTemplate(400, "Enter Valid Email"));
+    return res.status(400).json(failureTemplate(400, "Enter Valid Email"));
   }
 
   const findUser = await userModel.findOne({ email: email });
@@ -31,7 +27,7 @@ async function loginValidation(req, res, next) {
   if (findUser == null) {
     logger.log({
       level: "info",
-      message: await failureTemplate(
+      message: failureTemplate(
         400,
         "User does not exists! kindly contact adminitrator for registration"
       ),
@@ -40,7 +36,7 @@ async function loginValidation(req, res, next) {
     return res
       .status(400)
       .json(
-        await failureTemplate(
+        failureTemplate(
           400,
           "User does not exists! kindly contact adminitrator for registration"
         )
@@ -54,10 +50,10 @@ async function loginValidation(req, res, next) {
   if (checkUser == false) {
     logger.log({
       level: "info",
-      message: await failureTemplate(400, "Invalid password"),
+      message: failureTemplate(400, "Invalid password"),
     });
 
-    return res.status(400).json(await failureTemplate(400, "Invalid password"));
+    return res.status(400).json(failureTemplate(400, "Invalid password"));
   }
 
   logger.log({
@@ -70,6 +66,10 @@ async function loginValidation(req, res, next) {
     name: findUser.name,
     email: findUser.email,
   };
+
+  if (findUser?.profilePicture) {
+    req.user.profilePicture = findUser.profilePicture;
+  }
 
   next();
 }

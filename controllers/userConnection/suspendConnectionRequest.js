@@ -49,7 +49,6 @@ async function suspendConnection(req, res) {
     const userConnectionData = {
       fromUserId: userId,
       toUserId: toUserId,
-      action: "withdrawn",
     };
 
     const message = "Connection request withdrawn successfully.";
@@ -57,21 +56,19 @@ async function suspendConnection(req, res) {
     // Log and send the success response
     logger.log({
       level: "info",
-      message: await successTemplate(200, message),
+      message: successTemplate(200, message),
       data: userConnectionData,
     });
 
     return res
       .status(200)
-      .json(await successTemplate(200, message, userConnectionData));
+      .json(successTemplate(200, message, userConnectionData));
   } catch (error) {
     logger.log({
       level: "error",
       message: `Error in suspendConnection controller: ${error.message}`,
     });
-    return res
-      .status(500)
-      .json(await failureTemplate(500, "Internal Server Error"));
+    return res.status(500).json(failureTemplate(500, "Internal Server Error"));
   }
 }
 

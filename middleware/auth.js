@@ -15,14 +15,14 @@ async function authRoute(req, res, next) {
     if (!userCookie) {
       logger.log({
         level: "info",
-        message: await failureTemplate(400, "unautorized route"),
+        message: failureTemplate(400, "unautorized route"),
       });
 
-      return res
-        .status(401)
-        .json(await failureTemplate(400, "unautorized route"));
+      return res.status(401).json(failureTemplate(400, "unautorized route"));
     }
+
     let decoded = jwt.verify(userCookie, process.env.JWT_SECRET_KEY);
+
     logger.log({
       level: "info",
       message: "decoded value from user cookie.",
@@ -36,9 +36,12 @@ async function authRoute(req, res, next) {
   } catch (error) {
     logger.log({
       level: "error",
-      message: "decoded value from user cookie.",
+      message: "error in auth middleware",
       error,
     });
+    return res
+      .status(401)
+      .json(failureTemplate(401, "Unauthorized - Invalid or expired token"));
   }
 }
 

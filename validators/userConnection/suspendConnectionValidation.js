@@ -80,9 +80,7 @@ async function suspendConnectionValidation(req, res, next) {
       level: "error",
       message: `Error in suspendConnectionValidation: ${error.message}`,
     });
-    return res
-      .status(500)
-      .json(await failureTemplate(500, "Internal Server Error"));
+    return res.status(500).json(failureTemplate(500, "Internal Server Error"));
   }
 }
 

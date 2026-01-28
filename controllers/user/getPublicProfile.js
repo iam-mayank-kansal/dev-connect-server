@@ -2,11 +2,6 @@ const userModel = require("../../models/user");
 const { successTemplate } = require("../../helper/template");
 const logger = require("../../helper/logger");
 
-/**
- * Fetches a public user profile, sanitizes it, and returns the
- * connection status relative to BOTH the logged-in user and the profile user.
- * Assumes an authentication middleware adds `req.user`.
- */
 async function getPublicProfile(req, res) {
   try {
     const profileUserId = req.params.userId;
@@ -27,17 +22,13 @@ async function getPublicProfile(req, res) {
         );
 
       const responseData = {
-        user: selfProfile, // Send the full, unsanitized object
+        user: selfProfile,
         status: "self",
       };
       return res
         .status(200)
         .json(
-          await successTemplate(
-            200,
-            "Profile fetched successfully",
-            responseData
-          )
+          successTemplate(200, "Profile fetched successfully", responseData)
         );
     }
 
@@ -126,9 +117,7 @@ async function getPublicProfile(req, res) {
 
     res
       .status(200)
-      .json(
-        await successTemplate(200, "Profile fetched successfully", responseData)
-      );
+      .json(successTemplate(200, "Profile fetched successfully", responseData));
   } catch (error) {
     logger.error({
       level: "error",

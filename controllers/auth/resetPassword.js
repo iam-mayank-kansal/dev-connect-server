@@ -13,7 +13,7 @@ async function resetPassword(req, res) {
   );
   logger.log({
     level: "info",
-    message: await successTemplate(
+    message: successTemplate(
       201,
       `${resetUserPassword.name} user password updated successfully`
     ),
@@ -22,7 +22,7 @@ async function resetPassword(req, res) {
   res
     .status(201)
     .json(
-      await successTemplate(
+      successTemplate(
         201,
         `${resetUserPassword.name} user password updated successfully`
       )

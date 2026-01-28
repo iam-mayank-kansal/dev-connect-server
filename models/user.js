@@ -28,7 +28,9 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "default-profile.png",
+    },
+    profilePictureId: {
+      type: String,
     },
     bio: {
       type: String,
@@ -61,7 +63,7 @@ const userSchema = new mongoose.Schema(
         degree: String,
         institution: String,
         startDate: Date,
-        endDate: Date, // null if currently working
+        endDate: Date,
         _id: false,
       },
     ],
@@ -71,7 +73,7 @@ const userSchema = new mongoose.Schema(
         position: String,
         company: String,
         startDate: Date,
-        endDate: Date, // null if currently working
+        endDate: Date,
         description: String,
         _id: false,
       },
@@ -89,7 +91,9 @@ const userSchema = new mongoose.Schema(
 
     resume: {
       type: String,
-      default: "",
+    },
+    resumeId: {
+      type: String,
     },
 
     // social links

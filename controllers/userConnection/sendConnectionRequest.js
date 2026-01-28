@@ -37,16 +37,13 @@ async function sendConnection(req, res) {
     // Prepare response data for clarity using populate
     const populatedConnection = await userConnectionModel
       .findById(newConnection._id)
-      .populate("fromUserId", "name")
-      .populate("toUserId", "name")
+      .populate("toUserId", "name _id designation email profilePicture")
       .lean();
 
-    const fromUserName = populatedConnection.fromUserId?.name || "";
-    const toUserName = populatedConnection.toUserId?.name || "";
+    const toUserData = populatedConnection?.toUserId || "";
 
     const userConnectionData = {
-      fromUserName,
-      toUserName,
+      toUserData,
       status: "interested",
     };
 
@@ -55,21 +52,19 @@ async function sendConnection(req, res) {
     // Log and send the success response
     logger.log({
       level: "info",
-      message: await successTemplate(201, message),
+      message: successTemplate(201, message),
       data: userConnectionData,
     });
 
     return res
       .status(201)
-      .json(await successTemplate(201, message, userConnectionData));
+      .json(successTemplate(201, message, userConnectionData));
   } catch (error) {
     logger.log({
       level: "error",
       message: `Error in sendConnection controller: ${error.message}`,
     });
-    return res
-      .status(500)
-      .json(await failureTemplate(500, "Internal Server Error"));
+    return res.status(500).json(failureTemplate(500, "Internal Server Error"));
   }
 }
 
