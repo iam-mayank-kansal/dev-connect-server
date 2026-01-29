@@ -24,16 +24,19 @@ logger.log({
   timestamp: new Date().toISOString(),
 });
 
-// Allow all origins (dev mode)
+// Configure CORS to allow credentials (cookies) from client
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Content-Type"],
   })
 );
 logger.log({
   level: "info",
-  message: `CORS configured to allow requests from ${process.env.CLIENT_URL}`,
+  message: `CORS configured to allow requests from ${process.env.CLIENT_URL} with credentials`,
   timestamp: new Date().toISOString(),
 });
 
