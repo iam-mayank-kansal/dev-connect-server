@@ -20,7 +20,11 @@ async function setNewPassword(req, res) {
     );
 
     if (updatedUser) {
-      res.clearCookie("devconnect-auth-token");
+      res.clearCookie("devconnect-auth-token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      });
       logger.log({
         level: "info",
         message: await successTemplate(

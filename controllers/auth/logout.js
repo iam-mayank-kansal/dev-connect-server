@@ -5,7 +5,7 @@ async function logout(req, res) {
   res.clearCookie("devconnect-auth-token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   });
   logger.log({
     level: "info",

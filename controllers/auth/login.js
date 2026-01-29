@@ -13,7 +13,7 @@ async function login(req, res) {
   res.cookie("devconnect-auth-token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     maxAge: 5 * 60 * 60 * 1000, // 5 hours
   });
   logger.log({

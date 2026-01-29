@@ -18,7 +18,11 @@ async function resetPassword(req, res) {
       `${resetUserPassword.name} user password updated successfully`
     ),
   });
-  res.clearCookie("devconnect-auth-token");
+  res.clearCookie("devconnect-auth-token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  });
   res
     .status(201)
     .json(
