@@ -18,7 +18,7 @@ async function authRoute(req, res, next) {
   try {
     // Check for auth cookie
     console.log(`[Auth:${requestId}] Checking for auth cookie...`);
-    const userCookie = await req.cookies["devconnect-auth-token"];
+    let userCookie = await req.cookies["devconnect-auth-token"];
 
     console.log(`[Auth:${requestId}] Cookie check result:`, {
       hasCookie: !!userCookie,
@@ -34,6 +34,16 @@ async function authRoute(req, res, next) {
       path: req.path,
       timestamp: new Date().toISOString(),
     });
+
+    if (!userCookie) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        userCookie = authHeader.substring(7);
+        console.log("[Auth] userCookie found in Authorization header");
+      }
+    } else {
+      console.log("[Auth] userCookie found in cookie");
+    }
 
     if (!userCookie) {
       console.warn(`[Auth:${requestId}] ✗ UNAUTHORIZED - No auth cookie found`);
