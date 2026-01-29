@@ -20,10 +20,12 @@ async function setNewPassword(req, res) {
     );
 
     if (updatedUser) {
+      const isProduction = process.env.NODE_ENV === "production";
+
       res.clearCookie("devconnect-auth-token", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        secure: isProduction,
+        sameSite: isProduction ? "None" : "Lax",
       });
       logger.log({
         level: "info",

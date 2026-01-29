@@ -133,10 +133,13 @@ async function updateUser(req, res) {
     const token = jwt.sign({ payload }, process.env.JWT_SECRET_KEY, {
       expiresIn: "5h",
     });
+
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("devconnect-auth-token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
       maxAge: 5 * 60 * 60 * 1000, // 5 hours
     });
 

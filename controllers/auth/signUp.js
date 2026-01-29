@@ -29,10 +29,13 @@ async function signUp(req, res) {
     expiresIn: "5h",
   });
 
+  // For cross-domain cookies to work: must have secure: true and sameSite: "None"
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.cookie("devconnect-auth-token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    secure: isProduction,
+    sameSite: isProduction ? "None" : "Lax",
     maxAge: 5 * 60 * 60 * 1000, // 5 hours
   });
 

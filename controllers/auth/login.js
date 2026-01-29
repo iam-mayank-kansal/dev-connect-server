@@ -10,11 +10,26 @@ async function login(req, res) {
   const token = jwt.sign({ payload }, process.env.JWT_SECRET_KEY, {
     expiresIn: "5h",
   });
+
+  // For cross-domain cookies to work: must have secure: true and sameSite: "None"
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.cookie("devconnect-auth-token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    secure: isProduction, // MUST be true for HTTPS (production)
+    sameSite: isProduction ? "None" : "Lax", // "None" required for cross-origin
     maxAge: 5 * 60 * 60 * 1000, // 5 hours
+  });
+
+  logger.log({
+    level: "info",
+    message: "Cookie set with options",
+    cookieOptions: {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
+      nodeEnv: process.env.NODE_ENV,
+    },
   });
   logger.log({
     level: "info",
