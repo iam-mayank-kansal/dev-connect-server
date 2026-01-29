@@ -20,7 +20,7 @@ const { app, httpServer } = require("./socket");
 
 logger.log({
   level: "info",
-  message: `Environment variables loaded from .env file`,
+  message: `Environment variables loaded and middleware starting...`,
   timestamp: new Date().toISOString(),
 });
 
@@ -31,7 +31,6 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    exposedHeaders: ["Content-Type"],
   })
 );
 logger.log({
@@ -50,28 +49,6 @@ logger.log({
   timestamp: new Date().toISOString(),
 });
 
-// statically hosting uploads folder
-app.use("/uploads", express.static("uploads"));
-
-// listening to server if it's DB connection Successful
-connectToDB()
-  .then(() => {
-    httpServer.listen(process.env.PORT, () => {
-      serverListenMessage();
-      logger.log({
-        level: "info",
-        message: `Server Running Fine at ${process.env.ORIGIN_URL}`,
-      });
-    });
-  })
-  .catch((error) => {
-    logger.log({
-      level: "error",
-      message: `DB Connection Failed`,
-      error: error,
-    });
-  });
-
 //routes ------------------------->
 //auth routes
 app.use("/devconnect/auth", authRouter);
@@ -85,3 +62,23 @@ app.use("/devconnect/userconnection", userConnectionRouter);
 app.use("/devconnect/blog", userBlogRouter);
 // chat routes
 app.use("/devconnect/message", messageRouter);
+
+// listening to server if it's DB connection Successful
+connectToDB()
+  .then(() => {
+    httpServer.listen(process.env.PORT, "0.0.0.0", () => {
+      serverListenMessage();
+      logger.log({
+        level: "info",
+        message: `Server Running Fine at ${process.env.ORIGIN_URL}`,
+      });
+    });
+  })
+  .catch((error) => {
+    console.error("DB Connection Failed:", error);
+    logger.log({
+      level: "error",
+      message: `DB Connection Failed`,
+      error: error,
+    });
+  });
