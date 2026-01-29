@@ -19,6 +19,7 @@ async function login(req, res) {
     secure: isProduction, // MUST be true for HTTPS (production)
     sameSite: isProduction ? "None" : "Lax", // "None" required for cross-origin
     maxAge: 5 * 60 * 60 * 1000, // 5 hours
+    path: "/", // Cookie valid for entire site
   });
 
   logger.log({
