@@ -17,7 +17,7 @@ async function login(req, res) {
   res.cookie("devconnect-auth-token", token, {
     httpOnly: true,
     secure: isProduction, // MUST be true for HTTPS (production)
-    sameSite: isProduction ? "None" : "Lax", // "None" required for cross-origin
+    sameSite: "Lax", // "None" required for cross-origin
     maxAge: 5 * 60 * 60 * 1000, // 5 hours
   });
 
@@ -27,7 +27,7 @@ async function login(req, res) {
     cookieOptions: {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "None" : "Lax",
+      sameSite: "Lax",
       nodeEnv: process.env.NODE_ENV,
     },
   });
