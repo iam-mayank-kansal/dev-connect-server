@@ -6,9 +6,8 @@ const express = require("express");
 const cors = require("cors");
 
 // imports
-const logger = require("../helper/logger");
-const connectToDB = require("../config/database");
 const cookieParser = require("cookie-parser");
+const connectToDB = require("../config/database");
 const authRouter = require("../routes/authRouter");
 const userRouter = require("../routes/userRouter");
 const otpRouter = require("../routes/otpRouter");
@@ -23,7 +22,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:3000",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -33,13 +32,26 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 
-// Connect to database
-connectToDB();
+// Connect to database (async, non-blocking)
+if (process.env.MONGO_URI) {
+  connectToDB().catch((err) => {
+    console.error("Database connection error:", err.message);
+  });
+}
 
-// Health check endpoint
+// Health check endpoints
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "Dev Connect Server is running",
+    status: "success",
+    message: "DevConnect Server is running!",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.get("/devconnect", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "DevConnect Server is running!",
     timestamp: new Date().toISOString(),
   });
 });
@@ -49,12 +61,12 @@ app.get("/health", (req, res) => {
 });
 
 // Routes
-app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
-app.use("/api/otp", otpRouter);
-app.use("/api/connections", userConnectionRouter);
-app.use("/api/blogs", userBlogRouter);
-app.use("/api/messages", messageRouter);
+app.use("/devconnect/auth", authRouter);
+app.use("/devconnect/user", userRouter);
+app.use("/devconnect/otp", otpRouter);
+app.use("/devconnect/connections", userConnectionRouter);
+app.use("/devconnect/blogs", userBlogRouter);
+app.use("/devconnect/messages", messageRouter);
 
 // 404 handler
 app.use((req, res) => {
@@ -65,12 +77,8 @@ app.use((req, res) => {
 });
 
 // Error handling middleware
-app.use((err, _, res) => {
-  logger.log({
-    level: "error",
-    message: err.message,
-    stack: err.stack,
-  });
+app.use((err, req, res) => {
+  console.error(err);
 
   res.status(err.status || 500).json({
     message: err.message || "Internal Server Error",
