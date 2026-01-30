@@ -62,9 +62,9 @@ async function login(req, res) {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "None" : "Lax",
-      domain: isProduction ? ".vercel.app" : undefined,
+      secure: true, // Always true for cookies to work in modern browsers
+      sameSite: "None",
+      domain: ".vercel.app",
       maxAge: cookieMaxAge,
       path: "/",
     };
