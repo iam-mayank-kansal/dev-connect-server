@@ -1,10 +1,26 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "builds": [
     {
       "src": "app.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**"] }
+      "config": {
+        "includeFiles": [
+          "package.json",
+          "config/**",
+          "controllers/**",
+          "helper/**",
+          "middleware/**",
+          "models/**",
+          "routes/**",
+          "socket/**",
+          "utils/**",
+          "validators/**",
+          ".env*"
+        ]
+      }
     }
   ],
   "routes": [
@@ -12,5 +28,8 @@
       "src": "/(.*)",
       "dest": "app.js"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
