@@ -78,6 +78,16 @@ console.log(
 //routes ------------------------->
 console.log("[Server] Registering routes...");
 
+// base route for health check
+app.get("/devconnect", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "DevConnect Server is running!",
+    timestamp: new Date().toISOString(),
+  });
+});
+console.log("[Server] ✓ Base health check route registered at /devconnect");
+
 //auth routes
 app.use("/devconnect/auth", authRouter);
 console.log("[Server] ✓ Auth routes registered at /devconnect/auth");
