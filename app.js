@@ -79,7 +79,7 @@ console.log(
 console.log("[Server] Registering routes...");
 
 // base route for health check
-app.get("/devconnect", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json({
     status: "success",
     message: "DevConnect Server is running!",
