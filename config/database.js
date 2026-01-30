@@ -17,7 +17,8 @@ async function connectToDB() {
     const opts = {
       bufferCommands: false, // Fail fast so you can see the error
       maxPoolSize: 5,
-      serverSelectionTimeoutMS: 8000, // Keep this UNDER 10s for Vercel
+      serverSelectionTimeoutMS: 30000, // 30s for initial connection attempt
+      socketTimeoutMS: 45000, // 45s for socket operations
       heartbeatFrequencyMS: 10000,
     };
 
