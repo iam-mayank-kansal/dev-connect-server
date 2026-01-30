@@ -121,7 +121,11 @@ async function login(req, res) {
 
     console.log("=== LOGIN CONTROLLER END (SUCCESS) ===\n");
 
-    res.status(201).json(response);
+    // Include token in response body for cross-domain scenarios
+    res.status(201).json({
+      ...response,
+      token: token, // Send token in response body
+    });
   } catch (error) {
     console.error("=== LOGIN CONTROLLER ERROR ===");
     console.error(`[Login:${requestId}] ✗ Login error:`, {
