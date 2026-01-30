@@ -32,12 +32,22 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 
-// Connect to database (async, non-blocking)
-if (process.env.MONGO_URI) {
-  connectToDB().catch((err) => {
-    console.error("Database connection error:", err.message);
-  });
-}
+// Database connection middleware - ensure DB is ready before handling requests
+app.use(async (req, res, next) => {
+  try {
+    if (process.env.MONGO_URI) {
+      await connectToDB();
+    }
+    next();
+  } catch (err) {
+    console.error("Database connection error in middleware:", err.message);
+    res.status(503).json({
+      status: "error",
+      message: "Database connection failed",
+      error: err.message,
+    });
+  }
+});
 
 // Health check endpoints
 app.get("/", (req, res) => {
