@@ -65,7 +65,7 @@ async function login(req, res) {
       secure: isProduction ? true : false,
       sameSite: isProduction ? "None" : "Lax",
       maxAge: cookieMaxAge,
-      domain: isProduction ? ".vercel.com" : undefined,
+      domain: isProduction ? ".vercel.app" : undefined, // ✅ Fixed: .vercel.app
       path: "/",
     };
 

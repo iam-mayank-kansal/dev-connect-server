@@ -20,6 +20,8 @@ async function deleteUser(req, res) {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? "None" : "Lax",
+    domain: isProduction ? ".vercel.app" : undefined,
+    path: "/",
   });
   res
     .status(201)

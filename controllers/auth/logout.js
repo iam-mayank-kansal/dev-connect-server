@@ -8,6 +8,8 @@ async function logout(req, res) {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? "None" : "Lax",
+    domain: isProduction ? ".vercel.app" : undefined,
+    path: "/",
   });
   logger.log({
     level: "info",
