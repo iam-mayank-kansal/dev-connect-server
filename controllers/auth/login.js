@@ -62,10 +62,9 @@ async function login(req, res) {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction ? true : false,
-      sameSite: "Lax", // ✅ Use Lax instead of None
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
       maxAge: cookieMaxAge,
-      // Don't set domain - let browser handle it
       path: "/",
     };
 

@@ -24,7 +24,7 @@ async function resetPassword(req, res) {
   res.clearCookie("devconnect-auth-token", {
     httpOnly: true,
     secure: isProduction,
-    sameSite: "Lax",
+    sameSite: isProduction ? "None" : "Lax",
     path: "/",
   });
   res
