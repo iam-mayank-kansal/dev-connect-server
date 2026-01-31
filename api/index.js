@@ -2,6 +2,10 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
+console.log("[API] Starting serverless function...");
+console.log("[API] Environment:", process.env.NODE_ENV);
+console.log("[API] MONGO_URI set:", !!process.env.MONGO_URI);
+
 const express = require("express");
 const cors = require("cors");
 
@@ -35,12 +39,20 @@ app.use(cookieParser());
 // Database connection middleware - ensure DB is ready before handling requests
 app.use(async (req, res, next) => {
   try {
-    if (process.env.MONGO_URI) {
-      await connectToDB();
+    console.log("[Middleware] Checking MongoDB URI...");
+    if (!process.env.MONGO_URI) {
+      console.warn("[Middleware] MONGO_URI not set!");
+      return res.status(500).json({
+        status: "error",
+        message: "Database URI not configured",
+      });
     }
+    console.log("[Middleware] Connecting to database...");
+    await connectToDB();
+    console.log("[Middleware] Database connection successful");
     next();
   } catch (err) {
-    console.error("Database connection error in middleware:", err.message);
+    console.error("[Middleware] Database connection error:", err.message);
     res.status(503).json({
       status: "error",
       message: "Database connection failed",
