@@ -83,7 +83,7 @@ async function connectionResponse(req, res) {
       status: normalizedStatus,
     };
 
-    console.log("User Connection Data:", userConnectionData);
+    // // console.log("User Connection Data:", userConnectionData);
 
     logger.log({
       level: "info",

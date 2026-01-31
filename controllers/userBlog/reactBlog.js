@@ -68,7 +68,7 @@ async function reactBlog(req, res) {
         )
       );
   } catch (error) {
-    console.error(error.message);
+    // // console.error(error.message);
 
     logger.log({
       level: "error",

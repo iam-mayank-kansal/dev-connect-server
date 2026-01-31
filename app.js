@@ -38,20 +38,16 @@ logger.log({
 
 // Configure CORS to allow credentials (cookies) from client
 console.log("[Server] Configuring CORS...");
-console.log("[Server] CORS Config:", {
-  origin: process.env.CLIENT_URL,
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-});
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+console.log("[Server] CORS Config:", corsOptions);
+
+app.use(cors(corsOptions));
 
 logger.log({
   level: "info",
