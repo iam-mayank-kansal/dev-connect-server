@@ -29,13 +29,13 @@ async function signUp(req, res) {
     expiresIn: "5h",
   });
 
-  // For cross-domain cookies to work: must have secure: true and sameSite: "None"
+  // For production on Render: must have secure: true and sameSite: "None"
   const isProduction = process.env.NODE_ENV === "production";
   const cookieMaxAge = 5 * 60 * 60 * 1000; // 5 hours
 
   const cookieOptions = {
     httpOnly: true,
-    secure: isProduction,
+    secure: isProduction ? true : false,
     sameSite: isProduction ? "None" : "Lax",
     maxAge: cookieMaxAge,
     path: "/",

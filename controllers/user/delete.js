@@ -18,9 +18,8 @@ async function deleteUser(req, res) {
 
   res.clearCookie("devconnect-auth-token", {
     httpOnly: true,
-    secure: isProduction,
+    secure: isProduction ? true : false,
     sameSite: isProduction ? "None" : "Lax",
-    domain: isProduction ? ".vercel.app" : undefined,
     path: "/",
   });
   res

@@ -56,13 +56,13 @@ async function login(req, res) {
       timestamp: new Date().toISOString(),
     });
 
-    // For cross-domain cookies to work: must have secure: true and sameSite: "None"
+    // For production on Render: must have secure: true and sameSite: "None"
     const isProduction = process.env.NODE_ENV === "production";
     const cookieMaxAge = 5 * 60 * 60 * 1000; // 5 hours
 
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction,
+      secure: isProduction ? true : false,
       sameSite: isProduction ? "None" : "Lax",
       maxAge: cookieMaxAge,
       path: "/",
@@ -86,7 +86,7 @@ async function login(req, res) {
       userId: user?.id || user?._id,
       cookieOptions: {
         httpOnly: true,
-        secure: isProduction,
+        secure: isProduction ? true : false,
         sameSite: isProduction ? "None" : "Lax",
         nodeEnv: process.env.NODE_ENV,
         maxAgeHours: 5,

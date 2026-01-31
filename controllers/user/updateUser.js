@@ -138,7 +138,7 @@ async function updateUser(req, res) {
 
     res.cookie("devconnect-auth-token", token, {
       httpOnly: true,
-      secure: isProduction,
+      secure: isProduction ? true : false,
       sameSite: isProduction ? "None" : "Lax",
       maxAge: 5 * 60 * 60 * 1000, // 5 hours
     });
