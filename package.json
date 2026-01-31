@@ -33,7 +33,6 @@
   "homepage": "https://github.com/iam-mayank-kansal/dev-connect-server#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "class-transformer": "^0.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
