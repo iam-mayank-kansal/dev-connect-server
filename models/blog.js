@@ -14,22 +14,38 @@ const postSchema = new mongoose.Schema(
       type: String,
     },
 
-    blogPhoto: {
-      type: [],
-    },
+    // Store photo objects with url and fileId for ImageKit deletion
+    blogPhoto: [
+      {
+        url: {
+          type: String,
+        },
+        fileId: {
+          type: String,
+        },
+        _id: false,
+      },
+    ],
 
-    blogViedo: {
-      type: [],
-    },
+    // Store video objects with url and fileId for ImageKit deletion
+    blogViedo: [
+      {
+        url: {
+          type: String,
+        },
+        fileId: {
+          type: String,
+        },
+        _id: false,
+      },
+    ],
 
-    // why we need like agree disagree separately  ------------------------------ fixed
-    // isnt like means agree and dislike means disagree  ----------------------------- fixed
     reactions: {
       agreed: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
       disagreed: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
     },
   },
   { timestamps: true }
-); // adds createdAt and updatedAt automatically
+);
 
 module.exports = mongoose.model("blog", postSchema);

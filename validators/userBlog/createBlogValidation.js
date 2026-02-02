@@ -2,12 +2,11 @@ const logger = require("../../helper/logger");
 const { sendError } = require("../../helper/template");
 const blogModel = require("../../models/blog");
 
-async function updateUserValidation(req, res, next) {
+async function createBlogValidation(req, res, next) {
   const userId = req.user._id;
-  const { blogTitle, blogBody } = req.body; // extract required fields
-  const reqFileData = req.files;
+  const { blogTitle, blogBody, uploadedPhotos, uploadedVideos } = req.body;
 
-  // required fields
+  // Required fields
   if (!blogTitle || !blogBody) {
     return sendError(res, "Invalid request body");
   }
@@ -35,7 +34,7 @@ async function updateUserValidation(req, res, next) {
     return sendError(res, "blogBody cannot exceed 10000 characters");
   }
 
-  // limit for a user to post content -- limit -- 50
+  // Limit for a user to post content -- limit -- 50
   const MAX_BLOGS_PER_USER = 50;
   const checkDuplicateBlog = await blogModel.countDocuments({ userId: userId });
 
@@ -46,45 +45,46 @@ async function updateUserValidation(req, res, next) {
     );
   }
 
-  //   // File Uploads
-  if (reqFileData) {
-    const contentPhotos = reqFileData?.contentPhoto || [];
-    const contentVideos = reqFileData?.contentViedo || [];
-
-    // Validate images
-    const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2 MB
-    for (const file of contentPhotos) {
-      if (!file.mimetype.startsWith("image/")) {
-        return sendError(res, "Only image files are allowed for contentPhoto");
+  // Validate uploaded photos and videos from frontend
+  if (uploadedPhotos) {
+    if (!Array.isArray(uploadedPhotos)) {
+      return sendError(res, "uploadedPhotos must be an array");
+    }
+    if (uploadedPhotos.length > 10) {
+      return sendError(res, "Maximum 10 photos allowed");
+    }
+    for (const photo of uploadedPhotos) {
+      if (!photo.url || !photo.fileId) {
+        return sendError(res, "Each photo must have url and fileId");
       }
-      if (file.size > MAX_IMAGE_SIZE) {
-        return sendError(
-          res,
-          `Each contentPhoto cannot exceed ${MAX_IMAGE_SIZE / 1024 / 1024} MB`
-        );
+      if (typeof photo.url !== "string" || typeof photo.fileId !== "string") {
+        return sendError(res, "Photo url and fileId must be strings");
       }
     }
+  }
 
-    // Validate videos
-    const MAX_VIDEO_SIZE = 70 * 1024 * 1024; // 10 MB
-    for (const file of contentVideos) {
-      if (!file.mimetype.startsWith("video/")) {
-        return sendError(res, "Only video files are allowed for contentViedo");
+  if (uploadedVideos) {
+    if (!Array.isArray(uploadedVideos)) {
+      return sendError(res, "uploadedVideos must be an array");
+    }
+    if (uploadedVideos.length > 2) {
+      return sendError(res, "Maximum 2 videos allowed");
+    }
+    for (const video of uploadedVideos) {
+      if (!video.url || !video.fileId) {
+        return sendError(res, "Each video must have url and fileId");
       }
-      if (file.size > MAX_VIDEO_SIZE) {
-        return sendError(
-          res,
-          `Each contentViedo cannot exceed ${MAX_VIDEO_SIZE / 1024 / 1024} MB`
-        );
+      if (typeof video.url !== "string" || typeof video.fileId !== "string") {
+        return sendError(res, "Video url and fileId must be strings");
       }
     }
   }
 
   logger.log({
     level: "info",
-    message: `User create post Validation Successful`,
+    message: `User create blog validation successful`,
   });
   next();
 }
 
-module.exports = updateUserValidation;
+module.exports = createBlogValidation;
