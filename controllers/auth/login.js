@@ -5,23 +5,8 @@ const logger = require("../../helper/logger");
 async function login(req, res) {
   const requestId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-  console.log("=== LOGIN CONTROLLER START ===");
-  console.log(`[Login:${requestId}] Processing login request`);
-  console.log(`[Login:${requestId}] Request details:`, {
-    ip: req.ip,
-    userAgent: req.get("user-agent")?.substring(0, 50),
-    timestamp: new Date().toISOString(),
-  });
-
   try {
     const user = req.user;
-
-    console.log(`[Login:${requestId}] User data received:`, {
-      userId: user?.id || user?._id,
-      name: user?.name,
-      email: user?.email,
-      hasAllRequiredFields: !!(user?.id || user?._id) && !!user?.email,
-    });
 
     logger.log({
       level: "info",
@@ -33,18 +18,11 @@ async function login(req, res) {
     });
 
     // Creating jwt token on successful login
-    console.log(`[Login:${requestId}] Creating JWT token...`);
     const payload = user;
     const tokenExpiresIn = "5h";
 
     const token = jwt.sign({ payload }, process.env.JWT_SECRET_KEY, {
       expiresIn: tokenExpiresIn,
-    });
-
-    console.log(`[Login:${requestId}] ✓ JWT token created successfully`, {
-      expiresIn: tokenExpiresIn,
-      tokenLength: token.length,
-      payloadSize: JSON.stringify(payload).length,
     });
 
     logger.log({
@@ -68,16 +46,7 @@ async function login(req, res) {
       path: "/",
     };
 
-    console.log(`[Login:${requestId}] Setting auth cookie with options:`, {
-      ...cookieOptions,
-      maxAgeHours: cookieMaxAge / (60 * 60 * 1000),
-      environment: process.env.NODE_ENV,
-      isProduction,
-    });
-
     res.cookie("devconnect-auth-token", token, cookieOptions);
-
-    console.log(`[Login:${requestId}] ✓ Auth cookie set successfully`);
 
     logger.log({
       level: "info",
@@ -96,11 +65,6 @@ async function login(req, res) {
 
     const successMessage = `${user.name} user logged in successfully`;
 
-    console.log(
-      `[Login:${requestId}] ✓ Login successful for user: ${user.name}`
-    );
-    console.log(`[Login:${requestId}] Preparing response...`);
-
     logger.log({
       level: "info",
       message: successMessage,
@@ -113,23 +77,8 @@ async function login(req, res) {
 
     const response = successTemplate(201, successMessage, payload);
 
-    console.log(`[Login:${requestId}] Sending response:`, {
-      status: 201,
-      message: successMessage,
-      hasPayload: !!payload,
-    });
-
-    console.log("=== LOGIN CONTROLLER END (SUCCESS) ===\n");
-
     res.status(201).json(response);
   } catch (error) {
-    console.error("=== LOGIN CONTROLLER ERROR ===");
-    console.error(`[Login:${requestId}] ✗ Login error:`, {
-      name: error.name,
-      message: error.message,
-      stack: error.stack,
-    });
-
     logger.log({
       level: "error",
       message: "Error during login process",
@@ -141,8 +90,6 @@ async function login(req, res) {
       },
       timestamp: new Date().toISOString(),
     });
-
-    console.log("=== LOGIN CONTROLLER END (ERROR) ===\n");
 
     // Return error response
     res.status(500).json({

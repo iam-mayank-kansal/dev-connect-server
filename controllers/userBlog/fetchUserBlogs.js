@@ -34,16 +34,20 @@ async function fetchUserBlogs(req, res) {
     const totalCount = await blogModel.countDocuments({ userId: userId });
     const totalPages = Math.ceil(totalCount / limit);
 
-    if (blogs.length === 0) {
-      return sendError(res, `${user.name} hasn't posted any blogs yet`);
-    }
-
     logger.log({
       level: "info",
       action: `${user.name} blogs fetched with pagination (page ${page}, limit ${limit})`,
-      message: await successTemplate(
+      message: `Fetched ${blogs.length} blogs for user`,
+      totalCount,
+      timestamp: new Date().toISOString(),
+    });
+
+    res.status(200).json(
+      successTemplate(
         200,
-        `${user.name} blogs fetched successfully`,
+        blogs.length === 0
+          ? `${user.name} hasn't posted any blogs yet`
+          : `${user.name} blogs fetched successfully`,
         {
           blogs,
           pagination: {
@@ -53,19 +57,7 @@ async function fetchUserBlogs(req, res) {
             totalPages,
           },
         }
-      ),
-    });
-
-    res.status(200).json(
-      await successTemplate(200, `${user.name} blogs fetched successfully`, {
-        blogs,
-        pagination: {
-          currentPage: page,
-          limit,
-          totalCount,
-          totalPages,
-        },
-      })
+      )
     );
   } catch (error) {
     logger.log({

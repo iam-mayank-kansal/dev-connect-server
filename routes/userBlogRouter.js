@@ -7,8 +7,6 @@ const authRoute = require("../middleware/auth");
 //user imports
 const createBlogValidation = require("../validators/userBlog/createBlogValidation");
 const createBlog = require("../controllers/userBlog/createBlog");
-const listUserBlog = require("../controllers/userBlog/listUserBlog");
-const listAllBlog = require("../controllers/userBlog/listAllBlog");
 const fetchBlogs = require("../controllers/userBlog/fetchBlogs");
 const fetchUserBlogs = require("../controllers/userBlog/fetchUserBlogs");
 const fetchBlogById = require("../controllers/userBlog/fetchBlogById");
@@ -27,14 +25,11 @@ userBlogRouter.post(
   createBlog
 );
 
-userBlogRouter.get("/list-user-blogs", authRoute, listUserBlog);
-userBlogRouter.get("/list-all-blogs", listAllBlog);
-
 // fetch all blogs with pagination and limit
-userBlogRouter.get("/fetch-blogs", fetchBlogs);
+userBlogRouter.get("/fetch-blogs", authRoute, fetchBlogs);
 
 // fetch all blogs by a particular user with pagination and limit
-userBlogRouter.get("/fetch-user-blogs/:userId", fetchUserBlogs);
+userBlogRouter.get("/fetch-user-blogs/:userId", authRoute, fetchUserBlogs);
 
 // fetch a particular blog by blog id
 userBlogRouter.get("/fetch-blog/:blogId", fetchBlogById);

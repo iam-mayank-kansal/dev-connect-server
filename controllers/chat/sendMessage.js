@@ -1,5 +1,6 @@
 const { successTemplate, failureTemplate } = require("../../helper/template");
 const messageModel = require("../../models/MessageSchema");
+const { ioServer, getSocketIdByUserId } = require("../../socket");
 
 async function sendMessage(req, res) {
   try {
@@ -28,7 +29,12 @@ async function sendMessage(req, res) {
       readAt: newMessage?.readAt,
     };
 
-    const response = await successTemplate(
+    const receiverSocketId = getSocketIdByUserId(otherUserId);
+    if (receiverSocketId) {
+      ioServer.to(receiverSocketId).emit("newMessage", resposeData);
+    }
+
+    const response = successTemplate(
       200,
       `Message Send Successfully to user : ${otherUserId}`,
       resposeData

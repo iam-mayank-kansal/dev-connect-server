@@ -7,3 +7,7 @@ node_modules/
 
 # logs
 log/
+*.log
+
+# build
+dist/
