@@ -4,6 +4,7 @@ node_modules/
 # environment variables
 .env
 .env*
+.env/
 
 # logs
 log/
@@ -11,3 +12,4 @@ log/
 
 # build
 dist/
+package-lock.json

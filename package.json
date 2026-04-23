@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "build": "echo 'Build completed - app is ready to run'",
     "clean": "echo 'Clean target not needed for this project'",
-    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky; fi",
+    "prepare": "husky",
     "check": "npm run lint && npm run format"
   },
   "repository": {
@@ -32,16 +32,16 @@
   },
   "homepage": "https://github.com/iam-mayank-kansal/dev-connect-server#readme",
   "dependencies": {
+    "@imagekit/nodejs": "^7.5.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "imagekit": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
     "multer": "^2.0.2",
-    "nodemailer": "^7.0.6",
+    "nodemailer": "^8.0.5",
     "nodemon": "^3.1.10",
     "socket.io": "^4.8.3",
     "winston": "^3.17.0"

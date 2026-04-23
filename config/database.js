@@ -1,57 +1,36 @@
+const dns = require("dns");
 const mongoose = require("mongoose");
-const logger = require("../helper/logger");
 
-// Caching connection for serverless
-let cached = global.mongoose;
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+function configureMongoDns() {
+  const rawServers = process.env.MONGO_DNS_SERVERS || "8.8.8.8,1.1.1.1";
+
+  const servers = rawServers
+    .split(",")
+    .map((server) => server.trim())
+    .filter(Boolean);
+
+  if (servers.length > 0) {
+    dns.setServers(servers);
+  }
 }
 
 async function connectToDB() {
-  if (cached.conn) {
-    console.log("[DB] Using cached connection");
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-      maxPoolSize: 5,
-      minPoolSize: 0,
-      serverSelectionTimeoutMS: 15000,
-      socketTimeoutMS: 25000,
-      maxIdleTimeMS: 30000,
-    };
-
-    console.log("[DB] Creating new connection...");
-    cached.promise = mongoose
-      .connect(process.env.MONGO_URI, opts)
-      .then((mongoose) => {
-        console.log("[DB] ✓ Connection successful!");
-        logger.log({
-          level: "info",
-          message: "DB Connection Successful",
-        });
-        return mongoose;
-      })
-      .catch((error) => {
-        console.error("[DB] ✗ Connection failed:", error.message);
-        logger.log({
-          level: "error",
-          message: "DB Connection Failed",
-          error: error.message,
-        });
-        throw new Error(error);
-      });
-  }
+  configureMongoDns();
 
   try {
-    cached.conn = await cached.promise;
-    return cached.conn;
+    await mongoose.connect(process.env.MONGO_URI);
   } catch (error) {
-    console.error("[DB] ✗ Promise failed:", error.message);
+    if (error.code === "ECONNREFUSED" && error.message?.includes("querySrv")) {
+      error.message =
+        `${error.message}. Node could not resolve the MongoDB SRV record ` +
+        `using the current DNS resolver. Check your local DNS settings or ` +
+        `override MONGO_DNS_SERVERS in .env.`;
+    }
+
     throw error;
   }
+
+  console.log("Database connected");
 }
 
 module.exports = connectToDB;
