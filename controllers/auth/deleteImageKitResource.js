@@ -1,4 +1,4 @@
-const imagekit = require("../../config/imageKit");
+const imageKit = require("../../config/imageKit");
 const logger = require("../../helper/logger");
 
 async function deleteImageKitResource(req, res) {
@@ -12,15 +12,31 @@ async function deleteImageKitResource(req, res) {
       });
     }
 
-    // Delete the file from ImageKit
-    await imagekit.deleteFile(fileId);
+    if (!imageKit.hasImageKitEnv()) {
+      return res.status(500).json({
+        success: false,
+        message: "ImageKit not properly configured",
+      });
+    }
+
+    await imageKit.deleteFile(fileId);
 
     return res.status(200).json({
       success: true,
       message: "File deleted successfully",
     });
   } catch (error) {
-    logger.error("Error deleting ImageKit resource:", error);
+    logger.log({
+      level: "error",
+      message: "Error deleting ImageKit resource",
+      timestamp: new Date().toISOString(),
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      },
+    });
+
     return res.status(500).json({
       success: false,
       message: "Error deleting file",
