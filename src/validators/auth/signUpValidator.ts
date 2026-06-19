@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { failureTemplate } from "../../helper/template";
 import logger from "../../helper/logger";
 import { userModel } from "../../models/user.model";
+import { emailRegex, passwordRegex } from "@/utils/regex";
 
 async function signUpValidation(
   req: Request,
@@ -18,7 +19,7 @@ async function signUpValidation(
     return res.status(400).json(failureTemplate(400, "invalid request body"));
   }
 
-  const emailRegex = /^[A-Za-z0-9._%+-]{6,}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
   if (!emailRegex.test(email)) {
     logger.log({
       level: "info",
@@ -28,8 +29,7 @@ async function signUpValidation(
     return res.status(400).json(failureTemplate(400, "Enter Valid Email"));
   }
 
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+
   if (!passwordRegex.test(password)) {
     logger.log({
       level: "info",

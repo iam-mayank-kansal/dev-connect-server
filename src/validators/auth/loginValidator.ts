@@ -4,6 +4,7 @@ import { userModel } from "@/models/user.model";
 import encPassword from "@/helper/encPassword";
 
 import type { Request, Response, NextFunction } from "express";
+import { emailRegex } from "@/utils/regex";
 
 async function loginValidation(
   req: Request,
@@ -20,7 +21,6 @@ async function loginValidation(
     return res.status(400).json(failureTemplate(400, "invalid request body"));
   }
 
-  const emailRegex = /^[A-Za-z0-9._%+-]{6,}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   if (!emailRegex.test(email)) {
     logger.log({
       level: "info",

@@ -1,21 +1,7 @@
 // utils/otpTemplate.js
 
-/**
- * Professional OTP Email Template Generator
- * @param {Object} params - Template parameters
- * @param {string} params.otp - The OTP code to display
- * @param {string} [params.title] - Email title/subject
- * @param {string} [params.message] - Custom message text
- * @param {string} [params.companyName] - Company name for branding
- * @param {string} [params.companyLogo] - URL to company logo
- * @param {string} [params.supportEmail] - Support email address
- * @param {number} [params.expiryMinutes] - OTP expiry time in minutes
- * @param {string} [params.primaryColor] - Primary brand color
- * @param {string} [params.userName] - User's name for personalization
- * @returns {string} HTML email template
- */
-function otpTemplate({
-  otp: string,
+function OtpTemplate({
+  otp: string = "",
   title = "OTP Verification",
   message = "Use the OTP below to complete your verification.",
   companyName = "DevConnect",
@@ -369,4 +355,4 @@ function otpTemplate({
   `.trim();
 }
 
-module.exports = otpTemplate;
+export default OtpTemplate;

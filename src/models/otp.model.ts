@@ -3,17 +3,9 @@ import type { InferSchemaType } from "mongoose";
 
 const otpSchema = new mongoose.Schema(
   {
-    email: {
-      type: String,
-      unique: false,
-      sparse: true,
-    },
+    email: String,
 
-    mobile: {
-      type: String,
-      unique: false,
-      sparse: true,
-    },
+    mobile: String,
 
     type: {
       type: String,
