@@ -1,7 +1,6 @@
 import { deleteImageKitFile, hasImageKitEnv } from "@/config/imageKit";
 import logger from "@/helper/logger";
 import type { Request, Response } from "express";
-import { successTemplate, failureTemplate } from "@/helper/template";
 
 async function deleteImageKitResource(req: Request, res: Response) {
   try {

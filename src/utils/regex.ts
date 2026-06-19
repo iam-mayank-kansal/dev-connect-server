@@ -13,6 +13,13 @@ const passwordRegex =
 
 const emailRegex = /^[A-Za-z0-9._%+-]{6,}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-  const otpRegex = new RegExp(`^\\d{${dotenvConfig.OTP_LENGTH}}$`);
+const otpRegex = new RegExp(`^\\d{${dotenvConfig.OTP_LENGTH}}$`);
 
-export { nameRegex, mobileRegex, urlRegex, passwordRegex, emailRegex, otpRegex };
+export {
+  nameRegex,
+  mobileRegex,
+  urlRegex,
+  passwordRegex,
+  emailRegex,
+  otpRegex,
+};
