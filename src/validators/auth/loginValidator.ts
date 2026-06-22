@@ -2,7 +2,6 @@ import logger from "../../helper/logger";
 import { failureTemplate } from "@/helper/template";
 import { userModel } from "@/models/user.model";
 import encPassword from "@/helper/encPassword";
-
 import type { Request, Response, NextFunction } from "express";
 
 async function loginValidation(

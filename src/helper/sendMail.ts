@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import logger from "@/helper/logger";
 import dotenvConfig from "@/config/dotenv.config";
+import otpTemplate from "@/utils/otpTemplate";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
@@ -12,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function shipOTP(otp: string, receiver: string , type: string) {
+async function shipOTP(otp: string, receiver: string, type: string) {
   if (type == "email") {
     const info = await transporter.sendMail({
       from: `"Devconnect" <${dotenvConfig.GMAIL_USER}>`,

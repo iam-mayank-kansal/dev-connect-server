@@ -70,12 +70,12 @@ async function sendOtpValidation(
   req.user = {
     _id: findUser._id,
     name: findUser.name,
-    email: query.email ? query.email : null,
-    mobile: query.mobile ? query.mobile : null,
+    email: findUser.email,
+    mobile: query.mobile ? query.mobile : undefined,
     otpType: query.email ? "email" : "mobile",
   };
 
   next();
 }
 
-module.exports = sendOtpValidation;
+export default sendOtpValidation;

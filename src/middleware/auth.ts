@@ -65,19 +65,19 @@ async function authRoute(req: Request, res: Response, next: NextFunction) {
       level: "info",
       message: "Token decoded successfully",
       requestId,
-      userId: decoded?.payload?.id || decoded?.payload?._id,
-      email: decoded?.payload?.email,
+      userId: (decoded as any)?.payload?.id || (decoded as any)?.payload?._id,
+      email: (decoded as any)?.payload?.email,
       timestamp: new Date().toISOString(),
     });
 
     // Attaching user to req
-    req.user = decoded?.payload;
+    req.user = (decoded as any)?.payload;
 
     logger.log({
       level: "info",
       message: "Authentication successful - proceeding to next middleware",
       requestId,
-      userId: req.user?.id || req.user?._id,
+      userId: req.user?._id,
       path: req.path,
       timestamp: new Date().toISOString(),
     });

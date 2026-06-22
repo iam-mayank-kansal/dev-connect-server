@@ -28,7 +28,13 @@ declare global {
     interface Request {
       user?: UserPayload;
       details?: newPasswordDetails | undefined;
-      otpDetails?: otpDetails;
+      otpDetails?: any;
+      updatedBody?: any;
+      existingConnection?: any;
+      pendingConnection?: any;
+      existingBlog?: any;
+      updatedContent?: any;
+      updateReaction?: any;
     }
   }
 }

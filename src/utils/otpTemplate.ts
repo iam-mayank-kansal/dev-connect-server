@@ -1,21 +1,17 @@
-// utils/otpTemplate.js
+interface OtpTemplateParams {
+  otp: string;
+  title?: string;
+  message?: string;
+  companyName?: string;
+  companyLogo?: string | null;
+  supportEmail?: string;
+  expiryMinutes?: number;
+  primaryColor?: string;
+  userName?: string | null;
+}
 
-/**
- * Professional OTP Email Template Generator
- * @param {Object} params - Template parameters
- * @param {string} params.otp - The OTP code to display
- * @param {string} [params.title] - Email title/subject
- * @param {string} [params.message] - Custom message text
- * @param {string} [params.companyName] - Company name for branding
- * @param {string} [params.companyLogo] - URL to company logo
- * @param {string} [params.supportEmail] - Support email address
- * @param {number} [params.expiryMinutes] - OTP expiry time in minutes
- * @param {string} [params.primaryColor] - Primary brand color
- * @param {string} [params.userName] - User's name for personalization
- * @returns {string} HTML email template
- */
 function otpTemplate({
-  otp: string,
+  otp,
   title = "OTP Verification",
   message = "Use the OTP below to complete your verification.",
   companyName = "DevConnect",
@@ -24,20 +20,16 @@ function otpTemplate({
   expiryMinutes = 5,
   primaryColor = "#2563eb",
   userName = null,
-}) {
-  // Validate required parameters
+}: OtpTemplateParams): string {
   if (!otp) {
     throw new Error("OTP parameter is required");
   }
 
-  // Generate current year for footer
   const currentYear = new Date().getFullYear();
-
-  // Personal greeting
   const greeting = userName ? `Hello ${userName},` : "Hello,";
 
   return `
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -369,4 +361,4 @@ function otpTemplate({
   `.trim();
 }
 
-module.exports = otpTemplate;
+export default otpTemplate;

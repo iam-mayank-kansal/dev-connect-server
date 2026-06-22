@@ -105,10 +105,11 @@ async function sendConnectionValidation(
     // If all checks pass, proceed to the controller
     logger.log({ level: "info", message: "SendConnection Validation Success" });
     next();
-  } catch (error : any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     logger.log({
       level: "error",
-      message: `Error in sendConnectionValidation: ${error?.message}`,
+      message: `Error in sendConnectionValidation: ${err.message}`,
     });
     return res.status(500).json(failureTemplate(500, "Internal Server Error"));
   }

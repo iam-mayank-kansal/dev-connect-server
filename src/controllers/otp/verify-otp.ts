@@ -4,13 +4,22 @@ import { userModel } from "@/models/user.model";
 import type { Request, Response } from "express";
 
 async function verifyOTP(req: Request, res: Response) {
-  const otpDbDetail = req?.otpDetails;
+  const otpDbDetail = req.otpDetails;
+  if (!otpDbDetail) {
+    return res
+      .status(400)
+      .json({ status: 400, message: "OTP details not found." });
+  }
+
   try {
-    otpDbDetail.status = "verified";
-    await otpDbDetail.save();
+    (otpDbDetail as any).status = "verified";
+    await (otpDbDetail as any).save();
 
     const resetToken = crypto.randomBytes(32).toString("hex");
     const user = await userModel.findOne({ email: otpDbDetail.email });
+    if (!user) {
+      return res.status(404).json({ status: 404, message: "User not found." });
+    }
     user.resetToken = resetToken;
     user.resetTokenExpiry = new Date(Date.now() + 5 * 60000);
     await user.save();
@@ -29,10 +38,11 @@ async function verifyOTP(req: Request, res: Response) {
         contact: user.email,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const err = error as Error;
     logger.log({
       level: "error",
-      message: `Failed to verify OTP: ${error.message}`,
+      message: `Failed to verify OTP: ${err.message}`,
     });
     return res.status(500).json({
       status: 500,
@@ -41,4 +51,4 @@ async function verifyOTP(req: Request, res: Response) {
   }
 }
 
-module.exports = verifyOTP;
+export default verifyOTP;

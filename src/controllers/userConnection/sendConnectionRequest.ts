@@ -1,11 +1,12 @@
-const { successTemplate, failureTemplate } = require("../../helper/template");
-const logger = require("../../helper/logger");
-const userModel = require("../../models/user");
-const userConnectionModel = require("../../models/userConnections");
+import { successTemplate, failureTemplate } from "@/helper/template";
+import logger from "@/helper/logger";
+import { userModel } from "@/models/user.model";
+import { userConnectionModel } from "@/models/userConnection.model";
+import type { Request, Response } from "express";
 
-async function sendConnection(req, res) {
+async function sendConnection(req: Request, res: Response) {
   try {
-    const userId = req.user._id;
+    const userId = req.user!._id;
     const { toUserId } = req.body;
 
     // The validator has already confirmed that no connection exists.
@@ -52,20 +53,21 @@ async function sendConnection(req, res) {
     // Log and send the success response
     logger.log({
       level: "info",
-      message: successTemplate(201, message),
+      message: JSON.stringify(successTemplate(201, message)),
       data: userConnectionData,
     });
 
     return res
       .status(201)
       .json(successTemplate(201, message, userConnectionData));
-  } catch (error) {
+  } catch (error: unknown) {
+    const err = error as Error;
     logger.log({
       level: "error",
-      message: `Error in sendConnection controller: ${error.message}`,
+      message: `Error in sendConnection controller: ${err.message}`,
     });
     return res.status(500).json(failureTemplate(500, "Internal Server Error"));
   }
 }
 
-module.exports = sendConnection;
+export default sendConnection;

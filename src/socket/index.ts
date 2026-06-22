@@ -12,16 +12,16 @@ const ioServer = new Server(httpServer, {
   },
 });
 
-const userSocketMap = {}; // {userId : socketId}
+const userSocketMap: Record<string, string> = {}; // {userId : socketId}
 
-function getSocketIdByUserId(userId: any) {
+function getSocketIdByUserId(userId: string): string | undefined {
   return userSocketMap[userId];
 }
 
 ioServer.on("connection", (socket) => {
   console.log(`A new User Connection with Socket ID : ${socket.id}`);
 
-  const userId = socket.handshake.query.userId;
+  const userId = socket.handshake.query.userId as string | undefined;
   if (userId) {
     userSocketMap[userId] = socket.id;
   }
@@ -35,7 +35,7 @@ ioServer.on("connection", (socket) => {
       delete userSocketMap[userId];
     }
     console.log("Updated User-Socket Map after disconnect:", userSocketMap);
-    ioServer.emit("getOnlineUsers", userSocketMap);
+    ioServer.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
 

@@ -37,7 +37,7 @@ function getAuthenticationParameters(options = {}) {
     throw new Error("ImageKit auth helper is unavailable");
   }
 
-  const { token, expire } = options;
+  const { token, expire }: any = options;
 
   if (token || expire) {
     return client.helper.getAuthenticationParameters(token, expire);
