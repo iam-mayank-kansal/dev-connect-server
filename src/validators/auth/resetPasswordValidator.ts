@@ -2,6 +2,7 @@ import encPassword from "@/helper/encPassword";
 import logger from "@/helper/logger";
 import { failureTemplate } from "@/helper/template";
 import { userModel } from "@/models/user.model";
+import { passwordRegex } from "@/utils/regex";
 import type { Request, Response, NextFunction } from "express";
 
 async function resetPasswordValidation(
@@ -23,8 +24,7 @@ async function resetPasswordValidation(
     return res.status(400).json(failureTemplate(400, "invalid request body"));
   }
 
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+
   if (!passwordRegex.test(oldPassword) || !passwordRegex.test(newPassword)) {
     logger.log({
       level: "info",

@@ -1,3 +1,4 @@
+import type { Request, Response } from "express";
 import { successTemplate } from "../../helper/template.js";
 import type { Request, Response } from "express";
 
